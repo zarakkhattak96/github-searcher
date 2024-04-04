@@ -1,4 +1,4 @@
-/* :root {
+:root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -12,6 +12,23 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+:root {
+  --text-color-light: #000000; /* Dark text for light theme */
+  --text-color-dark: #ffffff; /* Light text for dark theme */
+  --background-color-light: #ffffff; /* Light background for light theme */
+  --background-color-dark: #000000; /* Dark background for dark theme */
+ }
+ 
+ body.light {
+  color: var(--text-color-light);
+  background-color: var(--background-color-light);
+ }
+ 
+ body.dark {
+  color: var(--text-color-dark);
+  background-color: var(--background-color-dark);
+ }
 
 a {
   font-weight: 500;
@@ -65,4 +82,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-} */
+} 

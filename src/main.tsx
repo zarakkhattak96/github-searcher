@@ -1,14 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import Search from './app/components/search.component.tsx'
-import NavBar from './app/components/navbar.component.tsx'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.tsx';
+import './index.css';
+import Search from './app/components/search.component.tsx';
+import NavBar from './app/components/navbar.component.tsx';
+import { ThemeSwitcher } from './app/components/theme-switcher.component.tsx';
+import './global/dark-theme.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <NavBar/>
-    <Search/>
+    <NavBar />
+    <ThemeSwitcher />
+    <Search />
     <App />
   </React.StrictMode>,
-)
+);

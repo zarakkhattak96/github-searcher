@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Flex, Input, Dropdown, Space, Select } from 'antd';
+import { Flex, Input, Dropdown, Select } from 'antd';
 import type { MenuProps } from 'antd';
-import { GithubOutlined } from '@ant-design/icons';
 
 export default function Search() {
   const [userName, setUserName] = useState('');
@@ -30,11 +29,6 @@ export default function Search() {
 
   return (
     <>
-      <Space>
-        <GithubOutlined className='github-logo' />
-
-        <h2 className='title'>Github Search</h2>
-      </Space>
       <Flex vertical gap={12}>
         <Input
           type='text'

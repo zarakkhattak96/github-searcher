@@ -49,5 +49,6 @@
     position: relative;
     left: 810px;
     bottom: 55px;
+    overflow-x: hidden;
 
 }
