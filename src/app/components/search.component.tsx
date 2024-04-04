@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Flex, Input, Dropdown, Space, Button, Select } from 'antd';
+import { Flex, Input, Dropdown, Space, Select } from 'antd';
 import type { MenuProps } from 'antd';
 import { GithubOutlined } from '@ant-design/icons';
 
@@ -8,6 +8,14 @@ export default function Search() {
 
   const userUrl = `https://api.github.com/users/${userName}`;
   const repoUrl = `https://api.github.com/users/${userName}/repos`;
+
+  const handleClick = (selectedValue: string) => {
+    if (selectedValue === userUrl) {
+      window.location.href = userUrl;
+    } else {
+      window.location.href = repoUrl;
+    }
+  };
 
   const items: MenuProps['items'] = [
     {
@@ -36,12 +44,16 @@ export default function Search() {
           className='search-input'
         />
 
-        <Select className='dropdown-menu' placeholder='Select an option'>
-          <Dropdown menu={{ items }} trigger={['click']}>
-            <Space>
-              <Button className='button'> User</Button>
-            </Space>
-          </Dropdown>
+        <Select
+          className='dropdown-menu'
+          placeholder='User'
+          options={[
+            { value: 'user', label: 'User' },
+            { value: 'repo', label: 'Repository' },
+          ]}
+          onChange={(value) => handleClick(value)}
+        >
+          <Dropdown menu={{ items }} trigger={['click']} />
         </Select>
       </Flex>
     </>

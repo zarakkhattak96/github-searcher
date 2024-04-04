@@ -13,7 +13,7 @@
 .search-input{
     /* margin-top: 15px; */
     width: 800px;
-    height: 50px;
+    height: 40px;
     border-radius: 0%;
     border: 1px solid black;
     
@@ -23,9 +23,23 @@
     
 }
 
-.button{
-    width: 80px;
-    height: 55px;
+/* .button{
+    width: 10px;
+    /* height: 55px; */
+    /* display: flex; */
+    /* font-weight: 600; */
+    /* border-radius: 0%;    */
+    /* background-color: #dddddd;; */
+    /* color: black; */
+    /* font-weight:800; */
+    /* position: relative; */
+    /* left: 810px; */
+    /* bottom: 65px; */
+/* } */
+
+.dropdown-menu{
+    width: 150px;
+    height: 40px;
     display: flex;
     font-weight: 600;
     border-radius: 0%;   
@@ -34,20 +48,6 @@
     font-weight:800;
     position: relative;
     left: 810px;
-    bottom: 65px;
-}
-
-.dropdown-menu{
-    width: 80px;
-    /* height: 55px; */
-    /* display: flex; */
-    font-weight: 600;
-    border-radius: 0%;   
-    background-color: #dddddd;;
-    color: black;
-    /* font-weight:800; */
-    /* position: relative; */
-    /* left: 810px; */
-    /* bottom: 65px; */
+    bottom: 55px;
 
 }
