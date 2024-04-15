@@ -1,54 +1,55 @@
+// import { useState } from 'react';
+import { Flex, Input, Select } from 'antd';
 import { useState } from 'react';
-import { Flex, Input, Dropdown, Select } from 'antd';
-import type { MenuProps } from 'antd';
 
 export default function Search() {
-  const [userName, setUserName] = useState('');
+  const [username, setUsername] = useState('');
 
-  const userUrl = `https://api.github.com/users/${userName}`;
-  const repoUrl = `https://api.github.com/users/${userName}/repos`;
+  const searchProfile = async () => {
+    const response = await fetch(
+      'https://api.github.com/search/users?q=zarakkhattak96',
+    );
 
-  const handleClick = (selectedValue: string) => {
-    if (selectedValue === userUrl) {
-      window.location.href = userUrl;
-    } else {
-      window.location.href = repoUrl;
-    }
+    const data = await response?.json();
+
+    console.log(data, 'Data');
   };
-
-  const items: MenuProps['items'] = [
-    {
-      label: <a href={userUrl}>Users</a>,
-      key: '0',
-    },
-    {
-      label: <a href={repoUrl}>Repositories</a>,
-      key: '1',
-    },
-  ];
 
   return (
     <>
-      <Flex vertical gap={12}>
+      <Flex vertical gap='middle' wrap='wrap'>
         <Input
+          placeholder='Start typing here ..'
+          maxLength={50}
+          size='large'
           type='text'
-          placeholder='Start typing to search ..'
-          value={userName}
-          onChange={(e) => setUserName(e.target.value)}
-          className='search-input'
+          style={{
+            borderRadius: '0',
+            height: '50px',
+            width: '100%',
+            maxWidth: '500px',
+          }}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <Select
-          className='dropdown-menu'
           placeholder='User'
           options={[
             { value: 'user', label: 'User' },
             { value: 'repo', label: 'Repository' },
           ]}
-          onChange={(value) => handleClick(value)}
-        >
-          <Dropdown menu={{ items }} trigger={['click']} />
-        </Select>
+          style={{
+            width: '40%',
+            // maxWidth: '500px',
+            height: '50px',
+            borderRadius: '0',
+            left: '380px',
+            bottom: '66px',
+          }}
+          size='large'
+          onChange={searchProfile}
+        />
       </Flex>
     </>
   );

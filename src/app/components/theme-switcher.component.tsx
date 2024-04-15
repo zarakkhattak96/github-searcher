@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Switch } from 'antd';
+import { Space, Switch } from 'antd';
 
 // const themeInput = {
 //   light: {
@@ -33,9 +33,23 @@ export const ThemeSwitcher = () => {
 
   return (
     <>
-      <div className='dark-mode'>
-        <Switch className='switch-style' onClick={changeTheme} />
-      </div>
+      <Space direction='vertical'>
+        <Switch
+          checkedChildren='Dark'
+          unCheckedChildren='Light'
+          defaultChecked
+          size='default'
+          onChange={changeTheme}
+          style={{
+            width: 60,
+            height: 27,
+            border: '1px solid black',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            left: '100px',
+          }}
+        />
+      </Space>
     </>
   );
 };

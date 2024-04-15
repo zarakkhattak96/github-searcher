@@ -1,13 +1,25 @@
 import { GithubOutlined } from '@ant-design/icons';
 import { Space } from 'antd';
+import { Typography } from 'antd';
 
+const { Title } = Typography;
 export default function NavBar() {
   return (
     <>
       <Space>
-        <GithubOutlined className='github-logo' />
+        <GithubOutlined style={{ fontSize: '35px', color: 'black' }} />
 
-        <h2 className='title'>Github Search</h2>
+        <Title
+          style={{
+            color: 'black',
+            fontWeight: 'bold',
+            fontSize: '35px',
+            position: 'relative',
+          }}
+        >
+          Github Searcher
+        </Title>
+        {/* <h2 className='title'>Github Search</h2> */}
       </Space>
     </>
   );
