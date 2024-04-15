@@ -1,9 +1,31 @@
 // import { useState } from 'react';
-import { Flex, Input, Select } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+import {
+  Flex,
+  Input,
+  Row,
+  Select,
+  Spin,
+  Avatar,
+  Space,
+  Typography,
+  Segmented,
+  Tabs,
+} from 'antd';
+import type { TabsProps } from 'antd';
+import Card from 'antd/es/card/Card';
+
 import { useState } from 'react';
 
+const { Title } = Typography;
 export default function Search() {
   const [username, setUsername] = useState('');
+  const [userProfile, setUserProfile] = useState({});
+
+  const [userFollowers, setUserFollowers] = useState('');
+  const [userRepos, setUserRepos] = useState('');
+
+  const [selectedTab, setSelectedTab] = useState(0);
 
   const searchProfile = async () => {
     const response = await fetch(
@@ -13,6 +35,39 @@ export default function Search() {
     const data = await response?.json();
 
     console.log(data, 'Data');
+
+    setUserProfile(data.items[0]);
+    fetchUserFollowers();
+    fetchUserRepos();
+  };
+
+  const items: TabsProps['items'] = [
+    { key: '1', label: 'Followers', children: `${userFollowers}` },
+    { key: '2', label: 'Repositories', children: `${userRepos}` },
+  ];
+
+  const fetchUserFollowers = async () => {
+    const followers = await fetch(
+      'https://api.github.com/users/zarakkhattak96/followers',
+    );
+
+    const data = await followers.json();
+
+    setUserFollowers(data);
+
+    console.log(data, 'Followers');
+  };
+
+  const fetchUserRepos = async () => {
+    const repos = await fetch(
+      'https://api.github.com/users/zarakkhattak96/repos',
+    );
+
+    const data = await repos.json();
+
+    console.log(data, 'Repos');
+
+    setUserRepos(data);
   };
 
   return (
@@ -51,6 +106,47 @@ export default function Search() {
           onChange={searchProfile}
         />
       </Flex>
+
+      <Card style={{ marginTop: '20px', maxWidth: '400px', height: '400px' }}>
+        {userProfile && (
+          <div>
+            <Space direction='vertical' size={16}>
+              <Avatar
+                size={64}
+                icon={<UserOutlined />}
+                src={userProfile?.avatar_url}
+                alt='User Profile'
+                style={{
+                  marginTop: '10px',
+                  marginBottom: '10px',
+                  height: '100px',
+                  width: '100px',
+                }}
+              />
+              <Title level={4}>{userProfile?.login}</Title>
+            </Space>
+            {/* {JSON.stringify(userProfile)} */}
+
+            <>
+              <Segmented
+                defaultValue='center'
+                style={{ marginBottom: 8 }}
+                // options={['Followers', 'Repositories']}
+              />
+              <Tabs
+                // defaultActiveKey='1'
+                items={items.map((e) => ({
+                  key: e.key,
+                  label: e.label,
+                  children: e.children,
+                }))}
+                onChange={fetchUserFollowers}
+                indicator={{ size: (origin) => origin - 20 }}
+              />
+            </>
+          </div>
+        )}
+      </Card>
     </>
   );
 }
