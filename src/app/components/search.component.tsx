@@ -1,31 +1,46 @@
 // import { useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import {
-  Flex,
-  Input,
-  Row,
-  Select,
-  Spin,
-  Avatar,
-  Space,
-  Typography,
-  Segmented,
-  Tabs,
-} from 'antd';
+import { Flex, Input, Select, Avatar, Space, Typography, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
 import Card from 'antd/es/card/Card';
 
 import { useState } from 'react';
+import { debounce } from '../../global/debounce';
 
 const { Title } = Typography;
 export default function Search() {
   const [username, setUsername] = useState('');
   const [userProfile, setUserProfile] = useState({});
 
-  const [userFollowers, setUserFollowers] = useState('');
-  const [userRepos, setUserRepos] = useState('');
+  const [userFollowers, setUserFollowers] = useState([]);
+  const [userRepos, setUserRepos] = useState([]);
 
-  const [selectedTab, setSelectedTab] = useState(0);
+  const items: TabsProps['items'] = [
+    {
+      key: 'followers',
+      label: 'Followers',
+      children: (
+        <div>
+          {userFollowers.map((follower) => (
+            <div key={follower.id}>{follower.login}</div>
+          ))}
+        </div>
+      ),
+    },
+    {
+      key: 'repos',
+      label: 'Repositories',
+      children: (
+        <div>
+          {userRepos.map((repo) => (
+            <div key={repo.id}>{repo.name}</div>
+          ))}
+        </div>
+      ),
+    },
+  ];
+
+  const [selectedTab, setSelectedTab] = useState('followers');
 
   const searchProfile = async () => {
     const response = await fetch(
@@ -34,17 +49,10 @@ export default function Search() {
 
     const data = await response?.json();
 
-    console.log(data, 'Data');
-
     setUserProfile(data.items[0]);
-    fetchUserFollowers();
-    fetchUserRepos();
+    await fetchUserFollowers();
+    await fetchUserRepos();
   };
-
-  const items: TabsProps['items'] = [
-    { key: '1', label: 'Followers', children: `${userFollowers}` },
-    { key: '2', label: 'Repositories', children: `${userRepos}` },
-  ];
 
   const fetchUserFollowers = async () => {
     const followers = await fetch(
@@ -54,8 +62,6 @@ export default function Search() {
     const data = await followers.json();
 
     setUserFollowers(data);
-
-    console.log(data, 'Followers');
   };
 
   const fetchUserRepos = async () => {
@@ -65,10 +71,20 @@ export default function Search() {
 
     const data = await repos.json();
 
-    console.log(data, 'Repos');
-
     setUserRepos(data);
   };
+
+  const handleTabChange = async (key: string) => {
+    setSelectedTab(key);
+
+    if (key === '1') {
+      await fetchUserFollowers(userProfile.followers_url);
+    } else if (key === '2') {
+      await fetchUserRepos(userProfile.repos_url);
+    }
+  };
+
+  const debouncedProfileSearch = debounce(searchProfile, 1000);
 
   return (
     <>
@@ -90,25 +106,21 @@ export default function Search() {
 
         <Select
           placeholder='User'
-          options={[
-            { value: 'user', label: 'User' },
-            { value: 'repo', label: 'Repository' },
-          ]}
+          options={[{ value: 'user', label: 'User' }]}
           style={{
             width: '40%',
-            // maxWidth: '500px',
             height: '50px',
             borderRadius: '0',
             left: '380px',
             bottom: '66px',
           }}
           size='large'
-          onChange={searchProfile}
+          onChange={debouncedProfileSearch}
         />
       </Flex>
 
-      <Card style={{ marginTop: '20px', maxWidth: '400px', height: '400px' }}>
-        {userProfile && (
+      {userProfile.login !== undefined && (
+        <Card style={{ marginTop: '20px', maxWidth: '400px', height: '450px' }}>
           <div>
             <Space direction='vertical' size={16}>
               <Avatar
@@ -125,28 +137,23 @@ export default function Search() {
               />
               <Title level={4}>{userProfile?.login}</Title>
             </Space>
-            {/* {JSON.stringify(userProfile)} */}
 
             <>
-              <Segmented
-                defaultValue='center'
-                style={{ marginBottom: 8 }}
-                // options={['Followers', 'Repositories']}
-              />
               <Tabs
-                // defaultActiveKey='1'
-                items={items.map((e) => ({
-                  key: e.key,
-                  label: e.label,
-                  children: e.children,
-                }))}
-                onChange={fetchUserFollowers}
-                indicator={{ size: (origin) => origin - 20 }}
-              />
+                activeKey={selectedTab}
+                onChange={handleTabChange}
+                destroyInactiveTabPane={true}
+                onTabClick={(key) => handleTabChange(key)}
+                items={items}
+              >
+                <Tabs.TabPane tab='Followers' key='1' />
+
+                <Tabs.TabPane tab='Repositories' key='2' />
+              </Tabs>
             </>
           </div>
-        )}
-      </Card>
+        </Card>
+      )}
     </>
   );
 }
