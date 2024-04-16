@@ -1,4 +1,3 @@
-// import { useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
 import { Flex, Input, Select, Avatar, Space, Typography, Tabs } from 'antd';
 import type { TabsProps } from 'antd';
@@ -44,7 +43,7 @@ export default function Search() {
 
   const searchProfile = async () => {
     const response = await fetch(
-      'https://api.github.com/search/users?q=zarakkhattak96',
+      `https://api.github.com/search/users?q=${username}`,
     );
 
     const data = await response?.json();
@@ -56,7 +55,7 @@ export default function Search() {
 
   const fetchUserFollowers = async () => {
     const followers = await fetch(
-      'https://api.github.com/users/zarakkhattak96/followers',
+      `https://api.github.com/users/${username}/followers`,
     );
 
     const data = await followers.json();
@@ -65,9 +64,7 @@ export default function Search() {
   };
 
   const fetchUserRepos = async () => {
-    const repos = await fetch(
-      'https://api.github.com/users/zarakkhattak96/repos',
-    );
+    const repos = await fetch(`https://api.github.com/users/${username}/repos`);
 
     const data = await repos.json();
 
@@ -96,7 +93,7 @@ export default function Search() {
           type='text'
           style={{
             borderRadius: '0',
-            height: '50px',
+            height: 'auto',
             width: '100%',
             maxWidth: '500px',
           }}
@@ -109,10 +106,9 @@ export default function Search() {
           options={[{ value: 'user', label: 'User' }]}
           style={{
             width: '40%',
-            height: '50px',
-            borderRadius: '0',
+            height: 'auto',
             left: '380px',
-            bottom: '66px',
+            bottom: '56px',
           }}
           size='large'
           onChange={debouncedProfileSearch}
@@ -120,7 +116,7 @@ export default function Search() {
       </Flex>
 
       {userProfile.login !== undefined && (
-        <Card style={{ marginTop: '20px', maxWidth: '400px', height: '450px' }}>
+        <Card style={{ marginTop: '20px', maxWidth: '400px', height: 'auto' }}>
           <div>
             <Space direction='vertical' size={16}>
               <Avatar
@@ -131,8 +127,8 @@ export default function Search() {
                 style={{
                   marginTop: '10px',
                   marginBottom: '10px',
-                  height: '100px',
-                  width: '100px',
+                  height: '150px',
+                  width: '150px',
                 }}
               />
               <Title level={4}>{userProfile?.login}</Title>
