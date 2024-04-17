@@ -1,45 +1,44 @@
-import { Flex, Input, Select, Typography, Row, Col, Image, Space } from 'antd';
-import type { TabsProps } from 'antd';
+import { Flex, Input, Select, Typography, Row, Col, Image, Anchor } from 'antd';
+// import type { TabsProps } from 'antd';
 import Card from 'antd/es/card/Card';
 
 import { useState } from 'react';
 import { debounce } from '../../global/debounce';
 import Meta from 'antd/es/card/Meta';
+import { IUserProfile } from '../../global/interfaces';
 
 const { Title } = Typography;
-// const {Meta} = Card;
-
 export default function Search() {
   const [username, setUsername] = useState('');
-  const [userProfile, setUserProfile] = useState([]);
+  const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
 
-  const [userFollowers, setUserFollowers] = useState([]);
-  const [userRepos, setUserRepos] = useState([]);
+  // const [userFollowers, setUserFollowers] = useState([]);
+  // const [userRepos, setUserRepos] = useState([]);
 
-  const items: TabsProps['items'] = [
-    {
-      key: 'followers',
-      label: 'Followers',
-      children: (
-        <div>
-          {userFollowers.map((follower) => (
-            <div key={follower.id}>{follower.login}</div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      key: 'repos',
-      label: 'Repositories',
-      children: (
-        <div>
-          {userRepos.map((repo) => (
-            <div key={repo.id}>{repo.name}</div>
-          ))}
-        </div>
-      ),
-    },
-  ];
+  // const items: TabsProps['items'] = [
+  //   {
+  //     key: 'followers',
+  //     label: 'Followers',
+  //     children: (
+  //       <div>
+  //         {userFollowers.map((follower) => (
+  //           <div key={follower.id}>{follower.login}</div>
+  //         ))}
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     key: 'repos',
+  //     label: 'Repositories',
+  //     children: (
+  //       <div>
+  //         {userRepos.map((repo) => (
+  //           <div key={repo.id}>{repo.name}</div>
+  //         ))}
+  //       </div>
+  //     ),
+  //   },
+  // ];
 
   // const [selectedTab, setSelectedTab] = useState('followers');
 
@@ -51,10 +50,27 @@ export default function Search() {
     const data = await response?.json();
 
     if (data.items.length > 0) {
-      setUserProfile([...userProfile, data.items[0]]);
+      const existingUser = userProfile.findIndex(
+        (profile) => profile.id === data.items[0].id,
+      );
+      // setUserProfile([...userProfile, data.items[0]]);
+
+      if (existingUser !== -1) {
+        setUserProfile((prevUserProf) => {
+          const updated = [...prevUserProf];
+          updated[existingUser] = {
+            ...updated[existingUser],
+            ...data.items[0],
+          };
+          return updated;
+        });
+      } else {
+        setUserProfile((prevUserProf) => [...prevUserProf, data.items[0]]);
+      }
     }
+    // setUserProfile(data.items[0]);
     await fetchUserFollowers();
-    await fetchUserRepos();
+    // await fetchUserRepos();
   };
 
   const fetchUserFollowers = async () => {
@@ -64,16 +80,35 @@ export default function Search() {
 
     const data = await followers.json();
 
-    setUserFollowers(data);
+    // setUserFollowers();
+
+    setUserProfile((prevUserProfile) => {
+      const updated = prevUserProfile.map((prof) => {
+        if (prof.login === username) {
+          return { ...prof, followers: data };
+        }
+        return prof;
+      });
+      return updated;
+      // const updatedUserProf = [...prevUserProfile];
+      // updatedUserProf[0] = { ...updatedUserProf[0], followers: data };
+
+      // console.log(updatedUserProf, 'UPDATED');
+
+      // console.log(updatedUserProf, 'Updated');
+      // return updatedUserProf;
+    });
   };
 
-  const fetchUserRepos = async () => {
-    const repos = await fetch(`https://api.github.com/users/${username}/repos`);
+  // console.log(userProfile, 'USERPROFILE');
 
-    const data = await repos.json();
+  // const fetchUserRepos = async () => {
+  //   const repos = await fetch(`https://api.github.com/users/${username}/repos`);
 
-    setUserRepos(data);
-  };
+  //   const data = await repos.json();
+
+  //   // await setUserRepos(data);
+  // };
 
   // const handleTabChange = async (key: string) => {
   //   setSelectedTab(key);
@@ -87,6 +122,11 @@ export default function Search() {
 
   const debouncedProfileSearch = debounce(searchProfile, 1000);
 
+  // if (userProfile.length === 0) {
+  //   console.log('USER PROFILE IS UNDEFINED');
+  // }
+
+  // console.log(userProfile[0].followers, 'hahaha');
   return (
     <>
       <div>
@@ -120,23 +160,36 @@ export default function Search() {
           />
 
           <Row gutter={[96, 6]}>
-            {userProfile.map((profile, index) => (
+            {userProfile?.map((profile, index) => (
               <Col key={index} span={8}>
-                <Card
-                  hoverable
-                  style={{ width: 240 }}
-                  cover={<Image alt='user dp' src={profile.avatar_url} />}
-                >
-                  <Meta title={profile.login} description={profile.html_url} />
+                {userProfile[0].login !== undefined && (
+                  <Card
+                    hoverable
+                    style={{ width: 240 }}
+                    cover={<Image alt='user dp' src={profile.avatar_url} />}
+                  >
+                    <Meta
+                      title={profile.login}
+                      description={
+                        <Anchor
+                          items={[
+                            {
+                              key: 'profile_url',
+                              href: profile.html_url,
+                              title: profile.login,
+                            },
+                          ]}
+                        />
+                      }
+                    />
 
-                  <div>
-                    <h3>Followers</h3>
-
-                    {userFollowers.map((follower) => (
-                      <div key={follower.id}>{follower.login}</div>
-                    ))}
-                  </div>
-                </Card>
+                    <div>
+                      <Title level={5}>
+                        Followers: {profile?.followers?.length ?? 0}
+                      </Title>
+                    </div>
+                  </Card>
+                )}
               </Col>
             ))}
           </Row>
