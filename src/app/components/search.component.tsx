@@ -4,12 +4,14 @@ import Card from 'antd/es/card/Card';
 import { useState } from 'react';
 import { debounce } from '../../global/debounce';
 import Meta from 'antd/es/card/Meta';
-import { IUserProfile } from '../../global/interfaces';
+import { IRepository, IUserProfile } from '../../global/interfaces';
 
 const { Title } = Typography;
 export default function Search() {
   const [username, setUsername] = useState('');
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
+  const [expandedUserRepos, setExpandedUserRepos] = useState<IRepository[]>([]);
+  const [isRepoExpanded, setIsRepoExpanded] = useState(false);
 
   const searchProfile = async () => {
     const response = await fetch(
@@ -37,6 +39,24 @@ export default function Search() {
       }
     }
     await fetchUserFollowers();
+    await fetchUserRepos(username);
+    // await setUserRepos(userRepos);
+    // await fetchUserRepos();
+  };
+
+  const fetchUserRepos = async (username: string) => {
+    const repos = await fetch(`https://api.github.com/users/${username}/repos`);
+    const data = await repos.json();
+    return data;
+
+    // setUserRepos(data);
+  };
+
+  const toggleReposCard = async (username: string) => {
+    setIsRepoExpanded(!isRepoExpanded);
+
+    const repos = await fetchUserRepos(username);
+    setExpandedUserRepos(repos);
   };
 
   const fetchUserFollowers = async () => {
@@ -58,6 +78,19 @@ export default function Search() {
   };
 
   const debouncedProfileSearch = debounce(searchProfile, 1000);
+
+  // TODO: To fix this part in the code below. clicking on profile will replace the card with repos
+  // TODO: To figure out how to un-expand the card upon clicking.. clicking expands it!
+
+  // {!isRepoExpanded ? (
+  //   <Card onClick={toggleCardReplacement}>
+  //      {/* Profile card content */}
+  //   </Card>
+  //  ) : (
+  //   <Card>
+  //      {/* Repositories card content */}
+  //   </Card>
+  //  )}
 
   return (
     <>
@@ -94,6 +127,7 @@ export default function Search() {
               <Col key={index} span={8}>
                 {userProfile[0].login !== undefined && (
                   <Card
+                    onClick={() => toggleReposCard(profile.login)}
                     hoverable
                     style={{ width: 240 }}
                     cover={<Image alt='user dp' src={profile.avatar_url} />}
@@ -117,6 +151,34 @@ export default function Search() {
                       <Title level={5}>
                         Followers: {profile?.followers?.length ?? 0}
                       </Title>
+                    </div>
+                  </Card>
+                )}
+              </Col>
+            ))}
+          </Row>
+
+          <Row gutter={[96, 6]}>
+            {expandedUserRepos?.map((repo, index) => (
+              <Col key={index} span={8}>
+                {repo.name !== undefined && (
+                  <Card hoverable style={{ width: 240 }}>
+                    <Meta
+                      title={repo.name}
+                      description={
+                        <Anchor
+                          items={[
+                            {
+                              key: 'profile_url',
+                              href: repo.html_url,
+                              title: repo.name,
+                            },
+                          ]}
+                        />
+                      }
+                    />
+                    <div>
+                      <Title level={5}>Stars: {repo.stargazers_count}</Title>
                     </div>
                   </Card>
                 )}
