@@ -40,6 +40,7 @@ export interface IUserProfile {
   site_admin: boolean;
   score: number;
   followers?: IFollower[];
+  background?: string;
 }
 
 export interface IRepository {

@@ -1,4 +1,15 @@
-import { Flex, Input, Select, Typography, Row, Col, Image, Anchor } from 'antd';
+import {
+  Flex,
+  Input,
+  Select,
+  Typography,
+  Row,
+  Col,
+  Image,
+  Anchor,
+  Space,
+  message,
+} from 'antd';
 import Card from 'antd/es/card/Card';
 
 import { useState } from 'react';
@@ -12,6 +23,7 @@ export default function Search() {
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
   const [expandedUserRepos, setExpandedUserRepos] = useState<IRepository[]>([]);
   const [isRepoExpanded, setIsRepoExpanded] = useState(false);
+  const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
 
   const searchProfile = async () => {
     const response = await fetch(
@@ -20,37 +32,53 @@ export default function Search() {
 
     const data = await response?.json();
 
+    if (searchedUsers.includes(username)) {
+      message.error('This user has already been searched');
+    }
+
+    if (data.items.length === 0) {
+      message.error('A user with this username does not exist');
+      return;
+    }
+
     if (data.items.length > 0) {
       const existingUser = userProfile.findIndex(
         (profile) => profile.id === data.items[0].id,
       );
 
       if (existingUser !== -1) {
+        console.log(existingUser, 'EXISTING USER');
         setUserProfile((prevUserProf) => {
           const updated = [...prevUserProf];
           updated[existingUser] = {
             ...updated[existingUser],
             ...data.items[0],
           };
+          updated.map((profile) => {
+            return { ...profile, background: getRandomColor() };
+          });
           return updated;
         });
       } else {
-        setUserProfile((prevUserProf) => [...prevUserProf, data.items[0]]);
+        setUserProfile((prevUserProf) => [
+          ...prevUserProf,
+          { ...data.items[0], background: getRandomColor() },
+        ]);
       }
     }
     await fetchUserFollowers();
     await fetchUserRepos(username);
-    // await setUserRepos(userRepos);
-    // await fetchUserRepos();
+    getRandomColor();
+    setSearchedUsers([...searchedUsers, username]);
   };
 
   const fetchUserRepos = async (username: string) => {
     const repos = await fetch(`https://api.github.com/users/${username}/repos`);
     const data = await repos.json();
     return data;
-
-    // setUserRepos(data);
   };
+
+  const [activeColor, setActiveColor] = useState('');
 
   const toggleReposCard = async (username: string) => {
     setIsRepoExpanded((prevState) => !prevState);
@@ -59,9 +87,16 @@ export default function Search() {
       const repos = await fetchUserRepos(username);
       setExpandedUserRepos(repos);
     }
+  };
 
-    // const repos = await fetchUserRepos(username);
-    // setExpandedUserRepos(repos);
+  const getRandomColor = () => {
+    const letters = '0123456789ABCDEF';
+
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
   };
 
   const fetchUserFollowers = async () => {
@@ -88,40 +123,38 @@ export default function Search() {
     <>
       <div>
         <Flex vertical gap='middle' wrap='wrap'>
-          <Input
-            placeholder='Start typing here ..'
-            maxLength={50}
-            size='large'
-            type='text'
-            style={{
-              borderRadius: '0',
-              height: 'auto',
-              width: '100%',
-              maxWidth: '500px',
-            }}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <Space align='center' direction='horizontal'>
+            <Input
+              placeholder='Start typing here ..'
+              maxLength={50}
+              size='large'
+              type='text'
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <Select
+              placeholder='User'
+              options={[{ value: 'user', label: 'User' }]}
+              size='large'
+              onClick={debouncedProfileSearch}
+              // listHeight={128}
+            />
+          </Space>
 
-          <Select
-            placeholder='User'
-            options={[{ value: 'user', label: 'User' }]}
-            style={{
-              width: '30%',
-              height: 'auto',
-            }}
-            size='large'
-            onClick={debouncedProfileSearch}
-          />
-
-          <Row gutter={[96, 6]}>
+          <Row gutter={[182, 8]}>
             {userProfile?.map((profile, index) => (
               <Col key={index} span={8}>
-                {userProfile[0].login !== undefined && (
+                {profile.login !== undefined && (
                   <Card
-                    onClick={() => toggleReposCard(profile.login)}
+                    onClick={() => {
+                      toggleReposCard(profile.login);
+                      setActiveColor(profile.background as string);
+                    }}
                     hoverable
-                    style={{ width: 240 }}
+                    style={{
+                      width: 240,
+                      backgroundColor: activeColor,
+                    }}
                     cover={<Image alt='user dp' src={profile.avatar_url} />}
                   >
                     <Meta
@@ -151,11 +184,17 @@ export default function Search() {
           </Row>
 
           {!isRepoExpanded ? null : (
-            <Row gutter={[96, 6]}>
+            <Row gutter={[182, 16]}>
               {expandedUserRepos?.map((repo, index) => (
                 <Col key={index} span={8}>
                   {repo.name !== undefined && (
-                    <Card hoverable style={{ width: 240 }}>
+                    <Card
+                      hoverable
+                      style={{
+                        width: 240,
+                        background: activeColor,
+                      }}
+                    >
                       <Meta
                         title={repo.name}
                         description={

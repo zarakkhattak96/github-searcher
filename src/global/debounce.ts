@@ -2,7 +2,7 @@
 export const debounce = (func: any, wait: number) => {
   let timeout: number;
 
-  return function executedDebounce(...args: any[]) {
+  return function executedDebounce(...args: unknown[]) {
     const later = () => {
       clearTimeout(timeout);
       func(...args);

@@ -33,7 +33,7 @@ export const ThemeSwitcher = () => {
 
   return (
     <>
-      <Space direction='vertical'>
+      <Space>
         <Switch
           checkedChildren='Dark'
           unCheckedChildren='Light'
