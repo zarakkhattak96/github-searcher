@@ -53,10 +53,15 @@ export default function Search() {
   };
 
   const toggleReposCard = async (username: string) => {
-    setIsRepoExpanded(!isRepoExpanded);
+    setIsRepoExpanded((prevState) => !prevState);
 
-    const repos = await fetchUserRepos(username);
-    setExpandedUserRepos(repos);
+    if (!isRepoExpanded) {
+      const repos = await fetchUserRepos(username);
+      setExpandedUserRepos(repos);
+    }
+
+    // const repos = await fetchUserRepos(username);
+    // setExpandedUserRepos(repos);
   };
 
   const fetchUserFollowers = async () => {
@@ -78,19 +83,6 @@ export default function Search() {
   };
 
   const debouncedProfileSearch = debounce(searchProfile, 1000);
-
-  // TODO: To fix this part in the code below. clicking on profile will replace the card with repos
-  // TODO: To figure out how to un-expand the card upon clicking.. clicking expands it!
-
-  // {!isRepoExpanded ? (
-  //   <Card onClick={toggleCardReplacement}>
-  //      {/* Profile card content */}
-  //   </Card>
-  //  ) : (
-  //   <Card>
-  //      {/* Repositories card content */}
-  //   </Card>
-  //  )}
 
   return (
     <>
@@ -158,33 +150,35 @@ export default function Search() {
             ))}
           </Row>
 
-          <Row gutter={[96, 6]}>
-            {expandedUserRepos?.map((repo, index) => (
-              <Col key={index} span={8}>
-                {repo.name !== undefined && (
-                  <Card hoverable style={{ width: 240 }}>
-                    <Meta
-                      title={repo.name}
-                      description={
-                        <Anchor
-                          items={[
-                            {
-                              key: 'profile_url',
-                              href: repo.html_url,
-                              title: repo.name,
-                            },
-                          ]}
-                        />
-                      }
-                    />
-                    <div>
-                      <Title level={5}>Stars: {repo.stargazers_count}</Title>
-                    </div>
-                  </Card>
-                )}
-              </Col>
-            ))}
-          </Row>
+          {!isRepoExpanded ? null : (
+            <Row gutter={[96, 6]}>
+              {expandedUserRepos?.map((repo, index) => (
+                <Col key={index} span={8}>
+                  {repo.name !== undefined && (
+                    <Card hoverable style={{ width: 240 }}>
+                      <Meta
+                        title={repo.name}
+                        description={
+                          <Anchor
+                            items={[
+                              {
+                                key: 'profile_url',
+                                href: repo.html_url,
+                                title: repo.name,
+                              },
+                            ]}
+                          />
+                        }
+                      />
+                      <div>
+                        <Title level={5}>Stars: {repo.stargazers_count}</Title>
+                      </div>
+                    </Card>
+                  )}
+                </Col>
+              ))}
+            </Row>
+          )}
         </Flex>
       </div>
     </>
