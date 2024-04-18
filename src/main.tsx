@@ -5,7 +5,8 @@ import './index.css';
 import Search from './app/components/search.component.tsx';
 import NavBar from './app/components/navbar.component.tsx';
 import { ThemeSwitcher } from './app/components/theme-switcher.component.tsx';
-import './global/dark-theme.css';
+// import './style.less';
+// import 'antd/dist/reset.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
