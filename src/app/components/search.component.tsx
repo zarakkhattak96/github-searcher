@@ -13,9 +13,9 @@ import {
 import Card from 'antd/es/card/Card';
 
 import { useState } from 'react';
-import { debounce } from '../../global/debounce';
+import { debounce } from '../../utils/debounce.utils';
 import Meta from 'antd/es/card/Meta';
-import { IRepository, IUserProfile } from '../../global/interfaces';
+import { IRepository, IUserProfile } from '../../utils/interfaces.utils';
 
 const { Title } = Typography;
 export default function Search() {

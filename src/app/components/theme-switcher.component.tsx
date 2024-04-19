@@ -1,5 +1,5 @@
 import { Switch } from 'antd';
-import { useTheme } from '../../hook/changetheme.hook';
+import { useTheme } from '../../custom-hooks/changetheme.hook';
 
 export const ThemeSwitcher = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
