@@ -19,7 +19,9 @@ import { IRepository, IUserProfile } from '../utils/interfaces.utils';
 import {
   fetchUserFollowers,
   fetchUserProfile,
+  fetchUserRepos,
 } from '../services/github.service';
+import getRandomColor from '../utils/randomColor.util';
 
 const { Title } = Typography;
 export default function Search() {
@@ -28,6 +30,7 @@ export default function Search() {
   const [expandedUserRepos, setExpandedUserRepos] = useState<IRepository[]>([]);
   const [isRepoExpanded, setIsRepoExpanded] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
+  const [activeColor, setActiveColor] = useState('');
 
   const searchUser = async () => {
     const data = await fetchUserProfile(username);
@@ -79,19 +82,11 @@ export default function Search() {
       return updated;
     });
 
-    // await fetchUserFollowers();
     await fetchUserRepos(username);
+
     getRandomColor();
     setSearchedUsers([...searchedUsers, username]);
   };
-
-  const fetchUserRepos = async (username: string) => {
-    const repos = await fetch(`https://api.github.com/users/${username}/repos`);
-    const data = await repos.json();
-    return data;
-  };
-
-  const [activeColor, setActiveColor] = useState('');
 
   const toggleReposCard = async (username: string) => {
     setIsRepoExpanded((prevState) => !prevState);
@@ -100,16 +95,6 @@ export default function Search() {
       const repos = await fetchUserRepos(username);
       setExpandedUserRepos(repos);
     }
-  };
-
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF';
-
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
   };
 
   const debouncedProfileSearch = debounce(searchUser, 1000);
@@ -130,7 +115,6 @@ export default function Search() {
           options={[{ value: 'user', label: 'User' }]}
           size='large'
           onClick={debouncedProfileSearch}
-          // listHeight={128}
         />
       </Space>
 

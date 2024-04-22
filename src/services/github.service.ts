@@ -21,3 +21,9 @@ export const fetchUserFollowers = async (username: string) => {
 
   return data;
 };
+
+export const fetchUserRepos = async (username: string) => {
+  const repos = await fetch(`https://api.github.com/users/${username}/repos`);
+  const data = await repos.json();
+  return data;
+};
