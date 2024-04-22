@@ -131,3 +131,13 @@ export interface ISearchInputProps {
   setUsername: React.Dispatch<React.SetStateAction<string>>;
   debouncedProfile: () => void;
 }
+
+export interface IContentComponentProps {
+  userProfile: IUserProfile[];
+  isRepoExpanded: boolean;
+  setIsRepoExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  expandedUserRepos: IRepository[];
+  setExpandedUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
+  activeColor: string;
+  setActiveColor: React.Dispatch<React.SetStateAction<string>>;
+}
