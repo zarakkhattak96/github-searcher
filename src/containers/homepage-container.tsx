@@ -12,7 +12,7 @@ import getRandomColor from '../utils/randomColor.util';
 import { SearchInputComponent } from '../app/components/common/searchInput/searchInput';
 import { ContentComponent } from '../app/components/content/content.component';
 import NavBar from '../app/components/navbar/navbar.component';
-import { ThemeSwitcher } from '../app/components/theme-switcher.component';
+import { ThemeSwitcher } from '../app/components/theme-switcher/theme-switcher.component';
 
 const HomePageContainer = () => {
   const [username, setUsername] = useState('');
