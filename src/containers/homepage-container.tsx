@@ -16,6 +16,10 @@ import { useState } from 'react';
 import { debounce } from '../utils/debounce.utils';
 import Meta from 'antd/es/card/Meta';
 import { IRepository, IUserProfile } from '../utils/interfaces.utils';
+import {
+  fetchUserFollowers,
+  fetchUserProfile,
+} from '../services/github.service';
 
 const { Title } = Typography;
 export default function Search() {
@@ -25,23 +29,19 @@ export default function Search() {
   const [isRepoExpanded, setIsRepoExpanded] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
 
-  const searchProfile = async () => {
-    const response = await fetch(
-      `https://api.github.com/search/users?q=${username}`,
-    );
-
-    const data = await response?.json();
+  const searchUser = async () => {
+    const data = await fetchUserProfile(username);
 
     if (searchedUsers.includes(username)) {
       message.error('This user has already been searched');
     }
 
-    if (data.items.length === 0) {
+    if (data?.items.length === 0) {
       message.error('A user with this username does not exist');
       return;
     }
 
-    if (data.items.length > 0) {
+    if (data?.items.length > 0) {
       const existingUser = userProfile.findIndex(
         (profile) => profile.id === data.items[0].id,
       );
@@ -52,7 +52,7 @@ export default function Search() {
           const updated = [...prevUserProf];
           updated[existingUser] = {
             ...updated[existingUser],
-            ...data.items[0],
+            ...data?.items[0],
           };
           updated.map((profile) => {
             return { ...profile, background: getRandomColor() };
@@ -62,11 +62,24 @@ export default function Search() {
       } else {
         setUserProfile((prevUserProf) => [
           ...prevUserProf,
-          { ...data.items[0], background: getRandomColor() },
+          { ...data?.items[0], background: getRandomColor() },
         ]);
       }
     }
-    await fetchUserFollowers();
+
+    const followersData = await fetchUserFollowers(username);
+
+    setUserProfile((prevUserProfile) => {
+      const updated = prevUserProfile.map((prof) => {
+        if (prof.login === username) {
+          return { ...prof, followers: followersData };
+        }
+        return prof;
+      });
+      return updated;
+    });
+
+    // await fetchUserFollowers();
     await fetchUserRepos(username);
     getRandomColor();
     setSearchedUsers([...searchedUsers, username]);
@@ -99,25 +112,7 @@ export default function Search() {
     return color;
   };
 
-  const fetchUserFollowers = async () => {
-    const followers = await fetch(
-      `https://api.github.com/users/${username}/followers`,
-    );
-
-    const data = await followers.json();
-
-    setUserProfile((prevUserProfile) => {
-      const updated = prevUserProfile.map((prof) => {
-        if (prof.login === username) {
-          return { ...prof, followers: data };
-        }
-        return prof;
-      });
-      return updated;
-    });
-  };
-
-  const debouncedProfileSearch = debounce(searchProfile, 1000);
+  const debouncedProfileSearch = debounce(searchUser, 1000);
 
   return (
     <Flex vertical gap='middle' wrap='wrap'>
@@ -139,47 +134,49 @@ export default function Search() {
         />
       </Space>
 
-      <Row gutter={[182, 8]}>
-        {userProfile?.map((profile, index) => (
-          <Col key={index} span={8}>
-            {profile.login !== undefined && (
-              <Card
-                onClick={() => {
-                  toggleReposCard(profile.login);
-                  setActiveColor(profile.background as string);
-                }}
-                hoverable
-                style={{
-                  width: 240,
-                  backgroundColor: profile.background,
-                }}
-                cover={<Image alt='user dp' src={profile.avatar_url} />}
-              >
-                <Meta
-                  title={profile.login}
-                  description={
-                    <Anchor
-                      items={[
-                        {
-                          key: 'profile_url',
-                          href: profile.html_url,
-                          title: profile.login,
-                        },
-                      ]}
-                    />
-                  }
-                />
+      {userProfile.length > 0 && (
+        <Row gutter={[182, 8]}>
+          {userProfile?.map((profile, index) => (
+            <Col key={index} span={8}>
+              {profile.login !== undefined && (
+                <Card
+                  onClick={() => {
+                    toggleReposCard(profile.login);
+                    setActiveColor(profile.background as string);
+                  }}
+                  hoverable
+                  style={{
+                    width: 240,
+                    backgroundColor: profile.background,
+                  }}
+                  cover={<Image alt='user dp' src={profile.avatar_url} />}
+                >
+                  <Meta
+                    title={profile.login}
+                    description={
+                      <Anchor
+                        items={[
+                          {
+                            key: 'profile_url',
+                            href: profile.html_url,
+                            title: profile.login,
+                          },
+                        ]}
+                      />
+                    }
+                  />
 
-                <div>
-                  <Title level={5}>
-                    Followers: {profile?.followers?.length ?? 0}
-                  </Title>
-                </div>
-              </Card>
-            )}
-          </Col>
-        ))}
-      </Row>
+                  <div>
+                    <Title level={5}>
+                      Followers: {profile?.followers?.length ?? 0}
+                    </Title>
+                  </div>
+                </Card>
+              )}
+            </Col>
+          ))}
+        </Row>
+      )}
 
       {!isRepoExpanded ? null : (
         <Row gutter={[182, 16]}>
