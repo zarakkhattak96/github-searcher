@@ -11,8 +11,10 @@ import {
 import getRandomColor from '../utils/randomColor.util';
 import { SearchInputComponent } from '../app/components/common/searchInput/searchInput';
 import { ContentComponent } from '../app/components/content/content.component';
+import NavBar from '../app/components/navbar/navbar.component';
+import { ThemeSwitcher } from '../app/components/theme-switcher.component';
 
-export default function Search() {
+const HomePageContainer = () => {
   const [username, setUsername] = useState('');
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
   const [expandedUserRepos, setExpandedUserRepos] = useState<IRepository[]>([]);
@@ -80,6 +82,8 @@ export default function Search() {
 
   return (
     <>
+      <NavBar />
+      <ThemeSwitcher />
       <SearchInputComponent
         username={username}
         setUsername={setUsername}
@@ -97,4 +101,6 @@ export default function Search() {
       />
     </>
   );
-}
+};
+
+export default HomePageContainer;

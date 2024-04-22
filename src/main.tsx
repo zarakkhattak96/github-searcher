@@ -2,14 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './styles/index.css';
 import './styles/App.css';
-import Search from './containers/homepage-container.tsx';
-import NavBar from './app/components/navbar/navbar.component.tsx';
-import { ThemeSwitcher } from './app/components/theme-switcher.component.tsx';
+import HomePageContainer from './containers/homepage-container';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <NavBar />
-    <ThemeSwitcher />
-    <Search />
+    {/* <NavBar /> */}
+    {/* <ThemeSwitcher /> */}
+    <HomePageContainer />
   </React.StrictMode>,
 );
