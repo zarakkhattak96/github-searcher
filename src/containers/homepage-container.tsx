@@ -22,6 +22,7 @@ import {
   fetchUserRepos,
 } from '../services/github.service';
 import getRandomColor from '../utils/randomColor.util';
+import { SearchInputComponent } from '../app/components/common/searchInput/searchInput';
 
 const { Title } = Typography;
 export default function Search() {
@@ -101,22 +102,11 @@ export default function Search() {
 
   return (
     <Flex vertical gap='middle' wrap='wrap'>
-      <Space align='center' direction='horizontal'>
-        <Input
-          placeholder='Start typing here ..'
-          maxLength={50}
-          size='large'
-          type='text'
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <Select
-          placeholder='User'
-          options={[{ value: 'user', label: 'User' }]}
-          size='large'
-          onClick={debouncedProfileSearch}
-        />
-      </Space>
+      <SearchInputComponent
+        username={username}
+        setUsername={setUsername}
+        debouncedProfile={debouncedProfileSearch}
+      />
 
       {userProfile.length > 0 && (
         <Row gutter={[182, 8]}>

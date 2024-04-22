@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface IFollower {
   login: string;
   id: number;
@@ -122,4 +124,10 @@ export interface IRepository {
   open_issues: number;
   watchers: number;
   default_branch: string;
+}
+
+export interface ISearchInputProps {
+  username: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  debouncedProfile: () => void;
 }
