@@ -129,7 +129,7 @@ export interface IRepository {
 export interface ISearchInputProps {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  debouncedProfile: () => void;
+  // debouncedProfile: () => void;
 }
 
 export interface IContentComponentProps {
@@ -140,4 +140,8 @@ export interface IContentComponentProps {
   setExpandedUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
   activeColor: string;
   setActiveColor: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface ISelectComponentProps {
+  debouncedProfile: () => void;
 }

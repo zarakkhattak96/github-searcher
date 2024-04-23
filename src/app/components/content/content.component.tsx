@@ -3,6 +3,7 @@ import Meta from 'antd/es/card/Meta';
 import { fetchUserRepos } from '../../../services/github.service';
 import { IContentComponentProps } from '../../../utils/interfaces.utils';
 import React from 'react';
+import { useStyle } from '../../../styles/style';
 
 const { Title } = Typography;
 
@@ -15,6 +16,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   activeColor,
   setActiveColor,
 }) => {
+  const { styles } = useStyle();
   const toggleReposCard = async (username: string) => {
     setIsRepoExpanded((prevState) => !prevState);
 

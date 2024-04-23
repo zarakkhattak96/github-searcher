@@ -13,6 +13,8 @@ import { SearchInputComponent } from '../app/components/common/searchInput/searc
 import { ContentComponent } from '../app/components/content/content.component';
 import NavBar from '../app/components/navbar/navbar.component';
 import { ThemeSwitcher } from '../app/components/theme-switcher/theme-switcher.component';
+import { useStyle } from '../styles/style';
+import { SelectCommonComponent } from '../app/components/common/select/select.common';
 
 const HomePageContainer = () => {
   const [username, setUsername] = useState('');
@@ -79,16 +81,18 @@ const HomePageContainer = () => {
   };
 
   const debouncedProfileSearch = debounce(searchUser, 1000);
+  const { styles } = useStyle();
 
   return (
-    <>
+    <div className={styles.homePageTitle}>
       <NavBar />
       <ThemeSwitcher />
       <SearchInputComponent
         username={username}
         setUsername={setUsername}
-        debouncedProfile={debouncedProfileSearch}
+        // debouncedProfile={debouncedProfileSearch}
       />
+      <SelectCommonComponent debouncedProfile={debouncedProfileSearch} />
 
       <ContentComponent
         userProfile={userProfile}
@@ -99,7 +103,7 @@ const HomePageContainer = () => {
         activeColor={activeColor}
         setActiveColor={setActiveColor}
       />
-    </>
+    </div>
   );
 };
 
