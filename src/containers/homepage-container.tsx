@@ -9,12 +9,8 @@ import {
   fetchUserRepos,
 } from '../services/github.service';
 import getRandomColor from '../utils/randomColor.util';
-import { SearchInputComponent } from '../app/components/common/searchInput/searchInput';
-import { ContentComponent } from '../app/components/content/content.component';
-import NavBar from '../app/components/navbar/navbar.component';
-import { ThemeSwitcher } from '../app/components/theme-switcher/theme-switcher.component';
+import { HomePageComponent } from '../app/components/homepage/homepage.component';
 import { useStyle } from '../styles/style';
-import { SelectCommonComponent } from '../app/components/common/select/select.common';
 
 const HomePageContainer = () => {
   const [username, setUsername] = useState('');
@@ -85,16 +81,10 @@ const HomePageContainer = () => {
 
   return (
     <div className={styles.homePageTitle}>
-      <NavBar />
-      <ThemeSwitcher />
-      <SearchInputComponent
+      <HomePageComponent
         username={username}
         setUsername={setUsername}
-        // debouncedProfile={debouncedProfileSearch}
-      />
-      <SelectCommonComponent debouncedProfile={debouncedProfileSearch} />
-
-      <ContentComponent
+        debouncedProfile={debouncedProfileSearch}
         userProfile={userProfile}
         isRepoExpanded={isRepoExpanded}
         setIsRepoExpanded={setIsRepoExpanded}

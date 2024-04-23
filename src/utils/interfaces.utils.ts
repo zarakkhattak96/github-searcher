@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { SetStateAction } from 'react';
 
 export interface IFollower {
   login: string;
@@ -144,4 +144,17 @@ export interface IContentComponentProps {
 
 export interface ISelectComponentProps {
   debouncedProfile: () => void;
+}
+
+export interface IHomePageComponentProps {
+  username: string;
+  setUsername: React.Dispatch<SetStateAction<string>>;
+  debouncedProfile: () => void;
+  userProfile: IUserProfile[];
+  isRepoExpanded: boolean;
+  setIsRepoExpanded: React.Dispatch<SetStateAction<boolean>>;
+  expandedUserRepos: IRepository[];
+  setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
+  activeColor: string;
+  setActiveColor: React.Dispatch<SetStateAction<string>>;
 }
