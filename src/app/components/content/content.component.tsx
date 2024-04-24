@@ -26,7 +26,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
     }
   };
   return (
-    <Flex vertical gap='middle' wrap='wrap'>
+    <>
       {userProfile.length > 0 && (
         <Row gutter={[182, 8]}>
           {userProfile?.map((profile, index) => (
@@ -106,6 +106,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           ))}
         </Row>
       )}
-    </Flex>
+    </>
   );
 };
