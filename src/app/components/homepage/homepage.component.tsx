@@ -25,7 +25,7 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
       {/* <Flex wrap='wrap' align='middle' justify='start'> */}
 
       <Row>
-        <Col span={24} className={styles.navThemeSwitchSearch}>
+        <Col span={12} className={styles.navThemeSwitchSearch}>
           <NavBar />
           <ThemeSwitcher />
         </Col>
@@ -42,7 +42,7 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
 
       {/* <div className={styles.content}> */}
       <Row>
-        <Col>
+        <Col span={24} className={styles.reposCard}>
           <ContentComponent
             userProfile={userProfile}
             isRepoExpanded={isRepoExpanded}

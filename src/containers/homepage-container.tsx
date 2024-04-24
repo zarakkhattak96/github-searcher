@@ -80,20 +80,20 @@ const HomePageContainer = () => {
   const { styles } = useStyle();
 
   return (
-    <div className={styles.homePageTitle}>
-      <HomePageComponent
-        username={username}
-        setUsername={setUsername}
-        debouncedProfile={debouncedProfileSearch}
-        userProfile={userProfile}
-        isRepoExpanded={isRepoExpanded}
-        setIsRepoExpanded={setIsRepoExpanded}
-        expandedUserRepos={expandedUserRepos}
-        setExpandedUserRepos={setExpandedUserRepos}
-        activeColor={activeColor}
-        setActiveColor={setActiveColor}
-      />
-    </div>
+    // <div className={styles.root}>
+    <HomePageComponent
+      username={username}
+      setUsername={setUsername}
+      debouncedProfile={debouncedProfileSearch}
+      userProfile={userProfile}
+      isRepoExpanded={isRepoExpanded}
+      setIsRepoExpanded={setIsRepoExpanded}
+      expandedUserRepos={expandedUserRepos}
+      setExpandedUserRepos={setExpandedUserRepos}
+      activeColor={activeColor}
+      setActiveColor={setActiveColor}
+    />
+    // </div>
   );
 };
 

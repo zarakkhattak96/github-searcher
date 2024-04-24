@@ -11,13 +11,12 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   return (
     <>
       <Row align='middle'>
-        <Col>
+        <Col className={styles.dropdownSelect}>
           <Select
             placeholder='User'
             options={[{ value: 'user', label: 'User' }]}
             size='large'
             onClick={debouncedProfile}
-            className={styles.dropdownSelect}
           />
         </Col>
       </Row>

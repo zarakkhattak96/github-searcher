@@ -1,4 +1,4 @@
-import { Switch } from 'antd';
+import { Col, Row, Switch } from 'antd';
 import { useTheme } from '../../../custom-hooks/changetheme.hook';
 import { useStyle } from '../../../styles/style';
 
@@ -10,12 +10,16 @@ export const ThemeSwitcher = () => {
   // esLint error so theme is prefixed with "_"
 
   return (
-    <Switch
-      checkedChildren='Dark'
-      unCheckedChildren='Light'
-      size='default'
-      className={styles.themeSwitch}
-      onChange={handleChange}
-    />
+    <Row>
+      <Col span={24}>
+        <Switch
+          checkedChildren='Dark'
+          unCheckedChildren='Light'
+          size='default'
+          className={styles.themeSwitch}
+          onChange={handleChange}
+        />
+      </Col>
+    </Row>
   );
 };

@@ -8,9 +8,9 @@ export default function NavBar() {
   return (
     <>
       <Row>
-        <Col span={12}>
-          <Row justify={'center'}>
-            <GithubOutlined className={styles.githubOutlined} />
+        <Col span={16}>
+          <Row justify={'center'} className={styles.githubOutlined}>
+            <GithubOutlined />
 
             <Title level={2}>Github Searcher</Title>
           </Row>
@@ -18,7 +18,7 @@ export default function NavBar() {
       </Row>
 
       <Row>
-        <Col span={12}>
+        <Col span={16}>
           <Typography.Paragraph type='secondary' className={styles.githubTitle}>
             Search users or repositories below
           </Typography.Paragraph>

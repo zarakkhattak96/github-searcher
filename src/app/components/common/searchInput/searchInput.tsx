@@ -10,7 +10,7 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 
   return (
     <>
-      <Row className={styles.searchField}>
+      <Row>
         <Col>
           <Input
             placeholder='Start typing here ..'
