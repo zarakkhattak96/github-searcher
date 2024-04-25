@@ -8,15 +8,22 @@ export default function NavBar() {
   return (
     <>
       <Row>
-        <Col>
+        <Col span={24}>
           <GithubOutlined className={styles.githubOutlined} />
-          <Title level={2}>Github Searcher</Title>
+          <Title level={3} className={styles.homePageTitle}>
+            Github Searcher
+          </Title>
         </Col>
       </Row>
 
       <Row>
-        <Col span={16}>
-          <Typography.Paragraph type='secondary' className={styles.githubTitle}>
+        <Col span={24}>
+          <Typography.Paragraph
+            type='secondary'
+            className={styles.githubPara}
+            style={{ top: 100, right: 560, position: 'relative' }}
+          >
+            {/* //TODO: The para styling isnt affected by the class name so added in-line styling  */}
             Search users or repositories below
           </Typography.Paragraph>
         </Col>

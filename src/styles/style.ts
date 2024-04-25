@@ -1,26 +1,18 @@
-// import './themes.styles.css';
 import { createStyles, css } from 'antd-style';
 
 export const useStyle = createStyles({
   layout: {
     // text: 'red',
-    margin: '0',
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    display: 'flex',
-    flexDirection: 'row',
-    // justifyContent: 'center',
+    margin: 0,
+    // width: '100%',
+    // height: '100%',
+    // alignItems: 'center',
     // backgroundColor: 'red',
     // text: 'var(--text-primary)',
   },
 
   inputSpace: css`
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+    // justifyContent: center;
   `,
 
   searchField: css`
@@ -37,13 +29,25 @@ export const useStyle = createStyles({
     height: 27px;
     border: 1px solid black;
     font-weight: bold;
-    left: 718px;
-    bottom: 120px;
+    left: 720px;
+    top: 60px;
+    position: relative;
+    display: flex;
+    justify-content: center;
     background-color: black;
   `,
 
   githubOutlined: css`
-    font-size: 30px;
+    width: 50px;
+    font-size: 28px;
+    color: var(--heading-color);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    text: var(--heading-color);
+    position: relative;
+    left: 320px;
+    top: 165px;
   `,
 
   githubTitle: css`
@@ -64,33 +68,39 @@ export const useStyle = createStyles({
     justify-content: center;
   `,
 
-  content: css`
-    width: 100%;
-    justify-content: center;
-    background-color: red;
-  `,
+  // content: css`
+  //   width: 100%;
+  //   justify-content: center;
+  //   background-color: red;
+  // `,
 
-  body: css`
-    display: flex;
-    place-items: center;
-    background-color: var(--background);
-    color: var(--text-primary);
-    margin: 0;
-  `,
+  // body: css`
+  //   display: flex;
+  //   place-items: center;
+  //   background-color: var(--background);
+  //   color: var(--text-primary);
+  //   margin: '0',
+  // `,
 
-  navThemeSwitchSearch: css`
-    width: 100%;
-    left: 240px;
-  `,
+  // navThemeSwitchSearch: css`
+  //   width: '100%',
+  //   top: '70px',
+  //   left: '240px',
+  // `,
 
   homePageTitle: css`
     width: 100%;
-    text-align: center;
+    top: 110px;
+    right: 300px;
+    position: relative;
+    display: flex;
     justify-content: center;
-  `,
+    `,
 
-  reposCard: css`
+  githubPara: css`
+  
     width: 100%;
-    height: 100%;
+    left: 350px;
+    bottom: 100px;
   `,
 });

@@ -10,7 +10,7 @@ import {
 } from '../services/github.service';
 import getRandomColor from '../utils/randomColor.util';
 import { HomePageComponent } from '../app/components/homepage/homepage.component';
-import { useStyle } from '../styles/style';
+// import { useStyle } from '../styles/style';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -77,23 +77,21 @@ const App = () => {
   };
 
   const debouncedProfileSearch = debounce(searchUser, 1000);
-  const { styles } = useStyle();
+  // const { styles } = useStyle();
 
   return (
-    <div className={styles.layout}>
-      <HomePageComponent
-        username={username}
-        setUsername={setUsername}
-        debouncedProfile={debouncedProfileSearch}
-        userProfile={userProfile}
-        isRepoExpanded={isRepoExpanded}
-        setIsRepoExpanded={setIsRepoExpanded}
-        expandedUserRepos={expandedUserRepos}
-        setExpandedUserRepos={setExpandedUserRepos}
-        activeColor={activeColor}
-        setActiveColor={setActiveColor}
-      />
-    </div>
+    <HomePageComponent
+      username={username}
+      setUsername={setUsername}
+      debouncedProfile={debouncedProfileSearch}
+      userProfile={userProfile}
+      isRepoExpanded={isRepoExpanded}
+      setIsRepoExpanded={setIsRepoExpanded}
+      expandedUserRepos={expandedUserRepos}
+      setExpandedUserRepos={setExpandedUserRepos}
+      activeColor={activeColor}
+      setActiveColor={setActiveColor}
+    />
   );
 };
 

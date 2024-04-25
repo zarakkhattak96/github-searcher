@@ -1,9 +1,9 @@
-import { Anchor, Card, Col, Flex, Row, Typography, Image } from 'antd';
+import { Anchor, Card, Col, Row, Typography, Image } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { fetchUserRepos } from '../../../services/github.service';
 import { IContentComponentProps } from '../../../utils/interfaces.utils';
 import React from 'react';
-import { useStyle } from '../../../styles/style';
+// import { useStyle } from '../../../styles/style';
 
 const { Title } = Typography;
 
@@ -16,7 +16,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   activeColor,
   setActiveColor,
 }) => {
-  const { styles } = useStyle();
+  // const { styles } = useStyle();
   const toggleReposCard = async (username: string) => {
     setIsRepoExpanded((prevState) => !prevState);
 
@@ -73,7 +73,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
         )}
       </Row>
 
-      <Row className={styles.inputSpace}>
+      <Row>
         <Col span={18}>
           {!isRepoExpanded ? null : (
             <Row>
