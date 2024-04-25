@@ -4,7 +4,8 @@ export const useStyle = createStyles({
   layout: {
     // text: 'red',
     margin: 0,
-    // width: '100%',
+    width: '100%',
+    maxWidth: '1024px',
     // height: '100%',
     // alignItems: 'center',
     // backgroundColor: 'red',
@@ -91,7 +92,7 @@ export const useStyle = createStyles({
   homePageTitle: css`
     width: 100%;
     top: 110px;
-    right: 300px;
+    right: 50px;
     position: relative;
     display: flex;
     justify-content: center;

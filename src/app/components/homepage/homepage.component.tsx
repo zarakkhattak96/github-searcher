@@ -1,4 +1,4 @@
-import { Col, Row } from 'antd';
+import { Col, Flex, Row } from 'antd';
 import { IHomePageComponentProps } from '../../../utils/interfaces.utils';
 import { SearchInputComponent } from '../common/searchInput/searchInput';
 import { SelectCommonComponent } from '../common/select/select.common';
@@ -23,6 +23,7 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
   return (
     <>
       <div className={styles.layout}>
+        {/* <Flex vertical={true} gap={'small'}> */}
         <Row>
           <Col span={24}>
             <NavBar />
@@ -53,6 +54,7 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
             />
           </Col>
         </Row>
+        {/* </Flex> */}
       </div>
     </>
   );
