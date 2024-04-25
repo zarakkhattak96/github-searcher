@@ -2,14 +2,9 @@ import { createStyles, css } from 'antd-style';
 
 export const useStyle = createStyles({
   layout: {
-    // text: 'red',
     margin: 0,
     width: '100%',
     maxWidth: '1024px',
-    // height: '100%',
-    // alignItems: 'center',
-    // backgroundColor: 'red',
-    // text: 'var(--text-primary)',
   },
 
   inputSpace: css`
@@ -69,25 +64,23 @@ export const useStyle = createStyles({
     justify-content: center;
   `,
 
-  // content: css`
-  //   width: 100%;
-  //   justify-content: center;
-  //   background-color: red;
-  // `,
+  cards: css`
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: 100px;
+`,
 
-  // body: css`
-  //   display: flex;
-  //   place-items: center;
-  //   background-color: var(--background);
-  //   color: var(--text-primary);
-  //   margin: '0',
-  // `,
+  profileCard: css`
+  width: 180px;
 
-  // navThemeSwitchSearch: css`
-  //   width: '100%',
-  //   top: '70px',
-  //   left: '240px',
-  // `,
+`,
+
+  reposCard: css`
+  width: 180px;
+
+`,
 
   homePageTitle: css`
     width: 100%;

@@ -3,7 +3,7 @@ import Meta from 'antd/es/card/Meta';
 import { fetchUserRepos } from '../../../services/github.service';
 import { IContentComponentProps } from '../../../utils/interfaces.utils';
 import React from 'react';
-// import { useStyle } from '../../../styles/style';
+import { useStyle } from '../../../styles/style';
 
 const { Title } = Typography;
 
@@ -16,7 +16,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   activeColor,
   setActiveColor,
 }) => {
-  // const { styles } = useStyle();
+  const { styles } = useStyle();
   const toggleReposCard = async (username: string) => {
     setIsRepoExpanded((prevState) => !prevState);
 
@@ -26,55 +26,54 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
     }
   };
   return (
-    <>
-      <Row>
-        {userProfile.length > 0 && (
-          <Row>
-            {userProfile?.map((profile, index) => (
-              <Col key={index} span={8}>
-                {profile.login !== undefined && (
-                  <Card
-                    onClick={() => {
-                      toggleReposCard(profile.login);
-                      setActiveColor(profile.background as string);
-                    }}
-                    hoverable
-                    style={{
-                      width: 240,
-                      backgroundColor: profile.background,
-                    }}
-                    cover={<Image alt='user dp' src={profile.avatar_url} />}
-                  >
-                    <Meta
-                      title={profile.login}
-                      description={
-                        <Anchor
-                          items={[
-                            {
-                              key: 'profile_url',
-                              href: profile.html_url,
-                              title: profile.login,
-                            },
-                          ]}
-                        />
-                      }
-                    />
+    <div className={styles.cards}>
+      {userProfile.length > 0 && (
+        <Row>
+          {userProfile?.map((profile, index) => (
+            <Col key={index}>
+              {profile.login !== undefined && (
+                <Card
+                  onClick={() => {
+                    toggleReposCard(profile.login);
+                    setActiveColor(profile.background as string);
+                  }}
+                  hoverable
+                  style={{
+                    // width: '150px',
+                    backgroundColor: profile.background,
+                  }}
+                  cover={<Image alt='user dp' src={profile.avatar_url} />}
+                  className={styles.profileCard}
+                >
+                  <Meta
+                    title={profile.login}
+                    description={
+                      <Anchor
+                        items={[
+                          {
+                            key: 'profile_url',
+                            href: profile.html_url,
+                            title: profile.login,
+                          },
+                        ]}
+                      />
+                    }
+                  />
 
-                    <div>
-                      <Title level={5}>
-                        Followers: {profile?.followers?.length ?? 0}
-                      </Title>
-                    </div>
-                  </Card>
-                )}
-              </Col>
-            ))}
-          </Row>
-        )}
-      </Row>
+                  <div>
+                    <Title level={5}>
+                      Followers: {profile?.followers?.length ?? 0}
+                    </Title>
+                  </div>
+                </Card>
+              )}
+            </Col>
+          ))}
+        </Row>
+      )}
 
       <Row>
-        <Col span={18}>
+        <Col>
           {!isRepoExpanded ? null : (
             <Row>
               {expandedUserRepos?.map((repo, index) => (
@@ -83,9 +82,10 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                     <Card
                       hoverable
                       style={{
-                        width: 240,
+                        // width: 240,
                         background: activeColor,
                       }}
+                      className={styles.reposCard}
                     >
                       <Meta
                         title={repo.name}
@@ -112,6 +112,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           )}
         </Col>
       </Row>
-    </>
+    </div>
   );
 };
