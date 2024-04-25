@@ -13,8 +13,8 @@ export const useStyle = createStyles({
 
   searchField: css`
     width: 500px;
-    top: 80px;
-    left: 200px;
+    top: 120px;
+    left: 430px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -25,8 +25,8 @@ export const useStyle = createStyles({
     height: 27px;
     border: 1px solid black;
     font-weight: bold;
-    left: 720px;
-    top: 60px;
+    left: 950px;
+    top: 90px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -42,8 +42,8 @@ export const useStyle = createStyles({
     justify-content: center;
     text: var(--heading-color);
     position: relative;
-    left: 320px;
-    top: 165px;
+    left: 594px;
+    top: 162px;
   `,
 
   githubTitle: css`
@@ -56,8 +56,8 @@ export const useStyle = createStyles({
   dropdownSelect: css` 
     width: 90px;
     height: 30px;
-    top: 40px;
-    left: 500px;
+    top: 80px;
+    left: 730px;
     position: relative;
     margin: auto;
     display: flex;
@@ -85,7 +85,7 @@ export const useStyle = createStyles({
   homePageTitle: css`
     width: 100%;
     top: 110px;
-    right: 50px;
+    left: 220px;
     position: relative;
     display: flex;
     justify-content: center;
@@ -94,7 +94,7 @@ export const useStyle = createStyles({
   githubPara: css`
   
     width: 100%;
-    left: 350px;
+    left: 620px;
     bottom: 100px;
   `,
 });
