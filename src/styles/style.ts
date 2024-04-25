@@ -97,4 +97,30 @@ export const useStyle = createStyles({
     left: 620px;
     bottom: 100px;
   `,
+
+  darkMode: css`
+    // width: 60px;
+    // height: 27px;
+    // border: 1px solid black;
+    // font-weight: bold;
+    // left: 950px;
+    // top: 90px;
+    // position: relative;
+    // display: flex;
+    // justify-content: center;
+    background-color: black;
+  `,
+
+  lightMode: css`
+    // width: 60px;
+    // height: 27px;
+    // border: 1px solid black;
+    // font-weight: bold;
+    // left: 950px;
+    // top: 90px;
+    // position: relative;
+    // display: flex;
+    // justify-content: center;
+    background-color: white;
+  `,
 });

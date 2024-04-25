@@ -10,6 +10,7 @@ import {
 } from '../services/github.service';
 import getRandomColor from '../utils/randomColor.util';
 import { HomePageComponent } from '../app/components/homepage/homepage.component';
+import { ThemeProvider } from 'antd-style';
 // import { ThemeAppearance } from 'antd-style';
 // import { useStyle } from '../styles/style';
 
@@ -81,18 +82,20 @@ const App = () => {
   // const { styles } = useStyle();
 
   return (
-    <HomePageComponent
-      username={username}
-      setUsername={setUsername}
-      debouncedProfile={debouncedProfileSearch}
-      userProfile={userProfile}
-      isRepoExpanded={isRepoExpanded}
-      setIsRepoExpanded={setIsRepoExpanded}
-      expandedUserRepos={expandedUserRepos}
-      setExpandedUserRepos={setExpandedUserRepos}
-      activeColor={activeColor}
-      setActiveColor={setActiveColor}
-    />
+    <ThemeProvider>
+      <HomePageComponent
+        username={username}
+        setUsername={setUsername}
+        debouncedProfile={debouncedProfileSearch}
+        userProfile={userProfile}
+        isRepoExpanded={isRepoExpanded}
+        setIsRepoExpanded={setIsRepoExpanded}
+        expandedUserRepos={expandedUserRepos}
+        setExpandedUserRepos={setExpandedUserRepos}
+        activeColor={activeColor}
+        setActiveColor={setActiveColor}
+      />
+    </ThemeProvider>
   );
 };
 
