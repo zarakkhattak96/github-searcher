@@ -10,7 +10,7 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 
   return (
     <>
-      <Row>
+      <Row className={styles.navThemeSwitchSearch}>
         <Col>
           <Input
             placeholder='Start typing here ..'

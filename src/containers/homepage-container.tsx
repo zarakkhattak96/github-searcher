@@ -12,7 +12,7 @@ import getRandomColor from '../utils/randomColor.util';
 import { HomePageComponent } from '../app/components/homepage/homepage.component';
 import { useStyle } from '../styles/style';
 
-const HomePageContainer = () => {
+const App = () => {
   const [username, setUsername] = useState('');
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
   const [expandedUserRepos, setExpandedUserRepos] = useState<IRepository[]>([]);
@@ -80,21 +80,21 @@ const HomePageContainer = () => {
   const { styles } = useStyle();
 
   return (
-    // <div className={styles.root}>
-    <HomePageComponent
-      username={username}
-      setUsername={setUsername}
-      debouncedProfile={debouncedProfileSearch}
-      userProfile={userProfile}
-      isRepoExpanded={isRepoExpanded}
-      setIsRepoExpanded={setIsRepoExpanded}
-      expandedUserRepos={expandedUserRepos}
-      setExpandedUserRepos={setExpandedUserRepos}
-      activeColor={activeColor}
-      setActiveColor={setActiveColor}
-    />
-    // </div>
+    <div className={styles.layout}>
+      <HomePageComponent
+        username={username}
+        setUsername={setUsername}
+        debouncedProfile={debouncedProfileSearch}
+        userProfile={userProfile}
+        isRepoExpanded={isRepoExpanded}
+        setIsRepoExpanded={setIsRepoExpanded}
+        expandedUserRepos={expandedUserRepos}
+        setExpandedUserRepos={setExpandedUserRepos}
+        activeColor={activeColor}
+        setActiveColor={setActiveColor}
+      />
+    </div>
   );
 };
 
-export default HomePageContainer;
+export default App;

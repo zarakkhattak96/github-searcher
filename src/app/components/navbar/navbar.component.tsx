@@ -8,12 +8,9 @@ export default function NavBar() {
   return (
     <>
       <Row>
-        <Col span={16}>
-          <Row justify={'center'} className={styles.githubOutlined}>
-            <GithubOutlined />
-
-            <Title level={2}>Github Searcher</Title>
-          </Row>
+        <Col>
+          <GithubOutlined className={styles.githubOutlined} />
+          <Title level={2}>Github Searcher</Title>
         </Col>
       </Row>
 
