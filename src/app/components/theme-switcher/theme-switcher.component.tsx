@@ -10,7 +10,7 @@ export const ThemeSwitcher = () => {
 
   return (
     <Row>
-      <Col span={24}>
+      <Col>
         <Switch
           checkedChildren='Dark'
           unCheckedChildren='Light'

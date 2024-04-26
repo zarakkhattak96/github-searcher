@@ -26,7 +26,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
     }
   };
   return (
-    <div className={styles.cards}>
+    <div className={styles.cards} id='contentDiv'>
       {userProfile.length > 0 && (
         <Row>
           {userProfile?.map((profile, index) => (
@@ -77,7 +77,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           {!isRepoExpanded ? null : (
             <Row>
               {expandedUserRepos?.map((repo, index) => (
-                <Col key={index} span={8}>
+                <Col key={index}>
                   {repo.name !== undefined && (
                     <Card
                       hoverable

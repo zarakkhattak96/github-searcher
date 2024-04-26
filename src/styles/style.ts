@@ -2,10 +2,10 @@ import { createStyles } from 'antd-style';
 
 export const useStyle = createStyles(({ css, appearance }) => ({
   layout: {
-    margin: 0,
+    margin: '0px',
     width: '100%',
     height: '100vh',
-    maxWidth: '1024px',
+    // maxWidth: '2096px',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
   },
 
@@ -18,7 +18,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     top: 120px;
     left: 430px;
     position: relative;
-    display: flex;
+    // display: flex;
     justify-content: center;
   `,
 
@@ -30,7 +30,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     left: 950px;
     top: 90px;
     position: relative;
-    display: flex;
+    // display: flex;
     justify-content: center;
     background-color: black;
   `,
@@ -40,7 +40,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     font-size: 28px;
     color: var(--heading-color);
     text-align: center;
-    display: flex;
+    // display: flex;
     justify-content: center;
     text: var(--heading-color);
     position: relative;
@@ -50,9 +50,9 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 
   githubTitle: css`
     text-align: center;
-    display: flex;
+    // display: flex;
     justify-content: center;
-    text: var(--text-color);
+    background-color: ${appearance === 'light' ? 'black' : 'white'};
   `,
 
   dropdownSelect: css` 
@@ -62,13 +62,13 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     left: 730px;
     position: relative;
     margin: auto;
-    display: flex;
+    // display: flex;
     justify-content: center;
   `,
 
   cards: css`
   text-align: center;
-  display: flex;
+  // display: flex;
   flex-direction: column;
   position: relative;
   top: 100px;
@@ -89,7 +89,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     top: 110px;
     left: 220px;
     position: relative;
-    display: flex;
+    // display: flex;
     justify-content: center;
     `,
 
@@ -110,7 +110,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     // position: relative;
     // display: flex;
     // justify-content: center;
-    background-color: black;
+    // background-color: black;
   `,
 
   lightMode: css`
@@ -123,6 +123,6 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     // position: relative;
     // display: flex;
     // justify-content: center;
-    background-color: white;
+    // background-color: white;
   `,
 }));

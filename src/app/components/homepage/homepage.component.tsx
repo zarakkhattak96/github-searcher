@@ -22,44 +22,44 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
   const { styles } = useStyle();
   return (
     <>
-      <div id='layout' className={styles.layout}>
-        <Flex vertical={true} gap={'small'}>
-          <Row>
-            <Col span={24}>
-              <NavBar />
-              <ThemeSwitcher />
-            </Col>
-          </Row>
+      {/* <div id='layout'> */}
+      <Flex vertical={true} gap={'small'} className={styles.layout} id='layout'>
+        <Row>
+          <Col>
+            <NavBar />
+            <ThemeSwitcher />
+          </Col>
+        </Row>
 
-          <Row>
-            <Col span={48}>
-              <SearchInputComponent
-                username={username}
-                setUsername={setUsername}
-              />
-              <SelectCommonComponent debouncedProfile={debouncedProfile} />
-            </Col>
-          </Row>
-        </Flex>
-      </div>
+        <Row>
+          <Col>
+            <SearchInputComponent
+              username={username}
+              setUsername={setUsername}
+            />
+            <SelectCommonComponent debouncedProfile={debouncedProfile} />
+          </Col>
+        </Row>
 
-      <div>
-        <Space>
-          <Row>
-            <Col span={21}>
-              <ContentComponent
-                userProfile={userProfile}
-                isRepoExpanded={isRepoExpanded}
-                setIsRepoExpanded={setIsRepoExpanded}
-                expandedUserRepos={expandedUserRepos}
-                setExpandedUserRepos={setExpandedUserRepos}
-                activeColor={activeColor}
-                setActiveColor={setActiveColor}
-              />
-            </Col>
-          </Row>
-        </Space>
-      </div>
+        {/* <div id='contentInContainer'> */}
+        {/* <Space> */}
+        <Row>
+          <Col>
+            <ContentComponent
+              userProfile={userProfile}
+              isRepoExpanded={isRepoExpanded}
+              setIsRepoExpanded={setIsRepoExpanded}
+              expandedUserRepos={expandedUserRepos}
+              setExpandedUserRepos={setExpandedUserRepos}
+              activeColor={activeColor}
+              setActiveColor={setActiveColor}
+            />
+          </Col>
+        </Row>
+      </Flex>
+      {/* </div> */}
+      {/* </Space> */}
+      {/* </div> */}
     </>
   );
 };

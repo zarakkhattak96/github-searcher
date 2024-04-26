@@ -83,28 +83,30 @@ const App = () => {
   console.debug('theme', theme);
 
   return (
-    <ThemeProvider appearance={theme}>
-      <ThemeContext.Provider
-        value={{
-          changeTheme: () => {
-            setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
-          },
-        }}
-      >
-        <HomePageComponent
-          username={username}
-          setUsername={setUsername}
-          debouncedProfile={debouncedProfileSearch}
-          userProfile={userProfile}
-          isRepoExpanded={isRepoExpanded}
-          setIsRepoExpanded={setIsRepoExpanded}
-          expandedUserRepos={expandedUserRepos}
-          setExpandedUserRepos={setExpandedUserRepos}
-          activeColor={activeColor}
-          setActiveColor={setActiveColor}
-        />
-      </ThemeContext.Provider>
-    </ThemeProvider>
+    <div id='homeContainer'>
+      <ThemeProvider appearance={theme}>
+        <ThemeContext.Provider
+          value={{
+            changeTheme: () => {
+              setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
+            },
+          }}
+        >
+          <HomePageComponent
+            username={username}
+            setUsername={setUsername}
+            debouncedProfile={debouncedProfileSearch}
+            userProfile={userProfile}
+            isRepoExpanded={isRepoExpanded}
+            setIsRepoExpanded={setIsRepoExpanded}
+            expandedUserRepos={expandedUserRepos}
+            setExpandedUserRepos={setExpandedUserRepos}
+            activeColor={activeColor}
+            setActiveColor={setActiveColor}
+          />
+        </ThemeContext.Provider>
+      </ThemeProvider>
+    </div>
   );
 };
 
