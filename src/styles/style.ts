@@ -1,10 +1,12 @@
-import { createStyles, css } from 'antd-style';
+import { createStyles } from 'antd-style';
 
-export const useStyle = createStyles({
+export const useStyle = createStyles(({ css, appearance }) => ({
   layout: {
     margin: 0,
     width: '100%',
+    height: '100vh',
     maxWidth: '1024px',
+    backgroundColor: appearance === 'dark' ? 'black' : 'white',
   },
 
   inputSpace: css`
@@ -123,4 +125,4 @@ export const useStyle = createStyles({
     // justify-content: center;
     background-color: white;
   `,
-});
+}));

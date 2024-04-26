@@ -22,7 +22,7 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
   const { styles } = useStyle();
   return (
     <>
-      <div className={styles.layout}>
+      <div id='layout' className={styles.layout}>
         <Flex vertical={true} gap={'small'}>
           <Row>
             <Col span={24}>

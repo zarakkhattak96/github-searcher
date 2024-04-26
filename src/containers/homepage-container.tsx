@@ -10,9 +10,8 @@ import {
 } from '../services/github.service';
 import getRandomColor from '../utils/randomColor.util';
 import { HomePageComponent } from '../app/components/homepage/homepage.component';
+import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
-// import { ThemeAppearance } from 'antd-style';
-// import { useStyle } from '../styles/style';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -21,6 +20,8 @@ const App = () => {
   const [isRepoExpanded, setIsRepoExpanded] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [activeColor, setActiveColor] = useState('');
+
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const searchUser = async () => {
     const data = await fetchUserProfile(username);
@@ -79,22 +80,30 @@ const App = () => {
   };
 
   const debouncedProfileSearch = debounce(searchUser, 1000);
-  // const { styles } = useStyle();
+  console.debug('theme', theme);
 
   return (
-    <ThemeProvider>
-      <HomePageComponent
-        username={username}
-        setUsername={setUsername}
-        debouncedProfile={debouncedProfileSearch}
-        userProfile={userProfile}
-        isRepoExpanded={isRepoExpanded}
-        setIsRepoExpanded={setIsRepoExpanded}
-        expandedUserRepos={expandedUserRepos}
-        setExpandedUserRepos={setExpandedUserRepos}
-        activeColor={activeColor}
-        setActiveColor={setActiveColor}
-      />
+    <ThemeProvider appearance={theme}>
+      <ThemeContext.Provider
+        value={{
+          changeTheme: () => {
+            setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
+          },
+        }}
+      >
+        <HomePageComponent
+          username={username}
+          setUsername={setUsername}
+          debouncedProfile={debouncedProfileSearch}
+          userProfile={userProfile}
+          isRepoExpanded={isRepoExpanded}
+          setIsRepoExpanded={setIsRepoExpanded}
+          expandedUserRepos={expandedUserRepos}
+          setExpandedUserRepos={setExpandedUserRepos}
+          activeColor={activeColor}
+          setActiveColor={setActiveColor}
+        />
+      </ThemeContext.Provider>
     </ThemeProvider>
   );
 };
