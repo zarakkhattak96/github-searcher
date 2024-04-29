@@ -49,6 +49,7 @@ const App = () => {
             ...data?.items[0],
           };
           updated.map((profile) => {
+            // return { ...profile };
             return { ...profile, background: getRandomColor() };
           });
           return updated;
@@ -56,6 +57,7 @@ const App = () => {
       } else {
         setUserProfile((prevUserProf) => [
           ...prevUserProf,
+          // { ...data?.items[0] },
           { ...data?.items[0], background: getRandomColor() },
         ]);
       }
@@ -84,6 +86,7 @@ const App = () => {
   const { styles } = useStyle();
 
   return (
+    // <ConfigProvider theme={darkTheme}>
     <Flex id='homeContainer' className={styles.flexHeight}>
       <ThemeProvider appearance={theme}>
         <ThemeContext.Provider
@@ -108,6 +111,7 @@ const App = () => {
         </ThemeContext.Provider>
       </ThemeProvider>
     </Flex>
+    // </ConfigProvider>
   );
 };
 

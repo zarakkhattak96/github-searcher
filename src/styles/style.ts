@@ -1,5 +1,15 @@
 import { createStyles } from 'antd-style';
 
+// export const darkTheme = {
+//   token: {
+//     colorFillContentHover: 'gray',
+//     colorFillAlter: 'red',
+//     colorFillContent: 'red',
+//     colorBgContainerDisabled: 'red',
+//     colorBgTextHover: 'red',
+//   },
+// };
+
 export const useStyle = createStyles(({ css, appearance }) => ({
   layout: {
     margin: '0px',
@@ -61,7 +71,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 `,
 
   profileCard: css`
-  width: 150px;
+  width: 180px;
 
 `,
 
@@ -69,6 +79,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     width: 160px;
     display: flex
     flex-direction: row;
+   
 
 `,
 
@@ -86,5 +97,8 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 
   flexHeight: css`
      height: 100%;
+     position: relative;
+     display: flex;
+     justify-content: center;
      `,
 }));
