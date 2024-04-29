@@ -15,8 +15,10 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
           <Input
             placeholder='Start typing here ..'
             maxLength={50}
+            style={{
+              position: 'relative',
+            }}
             size='large'
-            type='text'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             className={styles.searchField}

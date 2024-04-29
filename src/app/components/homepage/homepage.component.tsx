@@ -22,8 +22,7 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
   const { styles } = useStyle();
   return (
     <>
-      {/* <div id='layout'> */}
-      <Flex vertical={true} gap={'small'} className={styles.layout} id='layout'>
+      <Flex vertical={true} className={styles.layout}>
         <Row>
           <Col>
             <NavBar />
@@ -41,8 +40,6 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
           </Col>
         </Row>
 
-        {/* <div id='contentInContainer'> */}
-        {/* <Space> */}
         <Row>
           <Col>
             <ContentComponent
@@ -57,9 +54,6 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
           </Col>
         </Row>
       </Flex>
-      {/* </div> */}
-      {/* </Space> */}
-      {/* </div> */}
     </>
   );
 };

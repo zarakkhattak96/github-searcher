@@ -18,12 +18,7 @@ export default function NavBar() {
 
       <Row>
         <Col>
-          <Typography.Paragraph
-            type='secondary'
-            className={styles.githubPara}
-            style={{ top: 100, position: 'relative' }}
-          >
-            {/* //TODO: The para styling isnt affected by the class name so added in-line styling  */}
+          <Typography.Paragraph type='secondary' className={styles.githubPara}>
             Search users or repositories below
           </Typography.Paragraph>
         </Col>

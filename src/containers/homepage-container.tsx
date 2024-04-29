@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { Col, Flex, message, Row } from 'antd';
 
 import { useState } from 'react';
 import { debounce } from '../utils/debounce.utils';
@@ -12,6 +12,8 @@ import getRandomColor from '../utils/randomColor.util';
 import { HomePageComponent } from '../app/components/homepage/homepage.component';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
+import { useStyle } from '../styles/style';
+import '../styles/index.css';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -82,8 +84,10 @@ const App = () => {
   const debouncedProfileSearch = debounce(searchUser, 1000);
   console.debug('theme', theme);
 
+  const { styles } = useStyle();
+
   return (
-    <div id='homeContainer'>
+    <Flex id='homeContainer' className={styles.flexHeight}>
       <ThemeProvider appearance={theme}>
         <ThemeContext.Provider
           value={{
@@ -106,7 +110,7 @@ const App = () => {
           />
         </ThemeContext.Provider>
       </ThemeProvider>
-    </div>
+    </Flex>
   );
 };
 
