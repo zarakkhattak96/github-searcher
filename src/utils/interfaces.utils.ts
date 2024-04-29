@@ -158,3 +158,21 @@ export interface IHomePageComponentProps {
   activeColor: string;
   setActiveColor: React.Dispatch<SetStateAction<string>>;
 }
+
+// export interface ILayoutConfig {
+//   headerBg: string;
+//   siderBg: string;
+// }
+
+// export interface IBodyConfig {
+//   colorPrimary: string;
+//   colorBgBase: string;
+//   colorTextSecondary: string;
+//   colorTextTertiary: string;
+//   bgWhite: string;
+// }
+
+// export interface IComponentsConfig {
+//   layout: ILayoutConfig;
+//   body: IBodyConfig;
+// }

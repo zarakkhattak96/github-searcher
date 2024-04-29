@@ -1,23 +1,22 @@
 import { Col, Row, Switch } from 'antd';
-import { useTheme } from '../../../custom-hooks/changetheme.hook';
 import { useStyle } from '../../../styles/style';
+import { ThemeContext } from '../../../context/themeContext';
+import { useContext } from 'react';
 
 export const ThemeSwitcher = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_theme, handleChange] = useTheme('light');
   const { styles } = useStyle();
 
-  // esLint error so theme is prefixed with "_"
+  const { changeTheme } = useContext(ThemeContext);
 
   return (
     <Row>
-      <Col span={24}>
+      <Col>
         <Switch
           checkedChildren='Dark'
           unCheckedChildren='Light'
           size='default'
           className={styles.themeSwitch}
-          onChange={handleChange}
+          onChange={changeTheme}
         />
       </Col>
     </Row>

@@ -1,100 +1,96 @@
-import { createStyles, css } from 'antd-style';
+import { createStyles } from 'antd-style';
 
-export const useStyle = createStyles({
+export const useStyle = createStyles(({ css, appearance }) => ({
   layout: {
-    margin: 0,
+    margin: '0px',
     width: '100%',
-    maxWidth: '1024px',
+    // height: '100vh',
+    // maxWidth: '2096px',
+    backgroundColor: appearance === 'dark' ? 'black' : 'white',
+    alignItems: 'center',
+    // justifyContent: 'center',
+    // position: 'relative',
+    // overflowY: 'scroll',
   },
 
-  inputSpace: css`
-    // justifyContent: center;
-  `,
-
   searchField: css`
-    width: 500px;
-    top: 80px;
-    left: 200px;
-    position: relative;
-    display: flex;
-    justify-content: center;
+    // position: relative;
+    // display: flex;
+    // justify-content: center;
   `,
 
   themeSwitch: css`
-    width: 60px;
-    height: 27px;
-    border: 1px solid black;
-    font-weight: bold;
-    left: 720px;
-    top: 60px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    background-color: black;
+    // height: 27px;
+    // border: 1px solid black;
+    // font-weight: bold;
+    // position: relative;
+    // display: flex;
+    // justify-content: center;
+    // background-color: black;
   `,
 
   githubOutlined: css`
-    width: 50px;
     font-size: 28px;
-    color: var(--heading-color);
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    text: var(--heading-color);
-    position: relative;
-    left: 320px;
-    top: 165px;
+    // color: var(--heading-color);
+    // text-align: center;
+    // display: flex;
+    // justify-content: center;
+    // text: var(--heading-color);
+    // position: relative;
+       color: ${appearance === 'dark' ? 'white' : 'black'};
+    
   `,
 
   githubTitle: css`
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    text: var(--text-color);
+    // text-align: center;
+    // display: flex;
+    // justify-content: center;
+    // background-color: ${appearance === 'dark' ? 'white' : 'black'};
   `,
 
   dropdownSelect: css` 
-    width: 90px;
-    height: 30px;
-    top: 40px;
-    left: 500px;
-    position: relative;
-    margin: auto;
-    display: flex;
-    justify-content: center;
+    // height: 30px;
+    // left: 300px;
+    // position: relative;
+    // margin: auto;
+    // display: flex;
+    // justify-content: center;
   `,
 
   cards: css`
   text-align: center;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
-  top: 100px;
+  margin: auto;
 `,
 
   profileCard: css`
-  width: 180px;
+  // width: 180px;
 
 `,
 
   reposCard: css`
-  width: 180px;
+    width: 160px;
+    display: flex
+    flex-direction: row;
 
 `,
 
   homePageTitle: css`
-    width: 100%;
-    top: 110px;
-    right: 50px;
-    position: relative;
-    display: flex;
-    justify-content: center;
+    // position: relative;
+    // display: flex;
+    // justify-content: center;
     `,
 
   githubPara: css`
   
-    width: 100%;
-    left: 350px;
-    bottom: 100px;
+    // bottom: 100px;
   `,
-});
+
+  flexHeight: css`
+     height: 100%;
+     `,
+}));

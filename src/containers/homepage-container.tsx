@@ -1,4 +1,4 @@
-import { message } from 'antd';
+import { Col, Flex, message, Row } from 'antd';
 
 import { useState } from 'react';
 import { debounce } from '../utils/debounce.utils';
@@ -10,7 +10,10 @@ import {
 } from '../services/github.service';
 import getRandomColor from '../utils/randomColor.util';
 import { HomePageComponent } from '../app/components/homepage/homepage.component';
-// import { useStyle } from '../styles/style';
+import { ThemeContext } from '../context/themeContext';
+import { ThemeProvider } from 'antd-style';
+import { useStyle } from '../styles/style';
+import '../styles/index.css';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -19,6 +22,8 @@ const App = () => {
   const [isRepoExpanded, setIsRepoExpanded] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [activeColor, setActiveColor] = useState('');
+
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const searchUser = async () => {
     const data = await fetchUserProfile(username);
@@ -77,21 +82,35 @@ const App = () => {
   };
 
   const debouncedProfileSearch = debounce(searchUser, 1000);
-  // const { styles } = useStyle();
+  console.debug('theme', theme);
+
+  const { styles } = useStyle();
 
   return (
-    <HomePageComponent
-      username={username}
-      setUsername={setUsername}
-      debouncedProfile={debouncedProfileSearch}
-      userProfile={userProfile}
-      isRepoExpanded={isRepoExpanded}
-      setIsRepoExpanded={setIsRepoExpanded}
-      expandedUserRepos={expandedUserRepos}
-      setExpandedUserRepos={setExpandedUserRepos}
-      activeColor={activeColor}
-      setActiveColor={setActiveColor}
-    />
+    <Flex id='homeContainer' className={styles.flexHeight}>
+      <ThemeProvider appearance={theme}>
+        <ThemeContext.Provider
+          value={{
+            changeTheme: () => {
+              setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
+            },
+          }}
+        >
+          <HomePageComponent
+            username={username}
+            setUsername={setUsername}
+            debouncedProfile={debouncedProfileSearch}
+            userProfile={userProfile}
+            isRepoExpanded={isRepoExpanded}
+            setIsRepoExpanded={setIsRepoExpanded}
+            expandedUserRepos={expandedUserRepos}
+            setExpandedUserRepos={setExpandedUserRepos}
+            activeColor={activeColor}
+            setActiveColor={setActiveColor}
+          />
+        </ThemeContext.Provider>
+      </ThemeProvider>
+    </Flex>
   );
 };
 

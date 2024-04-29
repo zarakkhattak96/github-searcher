@@ -1,4 +1,4 @@
-import { Anchor, Card, Col, Row, Typography, Image } from 'antd';
+import { Anchor, Card, Col, Row, Typography, Image, Flex } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { fetchUserRepos } from '../../../services/github.service';
 import { IContentComponentProps } from '../../../utils/interfaces.utils';
@@ -26,7 +26,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
     }
   };
   return (
-    <div className={styles.cards}>
+    <div className={styles.cards} id='contentDiv'>
       {userProfile.length > 0 && (
         <Row>
           {userProfile?.map((profile, index) => (
@@ -39,7 +39,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   }}
                   hoverable
                   style={{
-                    // width: '150px',
+                    width: '150px',
                     backgroundColor: profile.background,
                   }}
                   cover={<Image alt='user dp' src={profile.avatar_url} />}
@@ -71,47 +71,50 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           ))}
         </Row>
       )}
-
-      <Row>
-        <Col>
-          {!isRepoExpanded ? null : (
-            <Row>
-              {expandedUserRepos?.map((repo, index) => (
-                <Col key={index} span={8}>
-                  {repo.name !== undefined && (
-                    <Card
-                      hoverable
-                      style={{
-                        // width: 240,
-                        background: activeColor,
-                      }}
-                      className={styles.reposCard}
-                    >
-                      <Meta
-                        title={repo.name}
-                        description={
-                          <Anchor
-                            items={[
-                              {
-                                key: 'profile_url',
-                                href: repo.html_url,
-                                title: repo.name,
-                              },
-                            ]}
-                          />
-                        }
-                      />
-                      <div>
-                        <Title level={5}>Stars: {repo.stargazers_count}</Title>
-                      </div>
-                    </Card>
-                  )}
-                </Col>
-              ))}
-            </Row>
-          )}
-        </Col>
-      </Row>
+      <Flex className={styles.cards}>
+        <Row>
+          <Col>
+            {!isRepoExpanded ? null : (
+              <Row>
+                {expandedUserRepos?.map((repo, index) => (
+                  <Col key={index}>
+                    {repo.name !== undefined && (
+                      <Card
+                        hoverable
+                        style={{
+                          // width: 240,
+                          background: activeColor,
+                        }}
+                        className={styles.reposCard}
+                      >
+                        <Meta
+                          title={repo.name}
+                          description={
+                            <Anchor
+                              items={[
+                                {
+                                  key: 'profile_url',
+                                  href: repo.html_url,
+                                  title: repo.name,
+                                },
+                              ]}
+                            />
+                          }
+                        />
+                        <div>
+                          <Title level={5}>
+                            Stars: {repo.stargazers_count}
+                          </Title>
+                        </div>
+                      </Card>
+                    )}
+                  </Col>
+                ))}
+              </Row>
+            )}
+          </Col>
+        </Row>
+      </Flex>
     </div>
   );
 };
