@@ -15,6 +15,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     display: flex;
     justify-content: center;
     width: 400px;
+    border-radius: 0px;
   `,
 
   themeSwitch: css`
@@ -25,31 +26,24 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     display: flex;
     justify-content: center;
     background-color: black;
-    left: 335px;
+    left: 325px;
     bottom: 10px;
   `,
 
   githubOutlined: css`
-    font-size: 28px;
+    font-size: 26px;
     display: flex;
     justify-content: center;
     position: relative;
     color: ${appearance === 'dark' ? 'white' : 'black'};
-    right: 115px;
+    right: 95px;
     top: 52px;
     
   `,
 
-  githubTitle: css`
-    // text-align: center;
-    // display: flex;
-    // justify-content: center;
-    // background-color: ${appearance === 'dark' ? 'white' : 'black'};
-  `,
-
   dropdownSelect: css` 
     height: 30px;
-    left: 420px;
+    left: 410px;
     bottom: 40px;
     position: relative;
     display: flex;
@@ -79,14 +73,15 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 `,
 
   homePageTitle: css`
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
+   left: 20px;
+   position: relative;
+
     `,
 
   githubPara: css`
-  
-    // bottom: 100px;
+    position: relative;
+    left: 6px;
+    bottom: 15px;
   `,
 
   flexHeight: css`
