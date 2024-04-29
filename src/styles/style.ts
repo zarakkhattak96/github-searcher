@@ -5,39 +5,38 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     margin: '0px',
     width: '100%',
     // height: '100vh',
-    // maxWidth: '2096px',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
     alignItems: 'center',
-    // justifyContent: 'center',
-    // position: 'relative',
     // overflowY: 'scroll',
   },
 
   searchField: css`
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 400px;
   `,
 
   themeSwitch: css`
-    // height: 27px;
-    // border: 1px solid black;
-    // font-weight: bold;
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
-    // background-color: black;
+    height: 27px;
+    border: 1px solid black;
+    font-weight: bold;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    left: 335px;
+    bottom: 10px;
   `,
 
   githubOutlined: css`
     font-size: 28px;
-    // color: var(--heading-color);
-    // text-align: center;
-    // display: flex;
-    // justify-content: center;
-    // text: var(--heading-color);
-    // position: relative;
-       color: ${appearance === 'dark' ? 'white' : 'black'};
+    display: flex;
+    justify-content: center;
+    position: relative;
+    color: ${appearance === 'dark' ? 'white' : 'black'};
+    right: 115px;
+    top: 52px;
     
   `,
 
@@ -49,12 +48,12 @@ export const useStyle = createStyles(({ css, appearance }) => ({
   `,
 
   dropdownSelect: css` 
-    // height: 30px;
-    // left: 300px;
-    // position: relative;
-    // margin: auto;
-    // display: flex;
-    // justify-content: center;
+    height: 30px;
+    left: 420px;
+    bottom: 40px;
+    position: relative;
+    display: flex;
+    justify-content: center;
   `,
 
   cards: css`
