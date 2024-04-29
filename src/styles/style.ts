@@ -14,10 +14,12 @@ export const useStyle = createStyles(({ css, appearance }) => ({
   layout: {
     margin: '0px',
     width: '100%',
-    // height: '100vh',
+    height: '100%',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
     alignItems: 'center',
-    // overflowY: 'scroll',
+    overflowY: 'auto',
+    position: 'relative',
+    right: '20px',
   },
 
   searchField: css`
@@ -72,15 +74,12 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 
   profileCard: css`
   width: 180px;
-
 `,
 
   reposCard: css`
     width: 160px;
     display: flex
     flex-direction: row;
-   
-
 `,
 
   homePageTitle: css`

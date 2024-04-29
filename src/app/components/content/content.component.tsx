@@ -26,9 +26,9 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
     }
   };
   return (
-    <div className={styles.cards} id='contentDiv'>
+    <Flex className={styles.cards} id='contentDiv' gap={'large'}>
       {userProfile.length > 0 && (
-        <Row>
+        <Row gutter={8}>
           {userProfile?.map((profile, index) => (
             <Col key={index}>
               {profile.login !== undefined && (
@@ -70,7 +70,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           ))}
         </Row>
       )}
-      <Flex className={styles.cards}>
+      <Flex className={styles.cards} id='repoCards'>
         <Row>
           <Col>
             {!isRepoExpanded ? null : (
@@ -113,6 +113,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           </Col>
         </Row>
       </Flex>
-    </div>
+    </Flex>
   );
 };
