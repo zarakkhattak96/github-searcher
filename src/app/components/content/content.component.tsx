@@ -72,7 +72,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
       )}
       <Flex className={styles.cards} id='repoCards'>
         <Row>
-          <Col>
+          <Col span={24}>
             {!isRepoExpanded ? null : (
               <Row>
                 {expandedUserRepos?.map((repo, index) => (

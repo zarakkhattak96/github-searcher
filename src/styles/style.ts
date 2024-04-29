@@ -19,7 +19,6 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     alignItems: 'center',
     overflowY: 'auto',
     position: 'relative',
-    right: '20px',
   },
 
   searchField: css`
