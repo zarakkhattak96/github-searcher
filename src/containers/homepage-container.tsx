@@ -1,7 +1,6 @@
-import { Col, Flex, message, Row } from 'antd';
+import { Flex, message } from 'antd';
 
 import { useState } from 'react';
-import { debounce } from '../utils/debounce.utils';
 import { IRepository, IUserProfile } from '../utils/interfaces.utils';
 import {
   fetchUserFollowers,
@@ -13,7 +12,7 @@ import { HomePageComponent } from '../app/components/homepage/homepage.component
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
-import '../styles/index.css';
+import { useDebounce } from '../hooks/debounce.hook';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -43,7 +42,6 @@ const App = () => {
       );
 
       if (existingUser !== -1) {
-        console.log(existingUser, 'EXISTING USER');
         setUserProfile((prevUserProf) => {
           const updated = [...prevUserProf];
           updated[existingUser] = {
@@ -81,12 +79,12 @@ const App = () => {
     setSearchedUsers([...searchedUsers, username]);
   };
 
-  const debouncedProfileSearch = debounce(searchUser, 1000);
-  console.debug('theme', theme);
+  const debouncedProfileSearch = useDebounce(searchUser, 1000);
 
   const { styles } = useStyle();
 
   return (
+    // <ConfigProvider theme={darkTheme}>
     <Flex id='homeContainer' className={styles.flexHeight}>
       <ThemeProvider appearance={theme}>
         <ThemeContext.Provider
@@ -111,6 +109,7 @@ const App = () => {
         </ThemeContext.Provider>
       </ThemeProvider>
     </Flex>
+    // </ConfigProvider>
   );
 };
 

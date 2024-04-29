@@ -1,60 +1,64 @@
 import { createStyles } from 'antd-style';
 
+// export const darkTheme = {
+//   token: {
+//     colorFillContentHover: 'gray',
+//     colorFillAlter: 'red',
+//     colorFillContent: 'red',
+//     colorBgContainerDisabled: 'red',
+//     colorBgTextHover: 'red',
+//   },
+// };
+
 export const useStyle = createStyles(({ css, appearance }) => ({
   layout: {
     margin: '0px',
     width: '100%',
-    // height: '100vh',
-    // maxWidth: '2096px',
+    height: '100%',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
     alignItems: 'center',
-    // justifyContent: 'center',
-    // position: 'relative',
-    // overflowY: 'scroll',
+    overflowY: 'auto',
+    position: 'relative',
   },
 
   searchField: css`
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    width: 400px;
+    border-radius: 0px;
   `,
 
   themeSwitch: css`
-    // height: 27px;
-    // border: 1px solid black;
-    // font-weight: bold;
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
-    // background-color: black;
+    height: 27px;
+    border: 1px solid black;
+    font-weight: bold;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    left: 325px;
+    bottom: 10px;
   `,
 
   githubOutlined: css`
-    font-size: 28px;
-    // color: var(--heading-color);
-    // text-align: center;
-    // display: flex;
-    // justify-content: center;
-    // text: var(--heading-color);
-    // position: relative;
-       color: ${appearance === 'dark' ? 'white' : 'black'};
+    font-size: 26px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    color: ${appearance === 'dark' ? 'white' : 'black'};
+    right: 95px;
+    top: 52px;
     
   `,
 
-  githubTitle: css`
-    // text-align: center;
-    // display: flex;
-    // justify-content: center;
-    // background-color: ${appearance === 'dark' ? 'white' : 'black'};
-  `,
-
   dropdownSelect: css` 
-    // height: 30px;
-    // left: 300px;
-    // position: relative;
-    // margin: auto;
-    // display: flex;
-    // justify-content: center;
+    height: 30px;
+    left: 410px;
+    bottom: 40px;
+    position: relative;
+    display: flex;
+    justify-content: center;
   `,
 
   cards: css`
@@ -68,29 +72,31 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 `,
 
   profileCard: css`
-  // width: 180px;
-
+  width: 180px;
 `,
 
   reposCard: css`
     width: 160px;
     display: flex
     flex-direction: row;
-
 `,
 
   homePageTitle: css`
-    // position: relative;
-    // display: flex;
-    // justify-content: center;
+   left: 20px;
+   position: relative;
+
     `,
 
   githubPara: css`
-  
-    // bottom: 100px;
+    position: relative;
+    left: 6px;
+    bottom: 15px;
   `,
 
   flexHeight: css`
      height: 100%;
+     position: relative;
+     display: flex;
+     justify-content: center;
      `,
 }));
