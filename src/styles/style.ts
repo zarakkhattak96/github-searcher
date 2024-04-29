@@ -61,7 +61,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 `,
 
   profileCard: css`
-  // width: 180px;
+  width: 150px;
 
 `,
 

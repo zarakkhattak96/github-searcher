@@ -39,7 +39,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   }}
                   hoverable
                   style={{
-                    width: '150px',
                     backgroundColor: profile.background,
                   }}
                   cover={<Image alt='user dp' src={profile.avatar_url} />}
@@ -82,7 +81,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                       <Card
                         hoverable
                         style={{
-                          // width: 240,
                           background: activeColor,
                         }}
                         className={styles.reposCard}
