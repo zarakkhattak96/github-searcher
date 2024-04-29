@@ -49,7 +49,6 @@ const App = () => {
             ...data?.items[0],
           };
           updated.map((profile) => {
-            // return { ...profile };
             return { ...profile, background: getRandomColor() };
           });
           return updated;
@@ -57,7 +56,6 @@ const App = () => {
       } else {
         setUserProfile((prevUserProf) => [
           ...prevUserProf,
-          // { ...data?.items[0] },
           { ...data?.items[0], background: getRandomColor() },
         ]);
       }
