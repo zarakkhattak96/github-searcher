@@ -1,13 +1,13 @@
 import { Col, Flex, Row } from 'antd';
-import { IHomePageComponentProps } from '../../../utils/interfaces.utils';
+import { IHomePageComponentProps } from '../../../utils/interfaces';
 import { SearchInputComponent } from '../common/searchInput/searchInput';
-import { SelectCommonComponent } from '../common/select/select.common';
-import { ContentComponent } from '../content/content.component';
-import NavBar from '../navbar/navbar.component';
-import { ThemeSwitcher } from '../theme-switcher/theme-switcher.component';
+import { SelectCommonComponent } from '../common/select/select';
+import { ContentComponent } from '../content/content';
+import NavBar from './homepageNavbar';
+import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
 
-export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
+export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   // username,
   // setUsername,
   debouncedProfile,

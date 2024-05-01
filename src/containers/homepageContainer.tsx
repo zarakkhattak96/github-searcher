@@ -1,18 +1,18 @@
 import { Flex, message } from 'antd';
 
 import { useState } from 'react';
-import { IRepository, IUserProfile } from '../utils/interfaces.utils';
+import { IRepository, IUserProfile } from '../utils/interfaces';
 import {
   fetchUserFollowers,
   fetchUserProfile,
   fetchUserRepos,
-} from '../services/github.service';
-import getRandomColor from '../utils/randomColor.util';
-import { HomePageComponent } from '../app/components/homepage/homepage.component';
+} from '../services/github';
+import getRandomColor from '../utils/randomColor';
+import { HomePageLayout } from '../app/components/homepage/homepageLayout';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
-import { useDebounce } from '../hooks/debounce.hook';
+import { useDebounce } from '../hooks/debounce';
 // import { useDispatch } from 'react-redux';
 // import { changeSearchInput } from '../app/components/slice';
 
@@ -104,7 +104,7 @@ const App = () => {
             },
           }}
         >
-          <HomePageComponent
+          <HomePageLayout
             username={username}
             setUsername={setUsername}
             debouncedProfile={debouncedProfileSearch}

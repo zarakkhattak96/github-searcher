@@ -1,7 +1,7 @@
 import { Anchor, Card, Col, Row, Typography, Image, Flex } from 'antd';
 import Meta from 'antd/es/card/Meta';
-import { fetchUserRepos } from '../../../services/github.service';
-import { IContentComponentProps } from '../../../utils/interfaces.utils';
+import { fetchUserRepos } from '../../../services/github';
+import { IContentComponentProps } from '../../../utils/interfaces';
 import React from 'react';
 import { useStyle } from '../../../styles/style';
 
