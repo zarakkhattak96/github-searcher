@@ -8,8 +8,8 @@ import { ThemeSwitcher } from '../theme-switcher/theme-switcher.component';
 import { useStyle } from '../../../styles/style';
 
 export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
-  username,
-  setUsername,
+  // username,
+  // setUsername,
   debouncedProfile,
   userProfile,
   isRepoExpanded,
@@ -33,8 +33,8 @@ export const HomePageComponent: React.FC<IHomePageComponentProps> = ({
         <Row>
           <Col>
             <SearchInputComponent
-              username={username}
-              setUsername={setUsername}
+            // username={username}
+            // setUsername={setUsername}
             />
             <SelectCommonComponent debouncedProfile={debouncedProfile} />
           </Col>

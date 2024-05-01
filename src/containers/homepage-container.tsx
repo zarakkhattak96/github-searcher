@@ -13,6 +13,8 @@ import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
 import { useDebounce } from '../hooks/debounce.hook';
+// import { useDispatch } from 'react-redux';
+// import { changeSearchInput } from '../app/components/slice';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -23,6 +25,14 @@ const App = () => {
   const [activeColor, setActiveColor] = useState('');
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  // const dispatch = useDispatch();
+
+  // const handleUserName = () => {
+  //   // e.preventDefault();
+  //   dispatch(changeSearchInput(username));
+  //   setUsername('');
+  // };
 
   const searchUser = async () => {
     const data = await fetchUserProfile(username);
