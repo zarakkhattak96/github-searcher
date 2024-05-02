@@ -6,11 +6,9 @@ import { ContentComponent } from '../content/content';
 import NavBar from './homepageNavbar';
 import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/store';
 
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
-  // username,
+  username,
   setUsername,
   debouncedProfile,
   userProfile,
@@ -22,11 +20,6 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   setActiveColor,
 }) => {
   const { styles } = useStyle();
-
-  const selectFromStore = useSelector((state: RootState) => state.searchInput);
-
-  const { username } = selectFromStore;
-  // const dispatch = useDispatch();
 
   return (
     <>

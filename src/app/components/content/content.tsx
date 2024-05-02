@@ -17,6 +17,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   setActiveColor,
 }) => {
   const { styles } = useStyle();
+
   const toggleReposCard = async (username: string) => {
     setIsRepoExpanded((prevState) => !prevState);
 

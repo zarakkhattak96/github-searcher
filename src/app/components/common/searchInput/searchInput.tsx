@@ -21,8 +21,6 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
-    console.log(newValue, 'NEW VALUE');
-
     dispatch(changeSearchInput(newValue));
 
     setUsername(newValue);
