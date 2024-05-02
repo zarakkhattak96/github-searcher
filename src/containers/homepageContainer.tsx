@@ -1,18 +1,20 @@
 import { Flex, message } from 'antd';
 
 import { useState } from 'react';
-import { IRepository, IUserProfile } from '../utils/interfaces.utils';
+import { IRepository, IUserProfile } from '../utils/interfaces';
 import {
   fetchUserFollowers,
   fetchUserProfile,
   fetchUserRepos,
-} from '../services/github.service';
-import getRandomColor from '../utils/randomColor.util';
-import { HomePageComponent } from '../app/components/homepage/homepage.component';
+} from '../services/github';
+import getRandomColor from '../utils/randomColor';
+import { HomePageLayout } from '../app/components/homepage/homepageLayout';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
-import { useDebounce } from '../hooks/debounce.hook';
+import { useDebounce } from '../hooks/debounce';
+import { useDispatch } from 'react-redux';
+import { changeContent } from '../app/slice';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -23,6 +25,8 @@ const App = () => {
   const [activeColor, setActiveColor] = useState('');
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  const dispatch = useDispatch();
 
   const searchUser = async () => {
     const data = await fetchUserProfile(username);
@@ -77,6 +81,8 @@ const App = () => {
 
     getRandomColor();
     setSearchedUsers([...searchedUsers, username]);
+
+    dispatch(changeContent(data));
   };
 
   const debouncedProfileSearch = useDebounce(searchUser, 1000);
@@ -94,7 +100,7 @@ const App = () => {
             },
           }}
         >
-          <HomePageComponent
+          <HomePageLayout
             username={username}
             setUsername={setUsername}
             debouncedProfile={debouncedProfileSearch}

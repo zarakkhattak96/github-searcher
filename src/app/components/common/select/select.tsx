@@ -1,7 +1,7 @@
 import { Col, Row, Select } from 'antd';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
-import { ISelectComponentProps } from '../../../../utils/interfaces.utils';
+import { ISelectComponentProps } from '../../../../utils/interfaces';
 
 export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   debouncedProfile,
