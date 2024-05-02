@@ -1,10 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { searchInputSlice, themeSlice } from '../components/slice';
+import { contentSlice, searchInputSlice, themeSlice } from '../slice';
 
 export const store = configureStore({
   reducer: {
     theme: themeSlice.reducer,
     searchInput: searchInputSlice.reducer,
+    content: contentSlice.reducer,
   },
 });
 
