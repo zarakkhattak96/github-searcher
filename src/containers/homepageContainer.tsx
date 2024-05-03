@@ -29,11 +29,16 @@ const App = () => {
   const dispatch = useDispatch();
 
   const searchUser = async () => {
-    const data = await fetchUserProfile(username);
+    if (!username) {
+      message.error('Please enter a username');
+      return;
+    }
 
     if (searchedUsers.includes(username)) {
       message.error('This user has already been searched');
     }
+
+    const data = await fetchUserProfile(username);
 
     if (data?.items.length === 0) {
       message.error('A user with this username does not exist');

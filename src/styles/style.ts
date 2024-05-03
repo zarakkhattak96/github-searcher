@@ -36,19 +36,19 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     position: relative;
     display: flex;
     justify-content: center;
-    background-color: black;
+    background-color: white-smoke;
     left: 325px;
-    bottom: 10px;
+    bottom: 29px;
   `,
 
   githubOutlined: css`
-    font-size: 26px;
+    font-size: 36px;
     display: flex;
     justify-content: center;
     position: relative;
     color: ${appearance === 'dark' ? 'white' : 'black'};
-    right: 95px;
-    top: 52px;
+    right: 170px;
+    top: 107px;
     
   `,
 
@@ -82,15 +82,16 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 `,
 
   homePageTitle: css`
-   left: 20px;
+   right: 40px;
    position: relative;
+   top: 47px;
 
     `,
 
   githubPara: css`
     position: relative;
-    left: 6px;
-    bottom: 15px;
+    right: 39px;
+    top: 28px;
   `,
 
   flexHeight: css`

@@ -11,7 +11,7 @@ export default function NavBar() {
         <Col>
           <GithubOutlined className={styles.githubOutlined} />
           <Title level={3} className={styles.homePageTitle}>
-            Github Searcher
+            GitHub Searcher
           </Title>
         </Col>
       </Row>
