@@ -3,10 +3,10 @@ import { Col, Input, Row } from 'antd';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
 import { ISearchInputProps } from '../../../../utils/interfaces';
-import { useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 // import { RootState } from '../../../store/store';
 // import React from 'react';
-import { changeSearchInput } from '../../../slice';
+// import { changeSearchInput } from '../../../slice';
 
 export const SearchInputComponent: React.FC<ISearchInputProps> = ({
   username,
@@ -16,12 +16,12 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 
   // const selectFromStore = useSelector((state: RootState) => state.searchInput);
   // const { username } = selectFromStore;
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
-    dispatch(changeSearchInput(newValue));
+    // dispatch(changeSearchInput(newValue));
 
     setUsername(newValue);
   };
