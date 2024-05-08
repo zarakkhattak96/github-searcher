@@ -134,27 +134,32 @@ export interface ISearchInputProps {
 
 export interface IContentComponentProps {
   userProfile: IUserProfile[];
-  isRepoExpanded: boolean;
-  setIsRepoExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  expandedUserRepos: IRepository[];
-  setExpandedUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
+  // isRepoExpanded: boolean;
+  // setIsRepoExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  // expandedUserRepos: IRepository[];
+  // setExpandedUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
   activeColor: string;
-  setActiveColor: React.Dispatch<React.SetStateAction<string>>;
+  // setActiveColor: React.Dispatch<React.SetStateAction<string>>;
+  userRepositories: IRepository[];
+  // setUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
 }
 
 export interface ISelectComponentProps {
   debouncedProfile: () => void;
+  debouncedRepos: () => void;
   username: string;
+  userRepos: IRepository[];
 }
 
 export interface IHomePageComponentProps {
   username: string;
   setUsername: React.Dispatch<SetStateAction<string>>;
   debouncedProfile: () => void;
+  debouncedRepos: () => void;
   userProfile: IUserProfile[];
-  isRepoExpanded: boolean;
-  setIsRepoExpanded: React.Dispatch<SetStateAction<boolean>>;
-  expandedUserRepos: IRepository[];
+  // isRepoExpanded: boolean;
+  // setIsRepoExpanded: React.Dispatch<SetStateAction<boolean>>;
+  userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
   activeColor: string;
   setActiveColor: React.Dispatch<SetStateAction<string>>;

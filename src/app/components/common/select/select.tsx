@@ -2,7 +2,7 @@ import { Col, Row, Select } from 'antd';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
 import { ISelectComponentProps } from '../../../../utils/interfaces';
-import { fetchUserProfile, fetchUserRepos } from '../../../../services/github';
+// import { fetchUserRepos } from '../../../../services/github';
 
 const selectOptions = [
   { value: 'user', label: 'User' },
@@ -11,19 +11,20 @@ const selectOptions = [
 
 export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   debouncedProfile,
-  username,
+  // username,
+  debouncedRepos,
 }) => {
   const { styles } = useStyle();
 
   const handleSelect = async (value: string) => {
     if (value === 'user') {
-      const userProf = await fetchUserProfile(username);
+      const userProf = debouncedProfile();
 
-      console.log(userProf.items[0], 'USER PROFILE123');
+      console.log(userProf, 'USER PROFILE123');
     } else if (value === 'repos') {
       // message.success('REPOS');
 
-      const userRepos = await fetchUserRepos(username);
+      const userRepos = await debouncedRepos();
 
       console.log(userRepos, 'USE REPOS');
     }

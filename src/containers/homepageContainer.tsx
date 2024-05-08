@@ -19,8 +19,8 @@ import { changeContent } from '../app/slice';
 const App = () => {
   const [username, setUsername] = useState('');
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
-  const [expandedUserRepos, setExpandedUserRepos] = useState<IRepository[]>([]);
-  const [isRepoExpanded, setIsRepoExpanded] = useState(false);
+  const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
+  // const [isRepoExpanded, setIsRepoExpanded] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [activeColor, setActiveColor] = useState('');
 
@@ -82,8 +82,6 @@ const App = () => {
       return updated;
     });
 
-    await fetchUserRepos(username);
-
     getRandomColor();
     setSearchedUsers([...searchedUsers, username]);
 
@@ -91,6 +89,15 @@ const App = () => {
   };
 
   const debouncedProfileSearch = useDebounce(searchUser, 1000);
+
+  const searchRepos = async () => {
+    const repos = await fetchUserRepos(username);
+
+    console.log(repos, 'REPOS FROM CONTAINER');
+    setUserRepos(repos);
+  };
+
+  const debouncedRepos = useDebounce(searchRepos, 1000);
 
   const { styles } = useStyle();
 
@@ -110,12 +117,13 @@ const App = () => {
             setUsername={setUsername}
             debouncedProfile={debouncedProfileSearch}
             userProfile={userProfile}
-            isRepoExpanded={isRepoExpanded}
-            setIsRepoExpanded={setIsRepoExpanded}
-            expandedUserRepos={expandedUserRepos}
-            setExpandedUserRepos={setExpandedUserRepos}
+            // isRepoExpanded={isRepoExpanded}
+            // setIsRepoExpanded={setIsRepoExpanded}
+            userRepositories={userRepositories}
+            setExpandedUserRepos={setUserRepos}
             activeColor={activeColor}
             setActiveColor={setActiveColor}
+            debouncedRepos={debouncedRepos}
           />
         </ThemeContext.Provider>
       </ThemeProvider>

@@ -12,14 +12,18 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   setUsername,
   debouncedProfile,
   userProfile,
-  isRepoExpanded,
-  setIsRepoExpanded,
-  expandedUserRepos,
-  setExpandedUserRepos,
+  // isRepoExpanded,
+  // setIsRepoExpanded,
+  userRepositories,
+  // setExpandedUserRepos,
   activeColor,
-  setActiveColor,
+  // setActiveColor,
+  debouncedRepos,
 }) => {
   const { styles } = useStyle();
+  // const [userRepos, setUserRepos] = useState<IRepository[]>([]);
+
+  console.log(userRepositories, 'REPOS FROM LAYOUT');
 
   return (
     <>
@@ -40,6 +44,8 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             <SelectCommonComponent
               debouncedProfile={debouncedProfile}
               username={username}
+              userRepos={userRepositories}
+              debouncedRepos={debouncedRepos}
             />
           </Col>
         </Row>
@@ -48,12 +54,14 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           <Col>
             <ContentComponent
               userProfile={userProfile}
-              isRepoExpanded={isRepoExpanded}
-              setIsRepoExpanded={setIsRepoExpanded}
-              expandedUserRepos={expandedUserRepos}
-              setExpandedUserRepos={setExpandedUserRepos}
+              // isRepoExpanded={isRepoExpanded}
+              // setIsRepoExpanded={setIsRepoExpanded}
+              // expandedUserRepos={expandedUserRepos}
+              // setExpandedUserRepos={setExpandedUserRepos}
               activeColor={activeColor}
-              setActiveColor={setActiveColor}
+              // setActiveColor={setActiveColor}
+              userRepositories={userRepositories}
+              // setUserRepos={setUserRepos}
             />
           </Col>
         </Row>
