@@ -37,7 +37,10 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
               username={username}
               setUsername={setUsername}
             />
-            <SelectCommonComponent debouncedProfile={debouncedProfile} />
+            <SelectCommonComponent
+              debouncedProfile={debouncedProfile}
+              username={username}
+            />
           </Col>
         </Row>
 

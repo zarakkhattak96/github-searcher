@@ -144,6 +144,7 @@ export interface IContentComponentProps {
 
 export interface ISelectComponentProps {
   debouncedProfile: () => void;
+  username: string;
 }
 
 export interface IHomePageComponentProps {
