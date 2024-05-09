@@ -1,12 +1,8 @@
 import { Col, Input, Row } from 'antd';
-// import { ISearchInputProps } from '../../../../utils/interfaces.utils';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
 import { ISearchInputProps } from '../../../../utils/interfaces';
-// import { useDispatch } from 'react-redux';
-// import { RootState } from '../../../store/store';
-// import React from 'react';
-// import { changeSearchInput } from '../../../slice';
+import { useDebounce } from '../../../../hooks/debounce';
 
 export const SearchInputComponent: React.FC<ISearchInputProps> = ({
   username,
@@ -14,16 +10,15 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 }) => {
   const { styles } = useStyle();
 
-  // const selectFromStore = useSelector((state: RootState) => state.searchInput);
-  // const { username } = selectFromStore;
-  // const dispatch = useDispatch();
+  const debouncedSetUsername = useDebounce(() => setUsername(username), 300);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
-    // dispatch(changeSearchInput(newValue));
+    // console.log(newValue, 'NEW VALUE');
 
-    setUsername(newValue);
+    setUsername(newValue); // updates the local state immediately
+    debouncedSetUsername(); // calling the debounced function to update username after user has stopped typing
   };
 
   return (

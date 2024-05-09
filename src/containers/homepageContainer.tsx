@@ -20,7 +20,6 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
-  // const [isRepoExpanded, setIsRepoExpanded] = useState(false);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [activeColor, setActiveColor] = useState('');
 
@@ -93,7 +92,6 @@ const App = () => {
   const searchRepos = async () => {
     const repos = await fetchUserRepos(username);
 
-    console.log(repos, 'REPOS FROM CONTAINER');
     setUserRepos(repos);
   };
 
@@ -117,8 +115,6 @@ const App = () => {
             setUsername={setUsername}
             debouncedProfile={debouncedProfileSearch}
             userProfile={userProfile}
-            // isRepoExpanded={isRepoExpanded}
-            // setIsRepoExpanded={setIsRepoExpanded}
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
             activeColor={activeColor}

@@ -7,23 +7,17 @@ import NavBar from './homepageNavbar';
 import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
 
+export type entityType = 'user' | 'repos';
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
   setUsername,
   debouncedProfile,
   userProfile,
-  // isRepoExpanded,
-  // setIsRepoExpanded,
   userRepositories,
-  // setExpandedUserRepos,
   activeColor,
-  // setActiveColor,
   debouncedRepos,
 }) => {
   const { styles } = useStyle();
-  // const [userRepos, setUserRepos] = useState<IRepository[]>([]);
-
-  console.log(userRepositories, 'REPOS FROM LAYOUT');
 
   return (
     <>
@@ -54,14 +48,8 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           <Col>
             <ContentComponent
               userProfile={userProfile}
-              // isRepoExpanded={isRepoExpanded}
-              // setIsRepoExpanded={setIsRepoExpanded}
-              // expandedUserRepos={expandedUserRepos}
-              // setExpandedUserRepos={setExpandedUserRepos}
               activeColor={activeColor}
-              // setActiveColor={setActiveColor}
               userRepositories={userRepositories}
-              // setUserRepos={setUserRepos}
             />
           </Col>
         </Row>

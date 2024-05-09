@@ -134,14 +134,10 @@ export interface ISearchInputProps {
 
 export interface IContentComponentProps {
   userProfile: IUserProfile[];
-  // isRepoExpanded: boolean;
-  // setIsRepoExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  // expandedUserRepos: IRepository[];
-  // setExpandedUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
+  // isRefreshed: boolean;
+  // setIsRefreshed: (entityType: entityType) => void;
   activeColor: string;
-  // setActiveColor: React.Dispatch<React.SetStateAction<string>>;
   userRepositories: IRepository[];
-  // setUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
 }
 
 export interface ISelectComponentProps {
@@ -157,8 +153,6 @@ export interface IHomePageComponentProps {
   debouncedProfile: () => void;
   debouncedRepos: () => void;
   userProfile: IUserProfile[];
-  // isRepoExpanded: boolean;
-  // setIsRepoExpanded: React.Dispatch<SetStateAction<boolean>>;
   userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
   activeColor: string;
