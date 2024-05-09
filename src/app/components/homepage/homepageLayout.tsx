@@ -14,7 +14,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   debouncedProfile,
   userProfile,
   userRepositories,
-  activeColor,
+  // activeColor,
   debouncedRepos,
 }) => {
   const { styles } = useStyle();
@@ -48,7 +48,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           <Col>
             <ContentComponent
               userProfile={userProfile}
-              activeColor={activeColor}
+              // activeColor={activeColor}
               userRepositories={userRepositories}
             />
           </Col>

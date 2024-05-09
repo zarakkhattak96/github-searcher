@@ -8,19 +8,10 @@ const { Title } = Typography;
 
 export const ContentComponent: React.FC<IContentComponentProps> = ({
   userProfile,
-  activeColor,
+  // activeColor,
   userRepositories,
 }) => {
   const { styles } = useStyle();
-
-  // const toggleReposCard = async (username: string) => {
-  //   setIsRepoExpanded((prevState) => !prevState);
-
-  //   if (!isRepoExpanded) {
-  //     const repos = await fetchUserRepos(username);
-  //     setExpandedUserRepos(repos);
-  //   }
-  // };
 
   return (
     <Flex className={styles.cards} id='contentDiv' gap={'large'}>
@@ -31,9 +22,9 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
               {profile.login !== undefined && (
                 <Card
                   hoverable
-                  style={{
-                    backgroundColor: profile.background,
-                  }}
+                  // style={{
+                  //   backgroundColor: profile.background,
+                  // }}
                   cover={<Image alt='user dp' src={profile.avatar_url} />}
                   className={styles.profileCard}
                 >
@@ -72,10 +63,10 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                 {repo.name !== undefined && (
                   <Card
                     hoverable
-                    style={{
-                      backgroundColor: activeColor,
-                    }}
-                    className={styles.cards}
+                    // style={{
+                    //   backgroundColor: activeColor,
+                    // }}
+                    className={styles.reposCard}
                     title={repo.name}
                   >
                     <Meta

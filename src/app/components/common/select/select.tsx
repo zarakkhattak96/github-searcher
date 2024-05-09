@@ -31,6 +31,7 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
             options={selectOptions}
             size='large'
             onSelect={handleSelect}
+            defaultValue='user'
           />
         </Col>
       </Row>

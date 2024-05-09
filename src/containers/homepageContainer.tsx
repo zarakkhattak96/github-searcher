@@ -21,7 +21,7 @@ const App = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
-  const [activeColor, setActiveColor] = useState('');
+  // const [activeColor, setActiveColor] = useState('');
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
@@ -33,9 +33,9 @@ const App = () => {
       return;
     }
 
-    if (searchedUsers.includes(username)) {
-      message.error('This user has already been searched');
-    }
+    // if (searchedUsers.includes(username)) {
+    //   message.error('This user has already been searched');
+    // }
 
     const data = await fetchUserProfile(username);
 
@@ -81,7 +81,8 @@ const App = () => {
       return updated;
     });
 
-    getRandomColor();
+    // getRandomColor();
+    setUserRepos([]); // search user should only show user card
     setSearchedUsers([...searchedUsers, username]);
 
     dispatch(changeContent(data));
@@ -92,6 +93,7 @@ const App = () => {
   const searchRepos = async () => {
     const repos = await fetchUserRepos(username);
 
+    setUserProfile([]); //searchRepos should show only repos
     setUserRepos(repos);
   };
 
@@ -117,8 +119,8 @@ const App = () => {
             userProfile={userProfile}
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
-            activeColor={activeColor}
-            setActiveColor={setActiveColor}
+            // activeColor={activeColor}
+            // setActiveColor={setActiveColor}
             debouncedRepos={debouncedRepos}
           />
         </ThemeContext.Provider>

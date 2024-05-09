@@ -3,6 +3,7 @@ import { useStyle } from '../../../../styles/style';
 import React from 'react';
 import { ISearchInputProps } from '../../../../utils/interfaces';
 import { useDebounce } from '../../../../hooks/debounce';
+import { fetchUserProfile } from '../../../../services/github';
 
 export const SearchInputComponent: React.FC<ISearchInputProps> = ({
   username,
@@ -10,16 +11,15 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 }) => {
   const { styles } = useStyle();
 
-  const debouncedSetUsername = useDebounce(() => setUsername(username), 300);
+  const handleInputChange = useDebounce(async (v: string) => {
+    const newValue = v;
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
+    if (newValue.length >= 3) {
+      const userProf = await fetchUserProfile(newValue);
 
-    // console.log(newValue, 'NEW VALUE');
-
-    setUsername(newValue); // updates the local state immediately
-    debouncedSetUsername(); // calling the debounced function to update username after user has stopped typing
-  };
+      console.log(userProf, 'PROF');
+    }
+  }, 300);
 
   return (
     <>
@@ -33,7 +33,11 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
             }}
             size='large'
             value={username}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              const v = e.target.value;
+              setUsername(e.target.value);
+              handleInputChange(v);
+            }}
             className={styles.searchField}
           />
         </Col>

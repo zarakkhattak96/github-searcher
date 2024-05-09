@@ -136,7 +136,7 @@ export interface IContentComponentProps {
   userProfile: IUserProfile[];
   // isRefreshed: boolean;
   // setIsRefreshed: (entityType: entityType) => void;
-  activeColor: string;
+  // activeColor: string;
   userRepositories: IRepository[];
 }
 
@@ -155,6 +155,6 @@ export interface IHomePageComponentProps {
   userProfile: IUserProfile[];
   userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
-  activeColor: string;
-  setActiveColor: React.Dispatch<SetStateAction<string>>;
+  // activeColor: string;
+  // setActiveColor: React.Dispatch<SetStateAction<string>>;
 }
