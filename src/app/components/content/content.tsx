@@ -80,7 +80,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
       <Flex className={styles.cards} id='repoCards'>
         {/* <Row> */}
         {/* <Col span={24}> */}
-        {userRepositories !== undefined && userRepositories.length > 0 && (
+        {userRepositories.length > 0 && (
           <Row gutter={8}>
             {userRepositories?.map((repo, index) => (
               <Col key={index}>
@@ -88,12 +88,12 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   <Card
                     hoverable
                     style={{
-                      background: activeColor,
+                      backgroundColor: activeColor,
                     }}
-                    className={styles.reposCard}
+                    className={styles.cards}
+                    title={repo.name}
                   >
                     <Meta
-                      title={repo.name}
                       description={
                         <Anchor
                           items={[
