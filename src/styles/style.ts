@@ -78,6 +78,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
       display: flex;
       flex-direction: column;
       justify-content: center;
+      position:relative;
 
   
   `,
@@ -88,5 +89,6 @@ export const useStyle = createStyles(({ css, appearance }) => ({
       justify-content: center;
       display: flex;
       flex-direction: column;
+      position: relative;
       `,
 }));

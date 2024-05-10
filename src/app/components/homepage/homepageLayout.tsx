@@ -7,14 +7,15 @@ import NavBar from './homepageNavbar';
 import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
 
-export type entityType = 'user' | 'repos';
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
   setUsername,
   userProfile,
   userRepositories,
-  handleSelect,
+  handleChange,
   handleInputChange,
+  selectedOption,
+  setSelectedOption,
 }) => {
   const { styles } = useStyle();
 
@@ -44,13 +45,20 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             <SelectCommonComponent
               username={username}
               userRepos={userRepositories}
-              handleSelect={handleSelect}
+              handleChange={handleChange}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
             />
           </Col>
         </Row>
       </Space>
 
-      <Space align={'center'} className={styles.withContent} size={'large'}>
+      <Space
+        align={'center'}
+        className={styles.withContent}
+        size={'large'}
+        direction='vertical'
+      >
         <Row>
           <Col>
             <ContentComponent

@@ -1,7 +1,10 @@
 import { Col, Row, Select } from 'antd';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
-import { ISelectComponentProps } from '../../../../utils/interfaces';
+import {
+  ISelectComponentProps,
+  SelectedOptionType,
+} from '../../../../utils/interfaces';
 
 const selectOptions = [
   { value: 'user', label: 'User' },
@@ -9,7 +12,9 @@ const selectOptions = [
 ];
 
 export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
-  handleSelect,
+  handleChange,
+  selectedOption,
+  setSelectedOption,
 }) => {
   const { styles } = useStyle();
 
@@ -20,8 +25,11 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
           placeholder='User'
           options={selectOptions}
           size='large'
-          onSelect={handleSelect}
-          defaultValue='user'
+          onChange={(e: SelectedOptionType) => {
+            handleChange(e);
+            setSelectedOption(e);
+          }}
+          value={selectedOption}
         />
       </Col>
     </Row>

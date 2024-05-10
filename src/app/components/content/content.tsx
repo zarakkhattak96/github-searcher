@@ -8,7 +8,6 @@ const { Title } = Typography;
 
 export const ContentComponent: React.FC<IContentComponentProps> = ({
   userProfile,
-  // activeColor,
   userRepositories,
 }) => {
   const { styles } = useStyle();
@@ -22,9 +21,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
               {profile.login !== undefined && (
                 <Card
                   hoverable
-                  // style={{
-                  //   backgroundColor: profile.background,
-                  // }}
                   cover={<Image alt='user dp' src={profile.avatar_url} />}
                   className={styles.profileCard}
                 >
@@ -63,9 +59,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                 {repo.name !== undefined && (
                   <Card
                     hoverable
-                    // style={{
-                    //   backgroundColor: activeColor,
-                    // }}
                     className={styles.reposCard}
                     title={repo.name}
                   >

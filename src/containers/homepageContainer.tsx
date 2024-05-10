@@ -1,13 +1,15 @@
 import { Flex, message } from 'antd';
-
 import { useState } from 'react';
-import { IRepository, IUserProfile } from '../utils/interfaces';
+import {
+  IRepository,
+  IUserProfile,
+  SelectedOptionType,
+} from '../utils/interfaces';
 import {
   fetchUserFollowers,
   fetchUserProfile,
   fetchUserRepos,
 } from '../services/github';
-import getRandomColor from '../utils/randomColor';
 import { HomePageLayout } from '../app/components/homepage/homepageLayout';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
@@ -21,99 +23,89 @@ const App = () => {
   const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
+  const [selectedOption, setSelectedOption] =
+    useState<SelectedOptionType>('user');
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const dispatch = useDispatch();
 
-  const searchUser = async () => {
+  const searchRepos = async () => {
+    const repos = await fetchUserRepos(username);
+
+    setUserProfile([]);
+    setUserRepos(repos);
+  };
+
+  const debouncedRepos = useDebounce(searchRepos, 3000);
+
+  const search = async () => {
     if (!username) {
       message.error('Please enter a username');
       return;
     }
 
-    const data = await fetchUserProfile(username);
+    if (selectedOption === 'user') {
+      const data = await fetchUserProfile(username);
 
-    if (data?.items.length === 0) {
-      message.error('A user with this username does not exist');
-      return;
-    }
-
-    if (data?.items.length > 0) {
-      const existingUser = userProfile.findIndex(
-        (profile) => profile.id === data.items[0].id,
-      );
-
-      if (existingUser !== -1) {
-        setUserProfile((prevUserProf) => {
-          const updated = [...prevUserProf];
-          updated[existingUser] = {
-            ...updated[existingUser],
-            ...data?.items[0],
-          };
-          updated.map((profile) => {
-            return { ...profile, background: getRandomColor() };
-          });
-          return updated;
-        });
-      } else {
-        setUserProfile((prevUserProf) => [
-          ...prevUserProf,
-          { ...data?.items[0], background: getRandomColor() },
-        ]);
+      if (data.length === 0) {
+        message.error('A user with this username does not exist');
+        return;
       }
-    }
 
-    const followersData = await fetchUserFollowers(username);
+      if (data?.items.length > 0) {
+        const existingUser = userProfile.findIndex(
+          (profile) => profile.id === data.items[0].id,
+        );
 
-    setUserProfile((prevUserProfile) => {
-      const updated = prevUserProfile.map((prof) => {
-        if (prof.login === username) {
-          return { ...prof, followers: followersData };
+        if (existingUser !== -1) {
+          setUserProfile((prevUserProf) => {
+            const updated = [...prevUserProf];
+            updated[existingUser] = {
+              ...updated[existingUser],
+              ...data?.items[0],
+            };
+            updated.map((profile) => {
+              return { ...profile };
+            });
+            return updated;
+          });
+        } else {
+          setUserProfile((prevUserProf) => [
+            ...prevUserProf,
+            { ...data?.items[0] },
+          ]);
         }
-        return prof;
+      }
+
+      const followersData = await fetchUserFollowers(username);
+
+      setUserProfile((prevUserProfile) => {
+        const updated = prevUserProfile.map((prof) => {
+          if (prof.login === username) {
+            return { ...prof, followers: followersData };
+          }
+          return prof;
+        });
+        return updated;
       });
-      return updated;
-    });
 
-    setUserRepos([]); // search user should only show user card
-    setSearchedUsers([...searchedUsers, username]);
+      setSearchedUsers([...searchedUsers, username]);
 
-    dispatch(changeContent(data));
-  };
-
-  const debouncedProfileSearch = useDebounce(searchUser, 2000);
-
-  const searchRepos = async () => {
-    const repos = await fetchUserRepos(username);
-
-    setUserProfile([]); //searchRepos should show only repos
-    setUserRepos(repos);
-  };
-
-  //for select
-  const handleSelect = (value: string) => {
-    console.log(value, 'VALUE');
-    if (value === 'user' && username.length >= 3) {
-      console.log(username, 'NAME');
-      debouncedProfileSearch();
-    } else if (value === 'repos') {
+      dispatch(changeContent(data));
+    } else if (selectedOption === 'repos') {
       debouncedRepos();
     }
   };
 
-  //for search
-  const handleInputChange = useDebounce(async (v: string) => {
-    const newValue = v;
+  const debouncedProfileSearch = useDebounce(search, 3000);
 
-    if (newValue.length >= 3) {
-      const userProf = await fetchUserProfile(newValue);
-
-      console.log(userProf, 'PROF');
-    }
-  }, 2000);
-
-  const debouncedRepos = useDebounce(searchRepos, 2000);
+  const handleChange = (v: SelectedOptionType) => {
+    v === 'user' ? setUserRepos([]) : setUserProfile([]);
+    (v === 'user' || v === 'repos') && username.length >= 3
+      ? setUsername('')
+      : setUsername(username);
+  };
 
   const { styles } = useStyle();
 
@@ -134,8 +126,10 @@ const App = () => {
             userProfile={userProfile}
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
-            handleSelect={handleSelect}
-            handleInputChange={handleInputChange}
+            handleChange={handleChange}
+            handleInputChange={debouncedProfileSearch}
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
           />
         </ThemeContext.Provider>
       </ThemeProvider>

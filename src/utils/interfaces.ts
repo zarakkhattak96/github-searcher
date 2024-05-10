@@ -126,6 +126,7 @@ export interface IRepository {
   default_branch: string;
 }
 
+export type SelectedOptionType = 'user' | 'repos';
 export interface ISearchInputProps {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
@@ -140,16 +141,20 @@ export interface IContentComponentProps {
 export interface ISelectComponentProps {
   username: string;
   userRepos: IRepository[];
-  handleSelect: (value: string) => void;
+  handleChange: (value: SelectedOptionType) => void;
+  selectedOption: SelectedOptionType;
+  setSelectedOption: React.Dispatch<SetStateAction<SelectedOptionType>>;
 }
 
 export interface IHomePageComponentProps {
   username: string;
   setUsername: React.Dispatch<SetStateAction<string>>;
+  selectedOption: SelectedOptionType;
+  setSelectedOption: React.Dispatch<SetStateAction<SelectedOptionType>>;
 
   userProfile: IUserProfile[];
   userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
-  handleSelect: (value: string) => void;
+  handleChange: (value: SelectedOptionType) => void;
   handleInputChange: (v: string) => void;
 }
