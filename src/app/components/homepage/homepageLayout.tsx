@@ -1,4 +1,4 @@
-import { Col, Flex, Row } from 'antd';
+import { Col, Flex, Row, Space } from 'antd';
 import { IHomePageComponentProps } from '../../../utils/interfaces';
 import { SearchInputComponent } from '../common/searchInput/searchInput';
 import { SelectCommonComponent } from '../common/select/select';
@@ -14,14 +14,18 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   debouncedProfile,
   userProfile,
   userRepositories,
-  // activeColor,
   debouncedRepos,
 }) => {
   const { styles } = useStyle();
 
   return (
-    <>
-      <Flex vertical={true} className={styles.layout}>
+    <Flex vertical={true} className={styles.layout}>
+      <Space
+        align={'center'}
+        wrap={true}
+        className={styles.withoutContent}
+        direction='vertical'
+      >
         <Row>
           <Col>
             <NavBar />
@@ -35,6 +39,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
               username={username}
               setUsername={setUsername}
             />
+
             <SelectCommonComponent
               debouncedProfile={debouncedProfile}
               username={username}
@@ -43,7 +48,9 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             />
           </Col>
         </Row>
+      </Space>
 
+      <Space align={'center'} className={styles.withContent} size={'large'}>
         <Row>
           <Col>
             <ContentComponent
@@ -53,7 +60,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             />
           </Col>
         </Row>
-      </Flex>
-    </>
+      </Space>
+    </Flex>
   );
 };

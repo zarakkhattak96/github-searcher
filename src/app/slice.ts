@@ -7,9 +7,6 @@ const searchInputInitialState = {
 
 const contentInitialState: Partial<IContentComponentProps> = {
   userProfile: [],
-  isRepoExpanded: false,
-  expandedUserRepos: [],
-  activeColor: '',
 };
 
 export const contentSlice = createSlice({
@@ -18,9 +15,6 @@ export const contentSlice = createSlice({
   reducers: {
     changeContent: (state, action) => {
       state.userProfile = action.payload.items[0];
-      state.expandedUserRepos = action.payload.items[0]?.repos_url;
-      state.isRepoExpanded = false;
-      state.activeColor = action.payload.items[0]?.background;
     },
   },
 });

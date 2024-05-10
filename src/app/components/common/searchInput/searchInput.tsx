@@ -19,7 +19,7 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 
       console.log(userProf, 'PROF');
     }
-  }, 300);
+  }, 2000);
 
   return (
     <>

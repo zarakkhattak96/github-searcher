@@ -14,6 +14,7 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
 }) => {
   const { styles } = useStyle();
 
+  // TODO: to change handleSelect logic!
   const handleSelect = async (value: string) => {
     if (value === 'user') {
       debouncedProfile();
@@ -23,18 +24,16 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   };
 
   return (
-    <>
-      <Row align='middle'>
-        <Col className={styles.dropdownSelect}>
-          <Select
-            placeholder='User'
-            options={selectOptions}
-            size='large'
-            onSelect={handleSelect}
-            defaultValue='user'
-          />
-        </Col>
-      </Row>
-    </>
+    <Row align='middle'>
+      <Col className={styles.dropdownSelect}>
+        <Select
+          placeholder='User'
+          options={selectOptions}
+          size='large'
+          onSelect={handleSelect}
+          defaultValue='user'
+        />
+      </Col>
+    </Row>
   );
 };
