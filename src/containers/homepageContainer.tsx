@@ -91,6 +91,7 @@ const App = () => {
     setUserRepos(repos);
   };
 
+  //for select
   const handleSelect = (value: string) => {
     console.log(value, 'VALUE');
     if (value === 'user' && username.length >= 3) {
@@ -100,6 +101,17 @@ const App = () => {
       debouncedRepos();
     }
   };
+
+  //for search
+  const handleInputChange = useDebounce(async (v: string) => {
+    const newValue = v;
+
+    if (newValue.length >= 3) {
+      const userProf = await fetchUserProfile(newValue);
+
+      console.log(userProf, 'PROF');
+    }
+  }, 2000);
 
   const debouncedRepos = useDebounce(searchRepos, 2000);
 
@@ -123,6 +135,7 @@ const App = () => {
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
             handleSelect={handleSelect}
+            handleInputChange={handleInputChange}
           />
         </ThemeContext.Provider>
       </ThemeProvider>

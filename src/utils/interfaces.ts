@@ -129,6 +129,7 @@ export interface IRepository {
 export interface ISearchInputProps {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
+  handleInputChange: (v: string) => void;
 }
 
 export interface IContentComponentProps {
@@ -150,4 +151,5 @@ export interface IHomePageComponentProps {
   userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
   handleSelect: (value: string) => void;
+  handleInputChange: (v: string) => void;
 }

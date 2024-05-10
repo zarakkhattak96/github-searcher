@@ -14,6 +14,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   userProfile,
   userRepositories,
   handleSelect,
+  handleInputChange,
 }) => {
   const { styles } = useStyle();
 
@@ -37,6 +38,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             <SearchInputComponent
               username={username}
               setUsername={setUsername}
+              handleInputChange={handleInputChange}
             />
 
             <SelectCommonComponent
