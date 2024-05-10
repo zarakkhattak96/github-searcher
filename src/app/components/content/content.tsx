@@ -1,6 +1,5 @@
 import { Anchor, Card, Col, Row, Typography, Image, Flex } from 'antd';
 import Meta from 'antd/es/card/Meta';
-import { fetchUserRepos } from '../../../services/github';
 import { IContentComponentProps } from '../../../utils/interfaces';
 import React from 'react';
 import { useStyle } from '../../../styles/style';
@@ -9,23 +8,10 @@ const { Title } = Typography;
 
 export const ContentComponent: React.FC<IContentComponentProps> = ({
   userProfile,
-  isRepoExpanded,
-  setIsRepoExpanded,
-  expandedUserRepos,
-  setExpandedUserRepos,
-  activeColor,
-  setActiveColor,
+  userRepositories,
 }) => {
   const { styles } = useStyle();
 
-  const toggleReposCard = async (username: string) => {
-    setIsRepoExpanded((prevState) => !prevState);
-
-    if (!isRepoExpanded) {
-      const repos = await fetchUserRepos(username);
-      setExpandedUserRepos(repos);
-    }
-  };
   return (
     <Flex className={styles.cards} id='contentDiv' gap={'large'}>
       {userProfile.length > 0 && (
@@ -34,14 +20,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
             <Col key={index}>
               {profile.login !== undefined && (
                 <Card
-                  onClick={() => {
-                    toggleReposCard(profile.login);
-                    setActiveColor(profile.background as string);
-                  }}
                   hoverable
-                  style={{
-                    backgroundColor: profile.background,
-                  }}
                   cover={<Image alt='user dp' src={profile.avatar_url} />}
                   className={styles.profileCard}
                 >
@@ -71,48 +50,40 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
           ))}
         </Row>
       )}
+
       <Flex className={styles.cards} id='repoCards'>
-        <Row>
-          <Col span={24}>
-            {!isRepoExpanded ? null : (
-              <Row>
-                {expandedUserRepos?.map((repo, index) => (
-                  <Col key={index}>
-                    {repo.name !== undefined && (
-                      <Card
-                        hoverable
-                        style={{
-                          background: activeColor,
-                        }}
-                        className={styles.reposCard}
-                      >
-                        <Meta
-                          title={repo.name}
-                          description={
-                            <Anchor
-                              items={[
-                                {
-                                  key: 'profile_url',
-                                  href: repo.html_url,
-                                  title: repo.name,
-                                },
-                              ]}
-                            />
-                          }
+        {userRepositories.length > 0 && (
+          <Row gutter={8}>
+            {userRepositories?.map((repo, index) => (
+              <Col key={index}>
+                {repo.name !== undefined && (
+                  <Card
+                    hoverable
+                    className={styles.reposCard}
+                    title={repo.name}
+                  >
+                    <Meta
+                      description={
+                        <Anchor
+                          items={[
+                            {
+                              key: 'profile_url',
+                              href: repo.html_url,
+                              title: repo.name,
+                            },
+                          ]}
                         />
-                        <div>
-                          <Title level={5}>
-                            Stars: {repo.stargazers_count}
-                          </Title>
-                        </div>
-                      </Card>
-                    )}
-                  </Col>
-                ))}
-              </Row>
-            )}
-          </Col>
-        </Row>
+                      }
+                    />
+                    <div>
+                      <Title level={5}>Stars: {repo.stargazers_count}</Title>
+                    </div>
+                  </Card>
+                )}
+              </Col>
+            ))}
+          </Row>
+        )}
       </Flex>
     </Flex>
   );

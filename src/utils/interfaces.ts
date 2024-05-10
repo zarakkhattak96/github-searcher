@@ -126,35 +126,35 @@ export interface IRepository {
   default_branch: string;
 }
 
+export type SelectedOptionType = 'user' | 'repos';
 export interface ISearchInputProps {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  // debouncedProfile: () => void;
+  handleInputChange: (v: string) => void;
 }
 
 export interface IContentComponentProps {
   userProfile: IUserProfile[];
-  isRepoExpanded: boolean;
-  setIsRepoExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-  expandedUserRepos: IRepository[];
-  setExpandedUserRepos: React.Dispatch<React.SetStateAction<IRepository[]>>;
-  activeColor: string;
-  setActiveColor: React.Dispatch<React.SetStateAction<string>>;
+  userRepositories: IRepository[];
 }
 
 export interface ISelectComponentProps {
-  debouncedProfile: () => void;
+  username: string;
+  userRepos: IRepository[];
+  handleChange: (value: SelectedOptionType) => void;
+  selectedOption: SelectedOptionType;
+  setSelectedOption: React.Dispatch<SetStateAction<SelectedOptionType>>;
 }
 
 export interface IHomePageComponentProps {
   username: string;
   setUsername: React.Dispatch<SetStateAction<string>>;
-  debouncedProfile: () => void;
+  selectedOption: SelectedOptionType;
+  setSelectedOption: React.Dispatch<SetStateAction<SelectedOptionType>>;
+
   userProfile: IUserProfile[];
-  isRepoExpanded: boolean;
-  setIsRepoExpanded: React.Dispatch<SetStateAction<boolean>>;
-  expandedUserRepos: IRepository[];
+  userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
-  activeColor: string;
-  setActiveColor: React.Dispatch<SetStateAction<string>>;
+  handleChange: (value: SelectedOptionType) => void;
+  handleInputChange: (v: string) => void;
 }

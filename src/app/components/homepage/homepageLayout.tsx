@@ -1,4 +1,4 @@
-import { Col, Flex, Row } from 'antd';
+import { Col, Flex, Row, Space } from 'antd';
 import { IHomePageComponentProps } from '../../../utils/interfaces';
 import { SearchInputComponent } from '../common/searchInput/searchInput';
 import { SelectCommonComponent } from '../common/select/select';
@@ -10,20 +10,23 @@ import { useStyle } from '../../../styles/style';
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
   setUsername,
-  debouncedProfile,
   userProfile,
-  isRepoExpanded,
-  setIsRepoExpanded,
-  expandedUserRepos,
-  setExpandedUserRepos,
-  activeColor,
-  setActiveColor,
+  userRepositories,
+  handleChange,
+  handleInputChange,
+  selectedOption,
+  setSelectedOption,
 }) => {
   const { styles } = useStyle();
 
   return (
-    <>
-      <Flex vertical={true} className={styles.layout}>
+    <Flex vertical={true} className={styles.layout}>
+      <Space
+        align={'center'}
+        wrap={true}
+        className={styles.withoutContent}
+        direction='vertical'
+      >
         <Row>
           <Col>
             <NavBar />
@@ -36,25 +39,35 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             <SearchInputComponent
               username={username}
               setUsername={setUsername}
+              handleInputChange={handleInputChange}
             />
-            <SelectCommonComponent debouncedProfile={debouncedProfile} />
+
+            <SelectCommonComponent
+              username={username}
+              userRepos={userRepositories}
+              handleChange={handleChange}
+              selectedOption={selectedOption}
+              setSelectedOption={setSelectedOption}
+            />
           </Col>
         </Row>
+      </Space>
 
+      <Space
+        align={'center'}
+        className={styles.withContent}
+        size={'large'}
+        direction='vertical'
+      >
         <Row>
           <Col>
             <ContentComponent
               userProfile={userProfile}
-              isRepoExpanded={isRepoExpanded}
-              setIsRepoExpanded={setIsRepoExpanded}
-              expandedUserRepos={expandedUserRepos}
-              setExpandedUserRepos={setExpandedUserRepos}
-              activeColor={activeColor}
-              setActiveColor={setActiveColor}
+              userRepositories={userRepositories}
             />
           </Col>
         </Row>
-      </Flex>
-    </>
+      </Space>
+    </Flex>
   );
 };

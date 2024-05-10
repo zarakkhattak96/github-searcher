@@ -24,12 +24,12 @@ export const useDebounce = (callback: () => void, delay: number) => {
     callbackRef.current = callback;
   }, [callback]);
 
-  const debouncedCallback = () => {
+  const debouncedCallback = (...arg: string[]) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      callbackRef.current?.();
+      callbackRef.current?.(...arg);
     }, delay);
   };
 
