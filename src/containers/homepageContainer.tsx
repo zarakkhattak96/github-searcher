@@ -91,6 +91,16 @@ const App = () => {
     setUserRepos(repos);
   };
 
+  const handleSelect = (value: string) => {
+    console.log(value, 'VALUE');
+    if (value === 'user' && username.length >= 3) {
+      console.log(username, 'NAME');
+      debouncedProfileSearch();
+    } else if (value === 'repos') {
+      debouncedRepos();
+    }
+  };
+
   const debouncedRepos = useDebounce(searchRepos, 2000);
 
   const { styles } = useStyle();
@@ -109,13 +119,10 @@ const App = () => {
           <HomePageLayout
             username={username}
             setUsername={setUsername}
-            debouncedProfile={debouncedProfileSearch}
             userProfile={userProfile}
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
-            // activeColor={activeColor}
-            // setActiveColor={setActiveColor}
-            debouncedRepos={debouncedRepos}
+            handleSelect={handleSelect}
           />
         </ThemeContext.Provider>
       </ThemeProvider>

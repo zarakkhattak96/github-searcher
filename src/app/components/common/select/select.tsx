@@ -9,19 +9,9 @@ const selectOptions = [
 ];
 
 export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
-  debouncedProfile,
-  debouncedRepos,
+  handleSelect,
 }) => {
   const { styles } = useStyle();
-
-  // TODO: to change handleSelect logic!
-  const handleSelect = async (value: string) => {
-    if (value === 'user') {
-      debouncedProfile();
-    } else if (value === 'repos') {
-      debouncedRepos();
-    }
-  };
 
   return (
     <Row align='middle'>

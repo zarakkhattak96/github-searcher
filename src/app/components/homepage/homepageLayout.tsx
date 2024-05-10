@@ -11,10 +11,9 @@ export type entityType = 'user' | 'repos';
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
   setUsername,
-  debouncedProfile,
   userProfile,
   userRepositories,
-  debouncedRepos,
+  handleSelect,
 }) => {
   const { styles } = useStyle();
 
@@ -41,10 +40,9 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             />
 
             <SelectCommonComponent
-              debouncedProfile={debouncedProfile}
               username={username}
               userRepos={userRepositories}
-              debouncedRepos={debouncedRepos}
+              handleSelect={handleSelect}
             />
           </Col>
         </Row>
@@ -55,7 +53,6 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           <Col>
             <ContentComponent
               userProfile={userProfile}
-              // activeColor={activeColor}
               userRepositories={userRepositories}
             />
           </Col>

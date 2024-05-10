@@ -129,32 +129,25 @@ export interface IRepository {
 export interface ISearchInputProps {
   username: string;
   setUsername: React.Dispatch<React.SetStateAction<string>>;
-  // debouncedProfile: () => void;
 }
 
 export interface IContentComponentProps {
   userProfile: IUserProfile[];
-  // isRefreshed: boolean;
-  // setIsRefreshed: (entityType: entityType) => void;
-  // activeColor: string;
   userRepositories: IRepository[];
 }
 
 export interface ISelectComponentProps {
-  debouncedProfile: () => void;
-  debouncedRepos: () => void;
   username: string;
   userRepos: IRepository[];
+  handleSelect: (value: string) => void;
 }
 
 export interface IHomePageComponentProps {
   username: string;
   setUsername: React.Dispatch<SetStateAction<string>>;
-  debouncedProfile: () => void;
-  debouncedRepos: () => void;
+
   userProfile: IUserProfile[];
   userRepositories: IRepository[];
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
-  // activeColor: string;
-  // setActiveColor: React.Dispatch<SetStateAction<string>>;
+  handleSelect: (value: string) => void;
 }
