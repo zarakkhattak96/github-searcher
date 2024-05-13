@@ -5,11 +5,12 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     width: '100%',
     height: '100%',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
-    alignItems: 'flex-start',
+    alignItems: 'center',
     overflowY: 'auto',
-    position: 'relative',
-    display: 'flex',
-    justifyContent: 'flex-start',
+    // position: 'relative',
+    // display: 'flex',
+    // justifyContent: 'center',
+    justifyItems: 'center',
   },
 
   searchField: css`
@@ -42,16 +43,28 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 
   cards: css`
     text-align: center;
+    position: relative;
   `,
 
   profileCard: css`
-    width: 180px;
+  width: 400px;
+  flex-direction: row;
+  bottom: 15px;
+  left: 20px;
+  border-radius: 0px;
+  border: 1px solid ${appearance === 'dark' ? 'red' : 'blue'};
   `,
 
   reposCard: css`
-      width: 160px;
+      width: 400px;
       display: flex
       flex-direction: row;
+      position: relative;
+      align-content: center;
+      left: 140px;
+      border-radius: 0px;
+      border: 1px solid ${appearance === 'dark' ? 'red' : 'blue'};
+      
   `,
 
   homePageTitle: css`
@@ -79,8 +92,6 @@ export const useStyle = createStyles(({ css, appearance }) => ({
       flex-direction: column;
       justify-content: center;
       position:relative;
-
-  
   `,
 
   withContent: css`
@@ -90,5 +101,11 @@ export const useStyle = createStyles(({ css, appearance }) => ({
       display: flex;
       flex-direction: column;
       position: relative;
+      `,
+
+  profileAvatar: css`
+  position: relative;
+  top: 10px;
+  left: 140px;
       `,
 }));

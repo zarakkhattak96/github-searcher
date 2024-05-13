@@ -1,4 +1,4 @@
-import { Anchor, Card, Col, Row, Typography, Image, Flex } from 'antd';
+import { Anchor, Card, Col, Row, Typography, Image, Flex, Avatar } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { IContentComponentProps } from '../../../utils/interfaces';
 import React from 'react';
@@ -13,19 +13,26 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   const { styles } = useStyle();
 
   return (
-    <Flex className={styles.cards} id='contentDiv' gap={'large'}>
+    <Flex className={styles.cards} id='contentDiv'>
       {userProfile.length > 0 && (
-        <Row gutter={8}>
+        <Row gutter={[36, 18]}>
           {userProfile?.map((profile, index) => (
             <Col key={index}>
               {profile.login !== undefined && (
                 <Card
                   hoverable
-                  cover={<Image alt='user dp' src={profile.avatar_url} />}
+                  cover={
+                    <Avatar
+                      size={120}
+                      alt='user dp'
+                      src={profile.avatar_url}
+                      className={styles.profileAvatar}
+                    />
+                  }
                   className={styles.profileCard}
                 >
                   <Meta
-                    title={profile.login}
+                    // title={profile.login}
                     description={
                       <Anchor
                         items={[
@@ -40,6 +47,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   />
 
                   <div>
+                    <Title level={5}> Username: {profile.login}</Title>
                     <Title level={5}>
                       Followers: {profile?.followers?.length ?? 0}
                     </Title>
@@ -53,7 +61,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
 
       <Flex className={styles.cards} id='repoCards'>
         {userRepositories.length > 0 && (
-          <Row gutter={8}>
+          <Row gutter={[36, 18]}>
             {userRepositories?.map((repo, index) => (
               <Col key={index}>
                 {repo.name !== undefined && (
@@ -67,7 +75,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                         <Anchor
                           items={[
                             {
-                              key: 'profile_url',
+                              key: 'repo_url',
                               href: repo.html_url,
                               title: repo.name,
                             },
@@ -77,6 +85,8 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                     />
                     <div>
                       <Title level={5}>Stars: {repo.stargazers_count}</Title>
+                      <Title level={5}>Forks: {repo.forks_count}</Title>
+                      <Title level={5}> Author: {repo.owner?.login} </Title>
                     </div>
                   </Card>
                 )}
