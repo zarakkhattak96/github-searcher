@@ -1,4 +1,4 @@
-import { Anchor, Card, Col, Row, Typography, Image, Flex, Avatar } from 'antd';
+import { Anchor, Card, Col, Row, Typography, Flex, Avatar } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { IContentComponentProps } from '../../../utils/interfaces';
 import React from 'react';
@@ -32,7 +32,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   className={styles.profileCard}
                 >
                   <Meta
-                    // title={profile.login}
                     description={
                       <Anchor
                         items={[

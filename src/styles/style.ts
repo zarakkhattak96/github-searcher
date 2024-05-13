@@ -7,9 +7,6 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
     alignItems: 'center',
     overflowY: 'auto',
-    // position: 'relative',
-    // display: 'flex',
-    // justifyContent: 'center',
     justifyItems: 'center',
   },
 
