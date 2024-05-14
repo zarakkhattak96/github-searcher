@@ -136,6 +136,7 @@ export interface ISearchInputProps {
 export interface IContentComponentProps {
   userProfile: IUserProfile[];
   userRepositories: IRepository[];
+  isLoading: boolean;
 }
 
 export interface ISelectComponentProps {
@@ -157,4 +158,14 @@ export interface IHomePageComponentProps {
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
   handleChange: (value: SelectedOptionType) => void;
   handleInputChange: (v: string) => void;
+
+  isLoading: boolean;
+
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface IIsLoading {
+  isLoading: boolean;
+
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }

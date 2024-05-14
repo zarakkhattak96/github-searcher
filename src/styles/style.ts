@@ -91,4 +91,15 @@ export const useStyle = createStyles(({ css, appearance }) => ({
   top: 10px;
   left: 50px;
       `,
+
+  skeletonStyle: css`
+  left: 550px;
+  width: 200px;
+  display: flex
+  flex-direction: row;
+  position: relative;
+  align-content: center;
+  color: ${appearance === 'dark' ? 'red' : 'blue'};
+      
+      `,
 }));

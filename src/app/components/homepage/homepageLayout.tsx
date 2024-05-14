@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Space } from 'antd';
+import { Col, Flex, Row, Skeleton, Space, Spin } from 'antd';
 import { IHomePageComponentProps } from '../../../utils/interfaces';
 import { SearchInputComponent } from '../common/searchInput/searchInput';
 import { SelectCommonComponent } from '../common/select/select';
@@ -16,6 +16,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   handleInputChange,
   selectedOption,
   setSelectedOption,
+  isLoading,
 }) => {
   const { styles } = useStyle();
 
@@ -40,11 +41,21 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
 
         <Row>
           <Col>
-            <SearchInputComponent
-              username={username}
-              setUsername={setUsername}
-              handleInputChange={handleInputChange}
-            />
+            <Spin
+              size='large'
+              spinning={
+                userProfile.length > 0 || userRepositories.length > 0
+                  ? false
+                  : isLoading
+              }
+              className={styles.skeletonStyle}
+            >
+              <SearchInputComponent
+                username={username}
+                setUsername={setUsername}
+                handleInputChange={handleInputChange}
+              />
+            </Spin>
 
             <SelectCommonComponent
               username={username}
@@ -57,16 +68,33 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
         </Row>
       </Space>
 
-      <Space className={styles.withContent}>
-        <Row>
-          <Col>
-            <ContentComponent
-              userProfile={userProfile}
-              userRepositories={userRepositories}
-            />
-          </Col>
-        </Row>
-      </Space>
+      <Row>
+        <Skeleton
+          active={true}
+          loading={
+            userProfile.length > 0 || userRepositories.length > 0
+              ? false
+              : isLoading
+          }
+          className={styles.skeletonStyle}
+          title={false}
+          paragraph={{
+            rows: 5,
+          }}
+        >
+          <Space className={styles.withContent}>
+            <Row>
+              <Col>
+                <ContentComponent
+                  userProfile={userProfile}
+                  userRepositories={userRepositories}
+                  isLoading={isLoading}
+                />
+              </Col>
+            </Row>
+          </Space>
+        </Skeleton>
+      </Row>
     </Flex>
   );
 };

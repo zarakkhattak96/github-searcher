@@ -26,6 +26,8 @@ const App = () => {
   const [selectedOption, setSelectedOption] =
     useState<SelectedOptionType>('user');
 
+  const [isLoading, setIsloading] = useState<boolean>(false);
+
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
   const dispatch = useDispatch();
@@ -96,15 +98,22 @@ const App = () => {
     } else if (selectedOption === 'repos') {
       debouncedRepos();
     }
+
+    setIsloading(true);
   };
 
-  const debouncedProfileSearch = useDebounce(search, 3000);
+  const debouncedProfileSearch = useDebounce(() => {
+    search();
+    setIsloading(true);
+  }, 3000);
 
   const handleChange = (v: SelectedOptionType) => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);
     (v === 'user' || v === 'repos') && username.length >= 3
       ? setUsername('')
       : setUsername(username);
+
+    setIsloading(false);
   };
 
   const { styles } = useStyle();
@@ -130,6 +139,8 @@ const App = () => {
             handleInputChange={debouncedProfileSearch}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
+            isLoading={isLoading}
+            setIsLoading={setIsloading}
           />
         </ThemeContext.Provider>
       </ThemeProvider>
