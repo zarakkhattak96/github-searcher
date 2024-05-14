@@ -8,7 +8,7 @@ import {
 
 const selectOptions = [
   { value: 'user', label: 'User' },
-  { value: 'repos', label: 'Repositories' },
+  { value: 'repos', label: 'Repos' },
 ];
 
 export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
@@ -19,8 +19,8 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   const { styles } = useStyle();
 
   return (
-    <Row align='middle'>
-      <Col className={styles.dropdownSelect}>
+    <Row align={'top'} justify={'end'}>
+      <Col push={3} className={styles.dropdownSelect} span={2}>
         <Select
           placeholder='User'
           options={selectOptions}

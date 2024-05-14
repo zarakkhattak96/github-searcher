@@ -9,12 +9,11 @@ export const ThemeSwitcher = () => {
   const { changeTheme } = useContext(ThemeContext);
 
   return (
-    <Row>
-      <Col>
+    <Row align={'top'} justify={'end'}>
+      <Col push={5} span={2}>
         <Switch
           checkedChildren='Dark'
           unCheckedChildren='Light'
-          size='default'
           className={styles.themeSwitch}
           onChange={changeTheme}
         />

@@ -22,7 +22,11 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   return (
     <Flex vertical={true} className={styles.layout}>
       <Space
-        align={'center'}
+        align={
+          userProfile.length > 0 || userRepositories.length > 0
+            ? 'start'
+            : 'center'
+        }
         wrap={true}
         className={styles.withoutContent}
         direction='vertical'
@@ -53,12 +57,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
         </Row>
       </Space>
 
-      <Space
-        align={'center'}
-        className={styles.withContent}
-        size={'large'}
-        direction='vertical'
-      >
+      <Space className={styles.withContent}>
         <Row>
           <Col>
             <ContentComponent

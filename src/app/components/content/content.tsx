@@ -23,7 +23,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   hoverable
                   cover={
                     <Avatar
-                      size={120}
+                      size={100}
                       alt='user dp'
                       src={profile.avatar_url}
                       className={styles.profileAvatar}
@@ -38,7 +38,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                           {
                             key: 'profile_url',
                             href: profile.html_url,
-                            title: profile.login,
+                            title: 'Github Account',
                           },
                         ]}
                       />
@@ -46,7 +46,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
                   />
 
                   <div>
-                    <Title level={5}> Username: {profile.login}</Title>
+                    <Title level={5}> {profile.login}</Title>
                     <Title level={5}>
                       Followers: {profile?.followers?.length ?? 0}
                     </Title>

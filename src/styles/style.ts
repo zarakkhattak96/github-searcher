@@ -5,13 +5,11 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     width: '100%',
     height: '100%',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
-    alignItems: 'center',
-    overflowY: 'auto',
-    justifyItems: 'center',
+    overflow: 'auto',
+    padding: '6rem',
   },
 
   searchField: css`
-      width: 350px;
       border-radius: 0px;
     `,
 
@@ -20,21 +18,18 @@ export const useStyle = createStyles(({ css, appearance }) => ({
       border: 1px solid black;
       font-weight: bold;
       background-color: white-smoke;
-      left: 292px;
-      bottom: 29px;
     `,
 
   githubOutlined: css`
       font-size: 36px;
       position: relative;
       color: ${appearance === 'dark' ? 'white' : 'black'};
-      right: 50px;
-      top: 105px;
+      right: 30px;
+      top: 120px;
 
     `,
 
   dropdownSelect: css`
-      left: 360px;
       bottom: 40px;
     `,
 
@@ -44,37 +39,37 @@ export const useStyle = createStyles(({ css, appearance }) => ({
   `,
 
   profileCard: css`
-  width: 400px;
+  width: 200px;
+  display: flex
   flex-direction: row;
-  bottom: 15px;
-  left: 20px;
+  position: relative;
+  align-content: center;
   border-radius: 0px;
   border: 1px solid ${appearance === 'dark' ? 'red' : 'blue'};
   `,
 
   reposCard: css`
-      width: 400px;
+      width: 200px;
       display: flex
       flex-direction: row;
       position: relative;
       align-content: center;
-      left: 140px;
       border-radius: 0px;
       border: 1px solid ${appearance === 'dark' ? 'red' : 'blue'};
       
   `,
 
   homePageTitle: css`
-     right: 5px;
+     left: 10px;
      position: relative;
-     top: 47px;
+     top: 60px;
 
       `,
 
   githubPara: css`
       position: relative;
-      right: 9px;
-      top: 28px;
+      left: 10px;
+      top: 40px;
     `,
 
   flexHeight: css`
@@ -84,25 +79,16 @@ export const useStyle = createStyles(({ css, appearance }) => ({
 
   withoutContent: css`
       width: 100%;
-      height: 85%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      position:relative;
   `,
 
   withContent: css`
       width: 100%;
-      height: auto;
-      justify-content: center;
-      display: flex;
-      flex-direction: column;
-      position: relative;
       `,
 
   profileAvatar: css`
-  position: relative;
   top: 10px;
-  left: 140px;
+  left: 50px;
       `,
 }));
