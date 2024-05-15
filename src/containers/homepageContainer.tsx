@@ -1,5 +1,5 @@
 import { Flex, message } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   IRepository,
   IUserProfile,
@@ -17,6 +17,7 @@ import { useStyle } from '../styles/style';
 import { useDebounce } from '../hooks/debounce';
 import { useDispatch } from 'react-redux';
 import { changeContent } from '../app/slice';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -29,6 +30,25 @@ const App = () => {
   const [isLoading, setIsloading] = useState<boolean>(false);
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const queryParams = new URLSearchParams(location.search);
+  const userName = queryParams.get('q') || '';
+
+  // updating the url when the input value changes
+  useEffect(() => {
+    const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
+    navigate(newUrl);
+  }, [userName, navigate, location.pathname]);
+
+  // updating the input value when the username changes
+  useEffect(() => {
+    userName && setUsername(decodeURI(userName));
+
+    userName && debouncedProfileSearch(userName);
+  }, [userName]);
 
   const dispatch = useDispatch();
 
