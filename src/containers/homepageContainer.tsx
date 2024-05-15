@@ -21,7 +21,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 const App = () => {
   const [username, setUsername] = useState('');
-  const [userProfile, setUserProfile] = useState<IUserProfile[]>([]);
+  const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] =
@@ -47,19 +47,12 @@ const App = () => {
   useEffect(() => {
     userName && setUsername(decodeURI(userName));
 
-    userName && debouncedProfileSearch(userName);
+    userName && debouncedProfileSearch;
+
+    // userName && debouncedRepos();
   }, [userName]);
 
   const dispatch = useDispatch();
-
-  const searchRepos = async () => {
-    const repos = await fetchUserRepos(username);
-
-    setUserProfile([]);
-    setUserRepos(repos);
-  };
-
-  const debouncedRepos = useDebounce(searchRepos, 3000);
 
   const search = async () => {
     if (!username) {
@@ -75,40 +68,23 @@ const App = () => {
         return;
       }
 
-      if (data?.items.length > 0) {
-        const existingUser = userProfile.findIndex(
-          (profile) => profile.id === data.items[0].id,
-        );
+      setUserProfile((userProfile) => {
+        const updated = [...userProfile, ...data.items];
+        return updated;
+      });
 
-        if (existingUser !== -1) {
-          setUserProfile((prevUserProf) => {
-            const updated = [...prevUserProf];
-            updated[existingUser] = {
-              ...updated[existingUser],
-              ...data?.items[0],
-            };
-            updated.map((profile) => {
-              return { ...profile };
-            });
-            return updated;
-          });
-        } else {
-          setUserProfile((prevUserProf) => [
-            ...prevUserProf,
-            { ...data?.items[0] },
-          ]);
-        }
-      }
+      const followersData = await Promise.all(
+        data.items.map(async (user) => {
+          const followersResponse = await fetchUserFollowers(user.login);
+          return { ...user, followers: followersResponse };
+        }),
+      );
 
-      const followersData = await fetchUserFollowers(username);
-
-      setUserProfile((prevUserProfile) => {
-        const updated = prevUserProfile.map((prof) => {
-          if (prof.login === username) {
-            return { ...prof, followers: followersData };
-          }
-          return prof;
-        });
+      setUserProfile(() => {
+        const updated = followersData.map((userWithFollowers) => ({
+          ...userWithFollowers,
+          followers: userWithFollowers.followers,
+        }));
         return updated;
       });
 
@@ -116,16 +92,25 @@ const App = () => {
 
       dispatch(changeContent(data));
     } else if (selectedOption === 'repos') {
-      debouncedRepos();
+      searchRepos();
     }
 
     setIsloading(true);
   };
 
+  const searchRepos = async () => {
+    const repos = await fetchUserRepos(username);
+
+    setUserProfile([]);
+    setUserRepos(repos);
+  };
+
+  // const debouncedRepos = useDebounce(searchRepos, 500);
+
   const debouncedProfileSearch = useDebounce(() => {
     search();
     setIsloading(true);
-  }, 3000);
+  }, 5000);
 
   const handleChange = (v: SelectedOptionType) => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);
@@ -152,7 +137,7 @@ const App = () => {
           <HomePageLayout
             username={username}
             setUsername={setUsername}
-            userProfile={userProfile}
+            userProfile={userProfiles}
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
             handleChange={handleChange}

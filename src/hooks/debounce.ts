@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 
-export const useDebounce = (callback: () => void, delay: number) => {
+export const useDebounce = <T extends string[]>(
+  callback: (...args: T) => void,
+  delay: number,
+) => {
   const callbackRef = useRef(callback);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -8,12 +11,13 @@ export const useDebounce = (callback: () => void, delay: number) => {
     callbackRef.current = callback;
   }, [callback]);
 
-  const debouncedCallback = (...arg: string[]) => {
+  const debouncedCallback = (...args: T) => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
     timeoutRef.current = setTimeout(() => {
-      callbackRef.current?.(...arg);
+      if (typeof args[0] === 'string' && args[0].length >= 3)
+        callbackRef.current?.(...args);
     }, delay);
   };
 
