@@ -41,7 +41,7 @@ export interface IUserProfile {
   type: string;
   site_admin: boolean;
   score: number;
-  followers?: IFollower[];
+  followers?: number;
   background?: string;
 }
 
@@ -136,6 +136,7 @@ export interface ISearchInputProps {
 export interface IContentComponentProps {
   userProfile: IUserProfile[];
   userRepositories: IRepository[];
+  username: string;
   isLoading: boolean;
 }
 

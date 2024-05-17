@@ -18,6 +18,7 @@ import { useDebounce } from '../hooks/debounce';
 import { useDispatch } from 'react-redux';
 import { changeContent } from '../app/slice';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useInfiniteLoading } from '../hooks/infiniteLoading';
 
 const App = () => {
   const [username, setUsername] = useState('');
@@ -31,13 +32,14 @@ const App = () => {
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
 
+  const { loading, hasMore, loadMore } = useInfiniteLoading(username);
+
   const navigate = useNavigate();
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
   const userName = queryParams.get('q') || '';
 
-  // updating the url when the input value changes
   useEffect(() => {
     const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
     navigate(newUrl);
@@ -52,6 +54,33 @@ const App = () => {
     // userName && debouncedRepos();
   }, [userName]);
 
+  //infinite scrolling
+
+  // useEffect(() => {
+  //   const list = document.getElementById('userProf-list');
+  //   const handleScroll = (e: Event) => {
+  //     const target = e.currentTarget as HTMLElement | null;
+
+  //     if (!target) return;
+  //     const bottom =
+  //       target.scrollHeight - target.scrollTop === target.clientHeight;
+
+  //     if (bottom && !loading && hasMore) {
+  //       loadMore();
+  //     }
+  //   };
+
+  //   if (list) {
+  //     list.addEventListener('scroll', handleScroll);
+  //   }
+
+  //   return () => {
+  //     if (list) {
+  //       list.removeEventListener('scroll', handleScroll);
+  //     }
+  //   };
+  // }, [loading, hasMore]);
+
   const dispatch = useDispatch();
 
   const search = async () => {
@@ -59,6 +88,8 @@ const App = () => {
       message.error('Please enter a username');
       return;
     }
+
+    //TODO: to update the fetchUserProfile to axios
 
     if (selectedOption === 'user') {
       const data = await fetchUserProfile(username);
@@ -75,10 +106,14 @@ const App = () => {
 
       const followersData = await Promise.all(
         data.items.map(async (user) => {
-          const followersResponse = await fetchUserFollowers(user.login);
-          return { ...user, followers: followersResponse };
+          const followersResponse = await fetchUserFollowers(user.url);
+          return { ...user, followers: followersResponse.followers };
         }),
       );
+
+      // await loadItems();
+
+      // const followersData = await fetchUserFollowers(username);
 
       setUserProfile(() => {
         const updated = followersData.map((userWithFollowers) => ({
@@ -112,6 +147,10 @@ const App = () => {
     setIsloading(true);
   }, 5000);
 
+  // const { items, loadItems, loading } = useInfiniteLoading(getGitHubUsers);
+
+  // useInfiniteLoading();
+
   const handleChange = (v: SelectedOptionType) => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);
     (v === 'user' || v === 'repos') && username.length >= 3
@@ -119,6 +158,9 @@ const App = () => {
       : setUsername(username);
 
     setIsloading(false);
+    // loadItems();
+    // setQuery(username);
+    // setPageNumber(1);
   };
 
   const { styles } = useStyle();

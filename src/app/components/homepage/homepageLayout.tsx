@@ -89,6 +89,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
                   userProfile={userProfile}
                   userRepositories={userRepositories}
                   isLoading={isLoading}
+                  username={username}
                 />
               </Col>
             </Row>
