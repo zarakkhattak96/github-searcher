@@ -1,5 +1,5 @@
 import { Flex } from 'antd';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   IRepository,
   IUserProfile,
@@ -23,10 +23,9 @@ const App = () => {
   };
 
   const [pagination, setPagination] = useState(paginationInitialValues);
-  const [inputText, setInputText] = useState('');
   const [username, setUsername] = useState('');
+  const [page, setPage] = useState(1);
   const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
   const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] =
@@ -52,50 +51,53 @@ const App = () => {
     }
   };
 
-  const search = useCallback(async () => {
+  const search = async () => {
     if (username.length === 0) {
-      console.log('Please enter a username');
       return;
     }
-    const result = await fetchData(
-      username,
-      pagination.per_page,
-      pagination.page,
-    );
 
-    const { items, total_count } = result as unknown;
-    setTotalCount(total_count);
-    if (selectedOption === 'user') {
-      setUserProfile((userProfile) => {
-        const updated = [...userProfile, ...items];
-        return updated;
-      });
-
-      const followersData = await Promise.all(
-        items.map(async (user: IUserProfile) => {
-          // const followersResponse = await fetchUserFollowers(user.url);
-          // return { ...user, followers: followersResponse.followers };
-          return { ...user };
-        }),
+    // TODO: to modify this
+    if (username.length >= 3) {
+      const result = await fetchData(
+        username,
+        pagination.per_page,
+        pagination.page,
       );
 
-      setUserProfile(() => {
-        const updated = followersData.map((userWithFollowers) => ({
-          ...userWithFollowers,
-          followers: userWithFollowers.followers,
-        }));
-        return updated;
-      });
+      const { items, total_count } = result as {
+        items: IUserProfile[];
+        total_count: number;
+      };
 
-      setSearchedUsers([...searchedUsers, username]);
+      setPagination((pagination) => ({ ...pagination, total_count }));
 
-      dispatch(changeContent(items));
+      if (selectedOption === 'user') {
+        const followersData = await Promise.all(
+          items.map(async (user: IUserProfile) => {
+            return { ...user };
+          }),
+        );
+
+        // TODO: to fix the followers logic
+
+        setUserProfile([
+          ...userProfiles,
+          ...followersData.map((userWithFollowers) => ({
+            ...userWithFollowers,
+            followers: userWithFollowers.followers,
+          })),
+        ]);
+
+        setSearchedUsers([...searchedUsers, username]);
+
+        dispatch(changeContent(items));
+      }
     } else if (selectedOption === 'repos') {
       searchRepos();
     }
 
     setIsloading(true);
-  }, [username]);
+  };
 
   const searchRepos = async () => {
     const repos = await fetchUserRepos(username);
@@ -112,7 +114,6 @@ const App = () => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);
 
     if (username.length <= 3) {
-      setInputText('');
       setUsername('');
     }
 
@@ -120,23 +121,23 @@ const App = () => {
   };
 
   const handleScroll = () => {
-    console.log('handleScroll');
+    setPagination((pagination) => ({
+      ...pagination,
+      page: pagination.page + 1,
+    }));
+    setPage((page) => page + 1);
   };
 
-  // const conditionForBottomScroll = () => {
-  //   console.log(pagination.total_count, 'asdasdasd');
-  //   return pagination.total_count >= 0;
-  // };
+  const conditionForBottomScroll =
+    pagination.total_count !== userProfiles.length && userProfiles.length !== 0;
 
-  // useEffect(() => {
-  //   console.log(pagination.total_count);
-  // }, []);
+  // TODO: update using useEffect
 
   useEffect(() => {
     search();
-    // setPagination({ ...pagination, total_count: total_count });
-    // console.log(totalCount);
-  }, [search]);
+  }, [username, page]);
+
+  useEffect(() => {}, [pagination]);
 
   useEffect(() => {
     const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
@@ -148,7 +149,6 @@ const App = () => {
   }, [userName]);
 
   return (
-    // <ConfigProvider theme={darkTheme}>
     <Flex id='homeContainer' className={styles.flexHeight}>
       <ThemeProvider appearance={theme}>
         <ThemeContext.Provider
@@ -171,12 +171,12 @@ const App = () => {
             isLoading={isLoading}
             setIsLoading={setIsloading}
             handleScroll={handleScroll}
-            conditionForBottomScroll={totalCount}
+            conditionForBottomScroll={conditionForBottomScroll}
+            page={page}
           />
         </ThemeContext.Provider>
       </ThemeProvider>
     </Flex>
-    // </ConfigProvider>
   );
 };
 

@@ -1,12 +1,8 @@
 import { Anchor, Card, Col, Row, Typography, Flex, Avatar } from 'antd';
 import Meta from 'antd/es/card/Meta';
 import { IContentComponentProps } from '../../../utils/interfaces';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useStyle } from '../../../styles/style';
-// import { useInfiniteLoading } from '../../../hooks/infiniteLoading';
-// import { fetchUserProfiles } from '../../../services/github';
-// import { useInfiniteLoading } from '../../../hooks/infiniteLoading';
-// import { getGitHubUsers } from '../../../services/github';
 
 const { Title } = Typography;
 
@@ -17,9 +13,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
 }) => {
   const { styles } = useStyle();
 
-  // const { items, loading, targetRef } = useInfiniteLoading(() => {
-  //   return fetchUserProfiles('zarakk', 5, 1);
-  // });
+  useEffect(() => {}, [userProfile]);
 
   return (
     <Flex className={styles.cards} id='userProf-list'>

@@ -161,14 +161,15 @@ export interface IHomePageComponentProps {
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
   handleChange: (value: SelectedOptionType) => void;
   handleInputChange: (v: string) => void;
+  page: number;
   // inputText: string;
   // setInputText: React.Dispatch<React.SetStateAction<string>>;
 
   isLoading: boolean;
 
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  handleScroll: () => void;
-  conditionForBottomScroll: any;
+  handleScroll: (page: number) => void;
+  conditionForBottomScroll: boolean;
 }
 
 export interface IIsLoading {
