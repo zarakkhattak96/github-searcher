@@ -14,7 +14,7 @@ export const contentSlice = createSlice({
   initialState: contentInitialState,
   reducers: {
     changeContent: (state, action) => {
-      state.userProfile = action.payload.items[0];
+      state.userProfile = action.payload;
     },
   },
 });

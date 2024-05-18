@@ -1,60 +1,34 @@
-import { useEffect, useState } from 'react';
-import { IUserProfile } from '../utils/interfaces';
-import axios from 'axios';
-import { fetchUserProfiles } from '../services/github';
+import { useEffect, useState, useRef } from 'react';
 
-export const useInfiniteLoading = (query: string) => {
-  const [userProfs, setUserProfs] = useState<IUserProfile[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
-  const [page, setPage] = useState(1);
+export const useInfiniteLoading = (onScrollBottom: () => void) => {
+  const bottomBoundaryRef = useRef<any>();
+  const [renderRef, setRenderRef] = useState<boolean>();
 
-  useEffect(() => {
-    if (!query || query.length < 3) {
-      setUserProfs([]);
-      setHasMore(false);
-      setLoading(false);
-      return;
+  const onIntersection = (entries: any[]) => {
+    console.log('asdasdasd');
+    if (entries[0].isIntersecting) {
+      onScrollBottom();
     }
-
-    const source = axios.CancelToken.source();
-    setLoading(true);
-    setError(false);
-
-    fetchUserProfiles(query, 15, page)
-      .then((res) => {
-        setUserProfs((prev) => {
-          const newUsers = res.filter(
-            (newUser) => !prev.some((user) => user.id === newUser.id),
-          );
-
-          console.log(newUsers, 'NEW USERS');
-
-          return [...prev, ...newUsers];
-        });
-
-        setHasMore(res.data.items.length > 0);
-        setLoading(false);
-      })
-      .catch((err) => {
-        if (axios.isCancel(err)) return;
-        setError(true);
-        setLoading(false);
-      });
-
-    return () => source.cancel();
-  }, [query, page]);
-
-  const loadMore = () => {
-    setPage((prevPage) => prevPage + 1);
   };
 
+  useEffect(() => {
+    console.log('scrollin');
+    const observer = new IntersectionObserver(onIntersection);
+    if (observer && bottomBoundaryRef.current) {
+      if (true) {
+        observer.observe(bottomBoundaryRef.current);
+        console.log('asdasdasd');
+      }
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [bottomBoundaryRef, renderRef]);
+
   return {
-    userProfs,
-    loading,
-    error,
-    hasMore,
-    loadMore,
+    bottomBoundaryRef,
   };
 };

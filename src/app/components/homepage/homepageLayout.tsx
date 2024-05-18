@@ -6,6 +6,7 @@ import { ContentComponent } from '../content/content';
 import NavBar from './homepageNavbar';
 import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
+import { useEffect, useRef, useState } from 'react';
 
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
@@ -17,8 +18,38 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   selectedOption,
   setSelectedOption,
   isLoading,
+  conditionForBottomScroll,
+  handleScroll,
 }) => {
   const { styles } = useStyle();
+
+  const bottomBoundaryRef = useRef<any>();
+  const [renderRef, setRenderRef] = useState<boolean>(false);
+
+  const onIntersection = (entries: any[]) => {
+    if (entries[0].isIntersecting) {
+      console.log(conditionForBottomScroll);
+      handleScroll();
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersection);
+    if (observer && bottomBoundaryRef.current) {
+      if (conditionForBottomScroll > 0) {
+        // console.log(conditionForBottomScroll);
+        observer.observe(bottomBoundaryRef.current);
+      }
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [bottomBoundaryRef, renderRef, conditionForBottomScroll]);
+
+  useEffect(() => {}, [conditionForBottomScroll]);
 
   return (
     <Flex vertical={true} className={styles.layout}>
@@ -51,9 +82,9 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
               className={styles.skeletonStyle}
             >
               <SearchInputComponent
+                handleInputChange={handleInputChange}
                 username={username}
                 setUsername={setUsername}
-                handleInputChange={handleInputChange}
               />
             </Spin>
 
@@ -96,6 +127,8 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           </Space>
         </Skeleton>
       </Row>
+
+      <div ref={bottomBoundaryRef}>This is the bottom boundary</div>
     </Flex>
   );
 };
