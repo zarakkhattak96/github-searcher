@@ -18,7 +18,7 @@ import { useDebounce } from '../hooks/debounce';
 const App = () => {
   const paginationInitialValues = {
     page: 1,
-    per_page: 5,
+    per_page: 20,
     total_count: 0,
   };
 
@@ -39,7 +39,11 @@ const App = () => {
   const { styles } = useStyle();
 
   const dispatch = useDispatch();
-  const fetchData = async (query: string, perPage?: number, page?: number) => {
+  const fetchProfileData = async (
+    query: string,
+    perPage?: number,
+    page?: number,
+  ) => {
     try {
       setIsloading(true);
       const result = await fetchUserProfiles(query, perPage, page);
@@ -51,14 +55,37 @@ const App = () => {
     }
   };
 
+  const fetchReposData = async (
+    query: string,
+    perPage?: number,
+    page?: number,
+  ) => {
+    try {
+      setIsloading(true);
+
+      const result = await fetchUserRepos(query, perPage, page);
+
+      setIsloading(false);
+
+      return result;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+
+      setIsloading(false);
+    }
+  };
+
   const search = async () => {
     if (username.length === 0) {
       return;
     }
 
+    if (username.length < 3) {
+      return;
+    }
     // TODO: to modify this
-    if (username.length >= 3) {
-      const result = await fetchData(
+    if (selectedOption === 'user') {
+      const result = await fetchProfileData(
         username,
         pagination.per_page,
         pagination.page,
@@ -71,44 +98,43 @@ const App = () => {
 
       setPagination((pagination) => ({ ...pagination, total_count }));
 
-      if (selectedOption === 'user') {
-        const followersData = await Promise.all(
-          items.map(async (user: IUserProfile) => {
-            return { ...user };
-          }),
-        );
+      // if (selectedOption === 'user') {
+      const followersData = await Promise.all(
+        items.map(async (user: IUserProfile) => {
+          return { ...user };
+        }),
+      );
 
-        // TODO: to fix the followers logic
+      // TODO: to fix the followers logic
 
-        setUserProfile([
-          ...userProfiles,
-          ...followersData.map((userWithFollowers) => ({
-            ...userWithFollowers,
-            followers: userWithFollowers.followers,
-          })),
-        ]);
+      setUserProfile([
+        ...userProfiles,
+        ...followersData.map((userWithFollowers) => ({
+          ...userWithFollowers,
+          followers: userWithFollowers.followers,
+        })),
+      ]);
 
-        setSearchedUsers([...searchedUsers, username]);
+      setSearchedUsers([...searchedUsers, username]);
 
-        dispatch(changeContent(items));
-      }
-    } else if (selectedOption === 'repos') {
-      searchRepos();
+      dispatch(changeContent(items));
     }
+
+    const reposResult = await fetchReposData(
+      username,
+      pagination.per_page,
+      pagination.page,
+    );
+
+    setUserRepos(reposResult);
 
     setIsloading(true);
   };
 
-  const searchRepos = async () => {
-    const repos = await fetchUserRepos(username);
-
-    setUserProfile([]);
-    setUserRepos(repos);
-  };
-
   const debouncedProfileSearch = useDebounce((val: string) => {
+    search();
     setUsername(val);
-  }, 1000);
+  }, 5000);
 
   const handleChange = (v: SelectedOptionType) => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);

@@ -1,4 +1,4 @@
-import { Col, Flex, Row, Skeleton, Space, Spin } from 'antd';
+import { Col, Flex, Row, Skeleton, Space } from 'antd';
 import { IHomePageComponentProps } from '../../../utils/interfaces';
 import { SearchInputComponent } from '../common/searchInput/searchInput';
 import { SelectCommonComponent } from '../common/select/select';
