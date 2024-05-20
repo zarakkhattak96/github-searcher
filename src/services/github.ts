@@ -27,9 +27,12 @@ export const fetchUserProfiles = async (
 };
 
 export const fetchUserFollowers = async (url: string) => {
-  const followers = await fetch(url);
+  console.log(url, 'URL');
+  const followers = await axios(url);
 
-  const data = await followers.json();
+  const data = await followers.data;
+
+  console.log(data, 'DATA');
 
   return data;
 };

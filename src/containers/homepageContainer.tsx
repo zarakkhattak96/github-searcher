@@ -99,6 +99,10 @@ const App = () => {
 
       setPagination((pagination) => ({ ...pagination, total_count }));
 
+      // TODO: to fix the fetch followers response
+      // TODO: to fix mobile responsiveness
+      // TODO: to move infiniteScrolling logic to customHook
+
       const followersData = await Promise.all(
         items.map(async (user: IUserProfile) => {
           return { ...user };
@@ -145,7 +149,7 @@ const App = () => {
   const debouncedProfileSearch = useDebounce((val: string) => {
     search();
     setUsername(val);
-  }, 3000);
+  }, 1000);
 
   const handleChange = (v: SelectedOptionType) => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);
