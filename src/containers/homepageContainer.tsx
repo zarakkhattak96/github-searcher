@@ -18,7 +18,7 @@ import { useDebounce } from '../hooks/debounce';
 const App = () => {
   const paginationInitialValues = {
     page: 1,
-    per_page: 20,
+    per_page: 5,
     total_count: 0,
   };
 
@@ -80,10 +80,12 @@ const App = () => {
       return;
     }
 
+    setIsloading(true);
+
     if (username.length < 3) {
       return;
     }
-    // TODO: to modify this
+
     if (selectedOption === 'user') {
       const result = await fetchProfileData(
         username,
@@ -98,43 +100,57 @@ const App = () => {
 
       setPagination((pagination) => ({ ...pagination, total_count }));
 
-      // if (selectedOption === 'user') {
       const followersData = await Promise.all(
         items.map(async (user: IUserProfile) => {
           return { ...user };
         }),
       );
 
-      // TODO: to fix the followers logic
+      console.log(followersData, 'DATA');
 
-      setUserProfile([
-        ...userProfiles,
-        ...followersData.map((userWithFollowers) => ({
+      setUserProfile((prevUserProfiles) => {
+        const updatedProfiles = followersData.map((userWithFollowers) => ({
           ...userWithFollowers,
           followers: userWithFollowers.followers,
-        })),
-      ]);
+        }));
+
+        return [...prevUserProfiles, ...updatedProfiles];
+      });
+
+      setSearchedUsers([...searchedUsers, username]);
 
       setSearchedUsers([...searchedUsers, username]);
 
       dispatch(changeContent(items));
+    } else if (selectedOption === 'repos') {
+      const reposResult = await fetchReposData(
+        username,
+        pagination.per_page,
+        pagination.page,
+      );
+
+      console.log(reposResult?.items, 'REPOS');
+
+      setUserRepos(reposResult?.items);
+
+      const { total_count } = reposResult as {
+        total_count: number;
+      };
+
+      console.log(total_count, 'COUNT');
+
+      console.log(pagination, 'Pagin');
+      setPagination((pagination) => ({ ...pagination, total_count }));
+
+      dispatch(changeContent(reposResult)); //persisting repos data in redux
+      setIsloading(false);
     }
-
-    const reposResult = await fetchReposData(
-      username,
-      pagination.per_page,
-      pagination.page,
-    );
-
-    setUserRepos(reposResult);
-
-    setIsloading(true);
   };
 
   const debouncedProfileSearch = useDebounce((val: string) => {
     search();
     setUsername(val);
-  }, 5000);
+  }, 3000);
 
   const handleChange = (v: SelectedOptionType) => {
     v === 'user' ? setUserRepos([]) : setUserProfile([]);
@@ -160,7 +176,7 @@ const App = () => {
   // TODO: update using useEffect
 
   useEffect(() => {
-    search();
+    debouncedProfileSearch(username);
   }, [username, page]);
 
   useEffect(() => {}, [pagination]);

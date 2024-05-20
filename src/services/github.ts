@@ -51,7 +51,10 @@ export const fetchUserRepos = async (
       },
     );
 
-    return repos.data;
+    return {
+      items: repos.data,
+      total_count: repos.data.length,
+    };
   } catch (error) {
     console.error(error);
   }

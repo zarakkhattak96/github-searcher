@@ -15,6 +15,7 @@ export const contentSlice = createSlice({
   reducers: {
     changeContent: (state, action) => {
       state.userProfile = action.payload;
+      state.userRepositories = action.payload;
     },
   },
 });
