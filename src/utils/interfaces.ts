@@ -127,10 +127,12 @@ export interface IRepository {
 }
 
 export type SelectedOptionType = 'user' | 'repos';
+
+export type IUserOrRepository = IUserProfile | IRepository;
 export interface ISearchInputProps {
-  username: string;
-  setUsername: React.Dispatch<React.SetStateAction<string>>;
   handleInputChange: (v: string) => void;
+  username: string;
+  setUsername: React.Dispatch<SetStateAction<string>>;
 }
 
 export interface IContentComponentProps {
@@ -159,14 +161,25 @@ export interface IHomePageComponentProps {
   setExpandedUserRepos: React.Dispatch<SetStateAction<IRepository[]>>;
   handleChange: (value: SelectedOptionType) => void;
   handleInputChange: (v: string) => void;
+  page: number;
+  // inputText: string;
+  // setInputText: React.Dispatch<React.SetStateAction<string>>;
 
   isLoading: boolean;
 
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  handleScroll: (page: number) => void;
+  conditionForBottomScroll: boolean;
 }
 
 export interface IIsLoading {
   isLoading: boolean;
 
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export interface IPagination {
+  page: number;
+  per_page: number;
+  total_count: number;
 }

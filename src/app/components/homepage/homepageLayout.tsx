@@ -6,6 +6,7 @@ import { ContentComponent } from '../content/content';
 import NavBar from './homepageNavbar';
 import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
+import { useEffect, useRef, useState } from 'react';
 
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
@@ -17,8 +18,38 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   selectedOption,
   setSelectedOption,
   isLoading,
+  conditionForBottomScroll,
+  handleScroll,
+  page,
 }) => {
   const { styles } = useStyle();
+
+  // TODO: To maybe move this to the infinite loading customHook
+
+  const bottomBoundaryRef = useRef<Element>();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [renderRef, _setRenderRef] = useState<boolean>(false);
+
+  const onIntersection = (entries: IntersectionObserverEntry[]) => {
+    if (entries[0].isIntersecting) {
+      handleScroll(page);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(onIntersection);
+    if (observer && bottomBoundaryRef.current) {
+      if (conditionForBottomScroll) {
+        observer.observe(bottomBoundaryRef.current);
+      }
+    }
+
+    return () => {
+      if (observer) {
+        observer.disconnect();
+      }
+    };
+  }, [bottomBoundaryRef, renderRef, conditionForBottomScroll]);
 
   return (
     <Flex vertical={true} className={styles.layout}>
@@ -41,21 +72,11 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
 
         <Row>
           <Col>
-            <Spin
-              size='large'
-              spinning={
-                userProfile.length > 0 || userRepositories.length > 0
-                  ? false
-                  : isLoading
-              }
-              className={styles.skeletonStyle}
-            >
-              <SearchInputComponent
-                username={username}
-                setUsername={setUsername}
-                handleInputChange={handleInputChange}
-              />
-            </Spin>
+            <SearchInputComponent
+              handleInputChange={handleInputChange}
+              username={username}
+              setUsername={setUsername}
+            />
 
             <SelectCommonComponent
               username={username}
@@ -96,6 +117,9 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           </Space>
         </Skeleton>
       </Row>
+
+      {/* TODO: Maybe add a spin here //!Fix the type of ref */}
+      <Row ref={bottomBoundaryRef} />
     </Flex>
   );
 };

@@ -6,7 +6,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     height: '100%',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
     overflow: 'auto',
-    padding: '6rem',
+    padding: '3rem',
   },
 
   searchField: css`

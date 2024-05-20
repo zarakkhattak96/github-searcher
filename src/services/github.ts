@@ -1,36 +1,43 @@
 import axios from 'axios';
 
-export const fetchUserProfile = async (username: string) => {
-  const response = await fetch(
-    `https://api.github.com/search/users?q=${username}`,
-  );
+// export const fetchUserProfile = async (username: string) => {
+//   const response = await fetch(
+//     `https://api.github.com/search/users?q=${username}`,
+//   );
 
-  const data = await response.json();
+//   const data = await response.json();
 
-  if (!data) {
-    throw new Error('Data does not exist');
-  }
+//   if (!data) {
+//     throw new Error('Data does not exist');
+//   }
 
-  return data;
-};
+//   return data;
+// };
 
 export const fetchUserProfiles = async (
   query: string,
-  perPage: number,
-  page: number,
+  perPage?: number,
+  page?: number,
 ) => {
   const url = 'https://api.github.com/search/users';
+
+  // console.log(query, 'QUERY');
 
   try {
     const response = await axios.get(url, {
       params: {
         q: query,
-        per_page: perPage,
-        page: page,
+        per_page: perPage as number,
+        page: page as number,
       },
     });
 
-    return response.data.items;
+    // console.log(response, "RESP")
+
+    return {
+      items: response.data.items,
+      total_count: response.data.total_count,
+    };
   } catch (error) {
     console.error('Error fetching users:', error);
     throw error;
