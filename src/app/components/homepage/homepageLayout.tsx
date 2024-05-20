@@ -24,7 +24,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
 }) => {
   const { styles } = useStyle();
 
-  // TODO: To maybe move this to the infinite loading customHook
+  // TODO: To move this to the infinite loading customHook
 
   const bottomBoundaryRef = useRef<Element>();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

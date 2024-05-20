@@ -22,7 +22,7 @@ export const fetchUserProfiles = async (
     };
   } catch (error) {
     console.error('Error fetching users:', error);
-    throw error;
+    return [];
   }
 };
 
@@ -44,7 +44,6 @@ export const fetchUserRepos = async (
       `https://api.github.com/users/${query}/repos`,
       {
         params: {
-          q: query,
           per_page: perPage,
           page: page,
         },
@@ -53,7 +52,7 @@ export const fetchUserRepos = async (
 
     return {
       items: repos.data,
-      total_count: repos.data.length,
+      total_count: undefined,
     };
   } catch (error) {
     console.error(error);

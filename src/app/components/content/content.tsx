@@ -9,12 +9,11 @@ const { Title } = Typography;
 export const ContentComponent: React.FC<IContentComponentProps> = ({
   userProfile,
   userRepositories,
-  // username,
 }) => {
   const { styles } = useStyle();
 
   useEffect(() => {}, [userProfile]);
-  useEffect(() => {}, [userRepositories]);
+  // useEffect(() => {}, [userRepositories]);
 
   return (
     <>
@@ -99,7 +98,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
             ))}
           </Row>
         )}
-        ;
       </Flex>
     </>
   );

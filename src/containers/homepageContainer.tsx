@@ -18,7 +18,7 @@ import { useDebounce } from '../hooks/debounce';
 const App = () => {
   const paginationInitialValues = {
     page: 1,
-    per_page: 5,
+    per_page: 20,
     total_count: 0,
   };
 
@@ -35,6 +35,7 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+
   const userName = queryParams.get('q') || '';
   const { styles } = useStyle();
 
@@ -76,15 +77,13 @@ const App = () => {
   };
 
   const search = async () => {
-    if (username.length === 0) {
+    if (username.length === 0 || username.length < 3) {
+      setIsloading(false);
+
       return;
     }
 
     setIsloading(true);
-
-    if (username.length < 3) {
-      return;
-    }
 
     if (selectedOption === 'user') {
       const result = await fetchProfileData(
@@ -106,8 +105,6 @@ const App = () => {
         }),
       );
 
-      console.log(followersData, 'DATA');
-
       setUserProfile((prevUserProfiles) => {
         const updatedProfiles = followersData.map((userWithFollowers) => ({
           ...userWithFollowers,
@@ -119,8 +116,6 @@ const App = () => {
 
       setSearchedUsers([...searchedUsers, username]);
 
-      setSearchedUsers([...searchedUsers, username]);
-
       dispatch(changeContent(items));
     } else if (selectedOption === 'repos') {
       const reposResult = await fetchReposData(
@@ -129,21 +124,21 @@ const App = () => {
         pagination.page,
       );
 
-      console.log(reposResult?.items, 'REPOS');
+      if (reposResult && reposResult.items.length > 0) {
+        setUserRepos((prevUserRepos) => [
+          ...prevUserRepos,
+          ...reposResult.items,
+        ]);
+        setPagination((pagination) => ({ ...pagination }));
 
-      setUserRepos(reposResult?.items);
-
-      const { total_count } = reposResult as {
-        total_count: number;
-      };
-
-      console.log(total_count, 'COUNT');
-
-      console.log(pagination, 'Pagin');
-      setPagination((pagination) => ({ ...pagination, total_count }));
-
-      dispatch(changeContent(reposResult)); //persisting repos data in redux
-      setIsloading(false);
+        dispatch(changeContent(reposResult)); //persisting repos data in redux
+        setIsloading(false);
+      } else if (reposResult?.items.length === 0) {
+        setPagination((pagination) => ({
+          ...pagination,
+          total_count: userRepositories.length,
+        }));
+      }
     }
   };
 
@@ -159,6 +154,7 @@ const App = () => {
       setUsername('');
     }
 
+    setPagination(paginationInitialValues);
     setIsloading(false);
   };
 
@@ -171,9 +167,10 @@ const App = () => {
   };
 
   const conditionForBottomScroll =
-    pagination.total_count !== userProfiles.length && userProfiles.length !== 0;
-
-  // TODO: update using useEffect
+    (pagination.total_count !== userProfiles.length &&
+      userProfiles.length !== 0) ||
+    (pagination.total_count !== userRepositories.length &&
+      userRepositories.length !== 0);
 
   useEffect(() => {
     debouncedProfileSearch(username);
