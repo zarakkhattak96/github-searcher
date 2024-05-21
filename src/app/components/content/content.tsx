@@ -13,7 +13,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   const { styles } = useStyle();
 
   useEffect(() => {}, [userProfile]);
-  // useEffect(() => {}, [userRepositories]);
 
   return (
     <>

@@ -100,7 +100,6 @@ const App = () => {
       setPagination((pagination) => ({ ...pagination, total_count }));
 
       // TODO: to fix the fetch followers response
-      // TODO: to fix mobile responsiveness
 
       const followersData = await Promise.all(
         items.map(async (user: IUserProfile) => {

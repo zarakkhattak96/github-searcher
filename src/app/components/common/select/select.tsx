@@ -19,7 +19,6 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   const { styles } = useStyle();
 
   return (
-    // <Row>
     <Col push={24} className={styles.dropdownSelect} offset={1}>
       <Select
         placeholder='User'
@@ -32,6 +31,5 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
         value={selectedOption}
       />
     </Col>
-    // </Row>
   );
 };
