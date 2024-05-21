@@ -101,7 +101,6 @@ const App = () => {
 
       // TODO: to fix the fetch followers response
       // TODO: to fix mobile responsiveness
-      // TODO: to move infiniteScrolling logic to customHook
 
       const followersData = await Promise.all(
         items.map(async (user: IUserProfile) => {

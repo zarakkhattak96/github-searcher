@@ -1,4 +1,4 @@
-import { Col, Input, Row } from 'antd';
+import { Input } from 'antd';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
 import { ISearchInputProps } from '../../../../utils/interfaces';
@@ -11,21 +11,17 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
   const { styles } = useStyle();
 
   return (
-    <Row>
-      <Col>
-        <Input
-          placeholder='Start typing here ..'
-          maxLength={50}
-          size='large'
-          value={username}
-          onChange={(e) => {
-            const v = e.target.value;
-            setUsername(e.target.value);
-            handleInputChange(v);
-          }}
-          className={styles.searchField}
-        />
-      </Col>
-    </Row>
+    <Input
+      placeholder='Start typing here ..'
+      maxLength={50}
+      size='large'
+      value={username}
+      onChange={(e) => {
+        const v = e.target.value;
+        setUsername(e.target.value);
+        handleInputChange(v);
+      }}
+      className={styles.searchField}
+    />
   );
 };

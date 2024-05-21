@@ -44,18 +44,13 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
             : 'center'
         }
         wrap={true}
-        className={styles.withoutContent}
         direction='vertical'
       >
         <Row>
-          <Col>
+          <Col className={styles.withoutContent}>
             <NavBar />
             <ThemeSwitcher />
-          </Col>
-        </Row>
 
-        <Row>
-          <Col>
             <SearchInputComponent
               handleInputChange={handleInputChange}
               username={username}
@@ -88,16 +83,14 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
           }}
         >
           <Space className={styles.withContent}>
-            <Row>
-              <Col>
-                <ContentComponent
-                  userProfile={userProfile}
-                  userRepositories={userRepositories}
-                  isLoading={isLoading}
-                  username={username}
-                />
-              </Col>
-            </Row>
+            <Col>
+              <ContentComponent
+                userProfile={userProfile}
+                userRepositories={userRepositories}
+                isLoading={isLoading}
+                username={username}
+              />
+            </Col>
           </Space>
         </Skeleton>
       </Row>
