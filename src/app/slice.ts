@@ -14,7 +14,13 @@ export const contentSlice = createSlice({
   initialState: contentInitialState,
   reducers: {
     changeContent: (state, action) => {
+      state.userProfile = action.payload.userProfile;
+      state.userRepositories = action.payload.userRepositories;
+    },
+    changeUserProfile: (state, action) => {
       state.userProfile = action.payload;
+    },
+    changeUserRepositories: (state, action) => {
       state.userRepositories = action.payload;
     },
   },
@@ -31,7 +37,8 @@ export const searchInputSlice = createSlice({
 });
 
 export const { changeSearchInput } = searchInputSlice.actions;
-export const { changeContent } = contentSlice.actions;
+export const { changeUserProfile, changeUserRepositories, changeContent } =
+  contentSlice.actions;
 
 const reducers = {
   searchInput: searchInputSlice.reducer,

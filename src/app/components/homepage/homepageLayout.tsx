@@ -39,7 +39,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
     <Flex vertical={true} className={styles.layout}>
       <Space
         align={
-          userProfile.length > 0 || userRepositories.length > 0
+          userProfile?.length > 0 || userRepositories.length > 0
             ? 'start'
             : 'center'
         }
@@ -72,7 +72,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
         <Skeleton
           active={true}
           loading={
-            userProfile.length > 0 || userRepositories.length > 0
+            userProfile?.length > 0 || userRepositories.length > 0
               ? false
               : isLoading
           }
