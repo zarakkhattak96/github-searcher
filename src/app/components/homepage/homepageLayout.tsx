@@ -6,7 +6,8 @@ import { ContentComponent } from '../content/content';
 import NavBar from './homepageNavbar';
 import { ThemeSwitcher } from './homepageThemeSwitcher';
 import { useStyle } from '../../../styles/style';
-import { useEffect, useRef, useState } from 'react';
+import useInfiniteScroll from '../../../hooks/InfiniteScrolling';
+import { useEffect } from 'react';
 
 export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   username,
@@ -20,36 +21,19 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
   isLoading,
   conditionForBottomScroll,
   handleScroll,
+  setPage,
   page,
 }) => {
   const { styles } = useStyle();
 
-  // TODO: To move this to the infinite loading customHook
-
-  const bottomBoundaryRef = useRef<Element>();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [renderRef, _setRenderRef] = useState<boolean>(false);
-
-  const onIntersection = (entries: IntersectionObserverEntry[]) => {
-    if (entries[0].isIntersecting) {
-      handleScroll(page);
-    }
-  };
+  const { ref, isInView } = useInfiniteScroll({ threshold: [0.25] });
 
   useEffect(() => {
-    const observer = new IntersectionObserver(onIntersection);
-    if (observer && bottomBoundaryRef.current) {
-      if (conditionForBottomScroll) {
-        observer.observe(bottomBoundaryRef.current);
-      }
+    if (isInView && conditionForBottomScroll) {
+      setPage((prevPage) => prevPage + 1);
+      handleScroll(page);
     }
-
-    return () => {
-      if (observer) {
-        observer.disconnect();
-      }
-    };
-  }, [bottomBoundaryRef, renderRef, conditionForBottomScroll]);
+  }, [isInView]);
 
   return (
     <Flex vertical={true} className={styles.layout}>
@@ -118,8 +102,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
         </Skeleton>
       </Row>
 
-      {/* TODO: Maybe add a spin here //!Fix the type of ref */}
-      <Row ref={bottomBoundaryRef} />
+      <Row ref={ref} />
     </Flex>
   );
 };

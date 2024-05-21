@@ -215,6 +215,7 @@ const App = () => {
             setIsLoading={setIsloading}
             handleScroll={handleScroll}
             conditionForBottomScroll={conditionForBottomScroll}
+            setPage={setPage}
             page={page}
           />
         </ThemeContext.Provider>
