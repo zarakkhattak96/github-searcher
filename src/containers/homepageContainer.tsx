@@ -1,19 +1,24 @@
-import { Flex } from 'antd';
+import { Flex, message } from 'antd';
 import { useEffect, useState } from 'react';
 import {
   IRepository,
   IUserProfile,
   SelectedOptionType,
 } from '../utils/interfaces';
-import { fetchUserProfiles, fetchUserRepos } from '../services/github';
+import {
+  FetchUseProfileArgs,
+  fetchUserProfiles,
+  fetchUserRepos,
+} from '../services/github';
 import { HomePageLayout } from '../app/components/homepage/homepageLayout';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
-import { useDispatch } from 'react-redux';
-import { changeContent } from '../app/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { changeUserProfile, changeUserRepositories } from '../app/slice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/debounce';
+import { AppDispatch, RootState } from '../app/store/store';
 
 const App = () => {
   const paginationInitialValues = {
@@ -27,7 +32,6 @@ const App = () => {
   const [page, setPage] = useState(1);
   const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
-  const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] =
     useState<SelectedOptionType>('user');
   const [isLoading, setIsloading] = useState<boolean>(false);
@@ -40,16 +44,44 @@ const App = () => {
   const { styles } = useStyle();
 
   const dispatch = useDispatch();
-  const fetchProfileData = async (
-    query: string,
-    perPage?: number,
-    page?: number,
-  ) => {
+
+  const userProfileState = useSelector((state: RootState) => state.profile);
+
+  console.log(userProfileState, 'USERPROFILESTATE');
+
+  const fetchProfileData = async ({
+    query,
+    perPage,
+    page,
+  }: FetchUseProfileArgs) => {
     try {
-      setIsloading(true);
-      const result = await fetchUserProfiles(query, perPage, page);
-      setIsloading(false);
-      return result;
+      const resultAction = dispatch<AppDispatch | any>(
+        fetchUserProfiles({
+          query: query,
+          perPage,
+          page,
+        }),
+      );
+
+      console.log(await resultAction, 'ACTIOn');
+
+      if (fetchUserProfiles.fulfilled.match(resultAction)) {
+        const user = resultAction;
+
+        setIsloading(false);
+
+        console.log(user, 'USER');
+        return user;
+      } else if (fetchUserProfiles.rejected.match(resultAction)) {
+        setIsloading(true);
+
+        message.error('Cannot fetch User Profile');
+        return;
+      } else {
+        setIsloading(true);
+      }
+
+      return await resultAction;
     } catch (error) {
       console.error('Error fetching data:', error);
       setIsloading(false);
@@ -86,62 +118,81 @@ const App = () => {
     setIsloading(true);
 
     if (selectedOption === 'user') {
-      const result = await fetchProfileData(
-        username,
-        pagination.per_page,
-        pagination.page,
-      );
-
-      const { items, total_count } = result as {
-        items: IUserProfile[];
-        total_count: number;
-      };
-
-      setPagination((pagination) => ({ ...pagination, total_count }));
-
-      // TODO: to fix the fetch followers response
-
-      const followersData = await Promise.all(
-        items.map(async (user: IUserProfile) => {
-          return { ...user };
-        }),
-      );
-
-      setUserProfile((prevUserProfiles) => {
-        const updatedProfiles = followersData.map((userWithFollowers) => ({
-          ...userWithFollowers,
-          followers: userWithFollowers.followers,
-        }));
-
-        return [...prevUserProfiles, ...updatedProfiles];
+      await fetchProfileData({
+        query: username,
+        perPage: pagination.per_page,
+        page: pagination.page,
       });
 
-      setSearchedUsers([...searchedUsers, username]);
+      const result = userProfileState.userProfiles;
 
-      dispatch(changeContent(items));
-    } else if (selectedOption === 'repos') {
-      const reposResult = await fetchReposData(
-        username,
-        pagination.per_page,
-        pagination.page,
-      );
+      console.log(result, 'RESULT11');
 
-      if (reposResult && reposResult.items.length > 0) {
-        setUserRepos((prevUserRepos) => [
-          ...prevUserRepos,
-          ...reposResult.items,
-        ]);
-        setPagination((pagination) => ({ ...pagination }));
+      if (result) {
+        const items = result.items;
+        setUserProfile(items);
+        // const items = await result.payload.items;
 
-        dispatch(changeContent(reposResult)); //persisting repos data in redux
-        setIsloading(false);
-      } else if (reposResult?.items.length === 0) {
-        setPagination((pagination) => ({
-          ...pagination,
-          total_count: userRepositories.length,
-        }));
+        console.log(items, 'PAYYYYYYYYY11111');
+
+        const total_count = result.total_count;
+
+        setPagination((pagination) => ({ ...pagination, total_count }));
+
+        // TODO: to fix the fetch followers response
+
+        // const items = result.items;
+
+        // console.log(items, 'ITEMS BEFORE FOLLOWERS');
+        // const followersData = await Promise.all(
+        //   items.map(async (user: IUserProfile) => {
+        //     return { ...user };
+        //   }),
+        // );
+
+        // setUserProfile([
+        //   ...followersData,
+        //   ...userProfileState.userProfiles.items,
+        // ]);
+
+        // setUserProfile((prevUserProfiles) => {
+        //   const updatedProfiles = followersData.map(
+        //     (userWithFollowers: IUserProfile) => ({
+        //       ...userWithFollowers,
+        //       followers: userWithFollowers.followers,
+        //     }),
+        //   );
+
+        //   return [...prevUserProfiles, ...updatedProfiles];
+        // });
+        // dispatch(changeUserProfile(items));
+        // setSearchedUsers([...searchedUsers, username]);
       }
     }
+
+    // else if (selectedOption === 'repos') {
+    // const reposResult = await fetchReposData(
+    // username,
+    // pagination.per_page,
+    // pagination.page,
+    // );
+    //
+    // if (reposResult && reposResult.items.length > 0) {
+    // setUserRepos((prevUserRepos) => [
+    // ...prevUserRepos,
+    // ...reposResult.items,
+    // ]);
+    // setPagination((pagination) => ({ ...pagination }));
+    //
+    // dispatch(changeUserRepositories(reposResult)); //persisting repos data in redux
+    // setIsloading(false);
+    // } else if (reposResult?.items.length === 0) {
+    // setPagination((pagination) => ({
+    // ...pagination,
+    // total_count: userRepositories.length,
+    // }));
+    // }
+    // }
   };
 
   const debouncedProfileSearch = useDebounce((val: string) => {
@@ -169,16 +220,19 @@ const App = () => {
   };
 
   const conditionForBottomScroll =
-    (pagination.total_count !== userProfiles.length &&
+    (pagination.total_count !== userProfileState.userProfiles.items.length &&
       userProfiles.length !== 0) ||
-    (pagination.total_count !== userRepositories.length &&
+    (pagination.total_count !== userProfileState.userProfiles.items.length &&
       userRepositories.length !== 0);
 
   useEffect(() => {
-    debouncedProfileSearch(username);
-  }, [username, page]);
+    // debouncedProfileSearch(username);
+    setPage(1);
+  }, [username]);
 
-  useEffect(() => {}, [pagination]);
+  useEffect(() => {
+    debouncedProfileSearch(username);
+  }, [username, pagination.page]);
 
   useEffect(() => {
     const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
@@ -202,7 +256,7 @@ const App = () => {
           <HomePageLayout
             username={username}
             setUsername={setUsername}
-            userProfile={userProfiles}
+            userProfile={userProfileState.userProfiles.items}
             userRepositories={userRepositories}
             setExpandedUserRepos={setUserRepos}
             handleChange={handleChange}

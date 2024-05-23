@@ -1,17 +1,25 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import { contentSlice, searchInputSlice } from '../slice';
+import {
+  // contentSlice,
+  searchInputSlice,
+  userProfileSlice,
+  userRepoSlice,
+} from '../slice';
 import { persistReducer, persistStore } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
 //Config to persist the data to the localStorage under the key "root"
 const persistConfig = {
-  key: 'root',
+  key: 'userData',
   storage,
+  // blacklist: ['profile.userProfiles'],
 };
 
 const rootReducer = combineReducers({
   searchInput: searchInputSlice.reducer,
-  content: contentSlice.reducer,
+  // content: contentSlice.reducer,
+  profile: userProfileSlice.reducer,
+  repos: userRepoSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
