@@ -168,31 +168,30 @@ const App = () => {
         // dispatch(changeUserProfile(items));
         // setSearchedUsers([...searchedUsers, username]);
       }
-    }
+    } else if (selectedOption === 'repos') {
+      const reposResult = await fetchReposData(
+        username,
+        pagination.per_page,
+        pagination.page,
+      );
 
-    // else if (selectedOption === 'repos') {
-    // const reposResult = await fetchReposData(
-    // username,
-    // pagination.per_page,
-    // pagination.page,
-    // );
-    //
-    // if (reposResult && reposResult.items.length > 0) {
-    // setUserRepos((prevUserRepos) => [
-    // ...prevUserRepos,
-    // ...reposResult.items,
-    // ]);
-    // setPagination((pagination) => ({ ...pagination }));
-    //
-    // dispatch(changeUserRepositories(reposResult)); //persisting repos data in redux
-    // setIsloading(false);
-    // } else if (reposResult?.items.length === 0) {
-    // setPagination((pagination) => ({
-    // ...pagination,
-    // total_count: userRepositories.length,
-    // }));
-    // }
-    // }
+      if (reposResult && reposResult.items.length > 0) {
+        setUserRepos((prevUserRepos) => [
+          ...prevUserRepos,
+          ...reposResult.items,
+        ]);
+
+        setPagination((pagination) => ({ ...pagination }));
+
+        dispatch(changeUserRepositories(reposResult)); //persisting repos data in redux
+        setIsloading(false);
+      } else if (reposResult?.items.length === 0) {
+        setPagination((pagination) => ({
+          ...pagination,
+          total_count: userRepositories.length,
+        }));
+      }
+    }
   };
 
   const debouncedProfileSearch = useDebounce((val: string) => {
@@ -222,17 +221,14 @@ const App = () => {
   const conditionForBottomScroll =
     (pagination.total_count !== userProfileState.userProfiles.items.length &&
       userProfiles.length !== 0) ||
-    (pagination.total_count !== userProfileState.userProfiles.items.length &&
+    (pagination.total_count !== userRepositories.length &&
       userRepositories.length !== 0);
-
-  useEffect(() => {
-    // debouncedProfileSearch(username);
-    setPage(1);
-  }, [username]);
 
   useEffect(() => {
     debouncedProfileSearch(username);
   }, [username, pagination.page]);
+
+  useEffect(() => {}, [pagination]);
 
   useEffect(() => {
     const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;

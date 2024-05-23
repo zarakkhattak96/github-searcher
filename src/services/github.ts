@@ -2,7 +2,6 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IUserProfile } from '../utils/interfaces';
 import { store } from '../app/store/store';
-// import { RootState } from '../app/store/store';
 
 export interface FetchUseProfileArgs {
   query: string;
