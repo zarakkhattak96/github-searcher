@@ -15,7 +15,7 @@ import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
 import { useDispatch, useSelector } from 'react-redux';
-import { changeUserProfile, changeUserRepositories } from '../app/slice';
+// import { changeUserRepositories } from '../app/slice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/debounce';
 import { AppDispatch, RootState } from '../app/store/store';
@@ -46,8 +46,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   const userProfileState = useSelector((state: RootState) => state.profile);
-
-  console.log(userProfileState, 'USERPROFILESTATE');
+  const reposState = useSelector((state: RootState) => state.repos);
 
   const fetchProfileData = async ({
     query,
@@ -63,14 +62,11 @@ const App = () => {
         }),
       );
 
-      console.log(await resultAction, 'ACTIOn');
-
       if (fetchUserProfiles.fulfilled.match(resultAction)) {
         const user = resultAction;
 
         setIsloading(false);
 
-        console.log(user, 'USER');
         return user;
       } else if (fetchUserProfiles.rejected.match(resultAction)) {
         setIsloading(true);
@@ -94,13 +90,35 @@ const App = () => {
     page?: number,
   ) => {
     try {
+      const resultAction = dispatch<AppDispatch | any>(
+        fetchUserRepos({ query, perPage, page }),
+      );
+
+      if (fetchUserRepos.fulfilled.match(resultAction)) {
+        const repos = resultAction;
+
+        setIsloading(false);
+
+        return repos;
+      } else if (fetchUserRepos.rejected.match(resultAction)) {
+        setIsloading(true);
+
+        message.error('Cannot fetch repos');
+        return;
+      } else {
+        setIsloading(true);
+      }
+
+      console.log(await resultAction, 'ACTION');
       setIsloading(true);
 
-      const result = await fetchUserRepos(query, perPage, page);
+      // const result = await fetchUserRepos(query, perPage, page);
 
       setIsloading(false);
 
-      return result;
+      return await resultAction;
+
+      // return result;
     } catch (error) {
       console.error('Error fetching data:', error);
 
@@ -167,30 +185,31 @@ const App = () => {
         // });
         // dispatch(changeUserProfile(items));
         // setSearchedUsers([...searchedUsers, username]);
+        // reposState.userRepos.items = [];
       }
     } else if (selectedOption === 'repos') {
-      const reposResult = await fetchReposData(
-        username,
-        pagination.per_page,
-        pagination.page,
-      );
+      await fetchReposData(username, pagination.per_page, pagination.page);
 
-      if (reposResult && reposResult.items.length > 0) {
+      console.log(await reposState, 'REPO RESULT SEARCH');
+
+      if (reposState && reposState.userRepos.items.length > 0) {
         setUserRepos((prevUserRepos) => [
           ...prevUserRepos,
-          ...reposResult.items,
+          ...reposState.userRepos.items,
         ]);
 
         setPagination((pagination) => ({ ...pagination }));
 
-        dispatch(changeUserRepositories(reposResult)); //persisting repos data in redux
+        // dispatch(changeUserRepositories(reposState.userRepos.items)); //persisting repos data in redux
         setIsloading(false);
-      } else if (reposResult?.items.length === 0) {
+      } else if (reposState.userRepos.items.length === 0) {
         setPagination((pagination) => ({
           ...pagination,
           total_count: userRepositories.length,
         }));
       }
+
+      setUserProfile([]);
     }
   };
 
@@ -221,8 +240,8 @@ const App = () => {
   const conditionForBottomScroll =
     (pagination.total_count !== userProfileState.userProfiles.items.length &&
       userProfiles.length !== 0) ||
-    (pagination.total_count !== userRepositories.length &&
-      userRepositories.length !== 0);
+    (pagination.total_count !== reposState.userRepos.items.length &&
+      reposState.userRepos.items.length !== 0);
 
   useEffect(() => {
     debouncedProfileSearch(username);
@@ -253,7 +272,7 @@ const App = () => {
             username={username}
             setUsername={setUsername}
             userProfile={userProfileState.userProfiles.items}
-            userRepositories={userRepositories}
+            userRepositories={reposState.userRepos.items}
             setExpandedUserRepos={setUserRepos}
             handleChange={handleChange}
             handleInputChange={debouncedProfileSearch}

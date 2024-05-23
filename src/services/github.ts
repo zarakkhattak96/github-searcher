@@ -1,7 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { IUserProfile } from '../utils/interfaces';
-import { store } from '../app/store/store';
+import { IRepository, IUserProfile } from '../utils/interfaces';
 
 export interface FetchUseProfileArgs {
   query: string;
@@ -19,6 +18,24 @@ export interface IUserResponse {
       total_count: number;
     };
   };
+}
+
+export interface IReposResponse {
+  items: IRepository[];
+  total_count: number;
+  requests: {
+    [key: string]: {
+      status: string;
+      items: IRepository[];
+      total_count: number;
+    };
+  };
+}
+
+export interface FetchReposArgs {
+  query: string;
+  perPage?: number;
+  page?: number;
 }
 
 // type  ThunkApi = ReturnType< typeof >
@@ -42,8 +59,6 @@ export const fetchUserProfiles = createAsyncThunk<
           page: page as number,
         },
       });
-
-      console.log('GITHUB FETCH');
 
       return {
         items: response.data.items,
@@ -84,27 +99,51 @@ export const fetchUserFollowers = async (url: string) => {
   return data;
 };
 
-export const fetchUserRepos = async (
-  query: string,
-  perPage?: number,
-  page?: number,
-) => {
-  try {
-    const repos = await axios.get(
-      `https://api.github.com/users/${query}/repos`,
-      {
+export const fetchUserRepos = createAsyncThunk<IReposResponse, FetchReposArgs>(
+  'profile/fetchUserRepos',
+
+  async ({ query, perPage, page }, thunkApi: any) => {
+    const url = `https://api.github.com/users/${query}/repos`;
+    try {
+      const repos = await axios.get(url, {
         params: {
           per_page: perPage,
           page: page,
         },
-      },
-    );
+      });
 
-    return {
-      items: repos.data,
-      total_count: undefined,
-    };
-  } catch (error) {
-    console.error(error);
-  }
-};
+      console.log(repos, 'GITHUB FETCH');
+
+      return {
+        items: repos.data,
+        total_count: undefined,
+      };
+    } catch (error) {
+      console.error(error);
+      return thunkApi.rejectWithValue({
+        items: [],
+        total_count: 0,
+      });
+    }
+  },
+  {
+    condition: ({ query, page }: FetchUseProfileArgs, { getState }) => {
+      const { repos } = getState();
+
+      console.log(repos, 'REPOS IN SERV');
+
+      const statusKey = repos.requests?.[query]?.[page];
+
+      if (
+        statusKey &&
+        (statusKey.status === 'fulfilled' || statusKey.status === 'loading')
+      ) {
+        console.log('ALREADY FETCHED');
+        // Already fetched or in progress, don't need to re-fetch
+        return false;
+      }
+      return true;
+    },
+    dispatchConditionRejection: true,
+  },
+);
