@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { IRepository, IUserProfile } from '../utils/interfaces';
+// import fetchFromCache, { USER_CACHE } from '../utils/ttlCache';
 
 export interface FetchUseProfileArgs {
   query: string;
@@ -133,6 +134,11 @@ export const fetchUserRepos = createAsyncThunk<IReposResponse, FetchReposArgs>(
       console.log(repos, 'REPOS IN SERV');
 
       const statusKey = repos.requests?.[query]?.[page];
+
+      if (repos.request) {
+        const fetch = fetchFromCache(USER_CACHE);
+        console.log(fetch, 'FETCH FROM CACHE');
+      }
 
       if (
         statusKey &&

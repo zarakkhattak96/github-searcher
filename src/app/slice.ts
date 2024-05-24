@@ -6,6 +6,30 @@ const searchInputInitialState = {
   username: '',
 };
 
+export interface IClearCache {
+  userProfiles: {
+    items: IUserProfile[];
+    total_count: number;
+  };
+
+  userRepos: {
+    items: IRepository[];
+    total_count: number;
+  };
+}
+
+const clearCacheInitialState = {
+  userProfiles: {
+    items: [],
+    total_count: 0,
+  },
+
+  userRepos: {
+    items: [],
+    total_count: 0,
+  },
+};
+
 interface UserProfileState {
   userProfiles: {
     items: IUserProfile[];
@@ -277,9 +301,27 @@ export const searchInputSlice = createSlice({
   },
 });
 
+export const cacheClearSlice = createSlice({
+  name: 'clearCache',
+  initialState: clearCacheInitialState,
+  reducers: {
+    clearUserData: (state) => {
+      // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 1');
+      
+      console.log(state.userProfiles.items, "items in slice")
+      state.userProfiles.items = [];
+      // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 2');
+
+      state.userRepos.items = [];
+      // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 3');
+    },
+  },
+});
+
 export const { changeSearchInput } = searchInputSlice.actions;
 export const { changeUserProfile } = userProfileSlice.actions;
 export const { changeUserRepositories } = userRepoSlice.actions;
+export const { clearUserData } = cacheClearSlice.actions;
 
 const reducers = {
   searchInput: searchInputSlice.reducer,

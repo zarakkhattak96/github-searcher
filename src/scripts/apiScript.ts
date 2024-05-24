@@ -1,7 +1,12 @@
 // import { fetchUserRepos } from '../services/github';
 
+// import fetchFromCache from "../utils/ttlCache";
+
+// import { fetchFromCache } from '../utils/ttlCache';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const axios = require('axios');
+// const axios = require('axios');
+// import { fetchFromCache } from '../utils/ttlCache';
 
 // const fetchUserProfile = async (
 //   query: string,
@@ -49,22 +54,12 @@ const axios = require('axios');
 // };
 
 const main = async () => {
-  const perPage = 10;
-  const page = 1;
+  // const perPage = 10;
+  // const page = 1;
+  const username = 'userData';
   try {
-    const username = 'zarakk';
-    const repos = await axios.get(
-      `https://api.github.com/users/${username}/repos`,
-      {
-        params: {
-          per_page: perPage,
-          page: page,
-        },
-      },
-    );
-
-    const data = repos.data;
-    console.log(data, 'REPOS');
+    const fetch = localStorage.getItem(username);
+    console.log(fetch, 'FETCH FROM CACHE');
   } catch (error) {
     console.error(error);
   }

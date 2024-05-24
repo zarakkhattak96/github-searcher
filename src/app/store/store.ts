@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {
-  // contentSlice,
+  cacheClearSlice,
   searchInputSlice,
   userProfileSlice,
   userRepoSlice,
@@ -12,14 +12,13 @@ import storage from 'redux-persist/lib/storage';
 const persistConfig = {
   key: 'userData',
   storage,
-  // blacklist: ['profile.userProfiles'],
 };
 
 const rootReducer = combineReducers({
   searchInput: searchInputSlice.reducer,
-  // content: contentSlice.reducer,
   profile: userProfileSlice.reducer,
   repos: userRepoSlice.reducer,
+  clearUserData: cacheClearSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

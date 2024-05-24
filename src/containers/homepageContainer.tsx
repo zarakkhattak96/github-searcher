@@ -15,10 +15,11 @@ import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
 import { useDispatch, useSelector } from 'react-redux';
-// import { changeUserRepositories } from '../app/slice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/debounce';
 import { AppDispatch, RootState } from '../app/store/store';
+import { cacheClearSlice } from '../app/slice';
+import { clear } from 'console';
 
 const App = () => {
   const paginationInitialValues = {
@@ -31,6 +32,8 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [page, setPage] = useState(1);
   const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
   const [selectedOption, setSelectedOption] =
     useState<SelectedOptionType>('user');
@@ -47,6 +50,11 @@ const App = () => {
 
   const userProfileState = useSelector((state: RootState) => state.profile);
   const reposState = useSelector((state: RootState) => state.repos);
+  const clearUserCache = useSelector(
+    (state: RootState) => state.clearUserData.userProfiles.items,
+  );
+
+  // console.log(clearUserCache, 'CLEAR USER CACHE Container');
 
   const fetchProfileData = async ({
     query,
@@ -219,15 +227,25 @@ const App = () => {
   }, 1000);
 
   const handleChange = (v: SelectedOptionType) => {
-    v === 'user' ? setUserRepos([]) : setUserProfile([]);
+    // v === 'user' ? setUserRepos([]) : setUserProfile([]);
+    // if (username.length <= 3) {
+    //   setUsername('');
+    // }
 
-    if (username.length <= 3) {
-      setUsername('');
+    if (v === 'user') {
+      reposState.userRepos.items = clearUserCache;
+      setUserRepos(clearUserCache);
     }
 
     setPagination(paginationInitialValues);
     setIsloading(false);
   };
+
+  useEffect(() => {
+    if (searchQuery.length < 3) {
+      setSearchQuery('');
+    }
+  });
 
   const handleScroll = () => {
     setPagination((pagination) => ({
