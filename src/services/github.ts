@@ -1,76 +1,155 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { IRepository, IUserProfile } from '../utils/interfaces';
+// import fetchFromCache, { USER_CACHE } from '../utils/ttlCache';
 
-// export const fetchUserProfile = async (username: string) => {
-//   const response = await fetch(
-//     `https://api.github.com/search/users?q=${username}`,
-//   );
+export interface FetchUseProfileArgs {
+  query: string;
+  perPage?: number;
+  page?: number;
+}
 
-//   const data = await response.json();
-
-//   if (!data) {
-//     throw new Error('Data does not exist');
-//   }
-
-//   return data;
-// };
-
-export const fetchUserProfiles = async (
-  query: string,
-  perPage?: number,
-  page?: number,
-) => {
-  const url = 'https://api.github.com/search/users';
-
-  // console.log(query, 'QUERY');
-
-  try {
-    const response = await axios.get(url, {
-      params: {
-        q: query,
-        per_page: perPage as number,
-        page: page as number,
-      },
-    });
-
-    // console.log(response, "RESP")
-
-    return {
-      items: response.data.items,
-      total_count: response.data.total_count,
+export interface IUserResponse {
+  items: IUserProfile[];
+  total_count: number;
+  requests: {
+    [key: string]: {
+      status: string;
+      items: IUserProfile[];
+      total_count: number;
     };
-  } catch (error) {
-    console.error('Error fetching users:', error);
-    throw error;
-  }
-};
+  };
+}
+
+export interface IReposResponse {
+  items: IRepository[];
+  total_count: number;
+  requests: {
+    [key: string]: {
+      status: string;
+      items: IRepository[];
+      total_count: number;
+    };
+  };
+}
+
+export interface FetchReposArgs {
+  query: string;
+  perPage?: number;
+  page?: number;
+}
+
+// type  ThunkApi = ReturnType< typeof >
+
+export const fetchUserProfiles = createAsyncThunk<
+  IUserResponse,
+  FetchUseProfileArgs
+>(
+  'profile/fetchUserProfiles',
+
+  async ({ query, perPage, page }, thunkApi: any) => {
+    const url = 'https://api.github.com/search/users';
+
+    console.log(query, 'QUERY FROM GITHUB');
+
+    try {
+      const response = await axios.get(url, {
+        params: {
+          q: query,
+          per_page: perPage as number,
+          page: page as number,
+        },
+      });
+
+      return {
+        items: response.data.items,
+        total_count: response.data.total_count,
+      };
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      return thunkApi.rejectWithValue({
+        items: [],
+        total_count: 0,
+      });
+    }
+  },
+  {
+    condition: ({ query, page }: FetchUseProfileArgs, { getState }) => {
+      const { profile } = getState();
+      const statusKey = profile.requests?.[query]?.[page];
+      console.log(statusKey, 'STATUS IN THUNK');
+      if (
+        statusKey &&
+        (statusKey.status === 'fulfilled' || statusKey.status === 'loading')
+      ) {
+        console.log('ALREADY FETCHED');
+        // Already fetched or in progress, don't need to re-fetch
+        return false;
+      }
+      return true;
+    },
+    dispatchConditionRejection: true,
+  },
+);
 
 export const fetchUserFollowers = async (url: string) => {
-  const followers = await fetch(url);
+  const followers = await axios(url);
 
-  const data = await followers.json();
+  const data = await followers.data;
 
   return data;
 };
 
-export const fetchUserRepos = async (username: string) => {
-  const repos = await fetch(`https://api.github.com/users/${username}/repos`);
-  const data = await repos.json();
-  return data;
-};
+export const fetchUserRepos = createAsyncThunk<IReposResponse, FetchReposArgs>(
+  'profile/fetchUserRepos',
 
-// export const getGitHubUsers = async (page: number, query: string) => {
-//   const response = await fetchUserProfile(query);
-//   return response.items;
-// };
-// export const getItems = async (
-//   page: number,
-//   username: string,
-// ): Promise<{ items: IUserProfile[]; total_count: number }> => {
-//   const response = await fetch(`https://api.github.com/users/${username}`);
+  async ({ query, perPage, page }, thunkApi: any) => {
+    const url = `https://api.github.com/users/${query}/repos`;
+    try {
+      const repos = await axios.get(url, {
+        params: {
+          per_page: perPage,
+          page: page,
+        },
+      });
 
-//   const data = await response.json();
+      console.log(repos, 'GITHUB FETCH');
 
-//   console.log(data, 'DATA for Infinite');
+      return {
+        items: repos.data,
+        total_count: undefined,
+      };
+    } catch (error) {
+      console.error(error);
+      return thunkApi.rejectWithValue({
+        items: [],
+        total_count: 0,
+      });
+    }
+  },
+  {
+    condition: ({ query, page }: FetchUseProfileArgs, { getState }) => {
+      const { repos } = getState();
 
-//   return data;
-// };
+      console.log(repos, 'REPOS IN SERV');
+
+      const statusKey = repos.requests?.[query]?.[page];
+
+      if (repos.request) {
+        const fetch = fetchFromCache(USER_CACHE);
+        console.log(fetch, 'FETCH FROM CACHE');
+      }
+
+      if (
+        statusKey &&
+        (statusKey.status === 'fulfilled' || statusKey.status === 'loading')
+      ) {
+        console.log('ALREADY FETCHED');
+        // Already fetched or in progress, don't need to re-fetch
+        return false;
+      }
+      return true;
+    },
+    dispatchConditionRejection: true,
+  },
+);

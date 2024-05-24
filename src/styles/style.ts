@@ -6,7 +6,7 @@ export const useStyle = createStyles(({ css, appearance }) => ({
     height: '100%',
     backgroundColor: appearance === 'dark' ? 'black' : 'white',
     overflow: 'auto',
-    padding: '3rem',
+    padding: '1.5rem',
   },
 
   searchField: css`
@@ -24,8 +24,8 @@ export const useStyle = createStyles(({ css, appearance }) => ({
       font-size: 36px;
       position: relative;
       color: ${appearance === 'dark' ? 'white' : 'black'};
-      right: 30px;
-      top: 120px;
+      right: 15px;
+      top: 125px;
 
     `,
 
@@ -60,16 +60,16 @@ export const useStyle = createStyles(({ css, appearance }) => ({
   `,
 
   homePageTitle: css`
-     left: 10px;
+     left: 25px;
      position: relative;
-     top: 60px;
+     top: 65px;
 
       `,
 
   githubPara: css`
       position: relative;
-      left: 10px;
-      top: 40px;
+      left: 25px;
+      top: 50px;
     `,
 
   flexHeight: css`

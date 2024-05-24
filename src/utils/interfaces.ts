@@ -162,8 +162,7 @@ export interface IHomePageComponentProps {
   handleChange: (value: SelectedOptionType) => void;
   handleInputChange: (v: string) => void;
   page: number;
-  // inputText: string;
-  // setInputText: React.Dispatch<React.SetStateAction<string>>;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 
   isLoading: boolean;
 

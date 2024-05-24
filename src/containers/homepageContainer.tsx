@@ -1,24 +1,30 @@
-import { Flex } from 'antd';
+import { Flex, message } from 'antd';
 import { useEffect, useState } from 'react';
 import {
   IRepository,
   IUserProfile,
   SelectedOptionType,
 } from '../utils/interfaces';
-import { fetchUserProfiles, fetchUserRepos } from '../services/github';
+import {
+  FetchUseProfileArgs,
+  fetchUserProfiles,
+  fetchUserRepos,
+} from '../services/github';
 import { HomePageLayout } from '../app/components/homepage/homepageLayout';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
 import { useStyle } from '../styles/style';
-import { useDispatch } from 'react-redux';
-import { changeContent } from '../app/slice';
+import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/debounce';
+import { AppDispatch, RootState } from '../app/store/store';
+import { cacheClearSlice } from '../app/slice';
+import { clear } from 'console';
 
 const App = () => {
   const paginationInitialValues = {
     page: 1,
-    per_page: 5,
+    per_page: 20,
     total_count: 0,
   };
 
@@ -26,8 +32,9 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [page, setPage] = useState(1);
   const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
-  const [searchedUsers, setSearchedUsers] = useState<string[]>([]);
   const [selectedOption, setSelectedOption] =
     useState<SelectedOptionType>('user');
   const [isLoading, setIsloading] = useState<boolean>(false);
@@ -35,90 +42,210 @@ const App = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
+
   const userName = queryParams.get('q') || '';
   const { styles } = useStyle();
 
   const dispatch = useDispatch();
-  const fetchData = async (query: string, perPage?: number, page?: number) => {
+
+  const userProfileState = useSelector((state: RootState) => state.profile);
+  const reposState = useSelector((state: RootState) => state.repos);
+  const clearUserCache = useSelector(
+    (state: RootState) => state.clearUserData.userProfiles.items,
+  );
+
+  // console.log(clearUserCache, 'CLEAR USER CACHE Container');
+
+  const fetchProfileData = async ({
+    query,
+    perPage,
+    page,
+  }: FetchUseProfileArgs) => {
     try {
-      setIsloading(true);
-      const result = await fetchUserProfiles(query, perPage, page);
-      setIsloading(false);
-      return result;
+      const resultAction = dispatch<AppDispatch | any>(
+        fetchUserProfiles({
+          query: query,
+          perPage,
+          page,
+        }),
+      );
+
+      if (fetchUserProfiles.fulfilled.match(resultAction)) {
+        const user = resultAction;
+
+        setIsloading(false);
+
+        return user;
+      } else if (fetchUserProfiles.rejected.match(resultAction)) {
+        setIsloading(true);
+
+        message.error('Cannot fetch User Profile');
+        return;
+      } else {
+        setIsloading(true);
+      }
+
+      return await resultAction;
     } catch (error) {
       console.error('Error fetching data:', error);
       setIsloading(false);
     }
   };
 
+  const fetchReposData = async (
+    query: string,
+    perPage?: number,
+    page?: number,
+  ) => {
+    try {
+      const resultAction = dispatch<AppDispatch | any>(
+        fetchUserRepos({ query, perPage, page }),
+      );
+
+      if (fetchUserRepos.fulfilled.match(resultAction)) {
+        const repos = resultAction;
+
+        setIsloading(false);
+
+        return repos;
+      } else if (fetchUserRepos.rejected.match(resultAction)) {
+        setIsloading(true);
+
+        message.error('Cannot fetch repos');
+        return;
+      } else {
+        setIsloading(true);
+      }
+
+      console.log(await resultAction, 'ACTION');
+      setIsloading(true);
+
+      // const result = await fetchUserRepos(query, perPage, page);
+
+      setIsloading(false);
+
+      return await resultAction;
+
+      // return result;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+
+      setIsloading(false);
+    }
+  };
+
   const search = async () => {
-    if (username.length === 0) {
+    if (username.length === 0 || username.length < 3) {
+      setIsloading(false);
+
       return;
     }
 
-    // TODO: to modify this
-    if (username.length >= 3) {
-      const result = await fetchData(
-        username,
-        pagination.per_page,
-        pagination.page,
-      );
+    setIsloading(true);
 
-      const { items, total_count } = result as {
-        items: IUserProfile[];
-        total_count: number;
-      };
+    if (selectedOption === 'user') {
+      await fetchProfileData({
+        query: username,
+        perPage: pagination.per_page,
+        page: pagination.page,
+      });
 
-      setPagination((pagination) => ({ ...pagination, total_count }));
+      const result = userProfileState.userProfiles;
 
-      if (selectedOption === 'user') {
-        const followersData = await Promise.all(
-          items.map(async (user: IUserProfile) => {
-            return { ...user };
-          }),
-        );
+      console.log(result, 'RESULT11');
 
-        // TODO: to fix the followers logic
+      if (result) {
+        const items = result.items;
+        setUserProfile(items);
+        // const items = await result.payload.items;
 
-        setUserProfile([
-          ...userProfiles,
-          ...followersData.map((userWithFollowers) => ({
-            ...userWithFollowers,
-            followers: userWithFollowers.followers,
-          })),
-        ]);
+        console.log(items, 'PAYYYYYYYYY11111');
 
-        setSearchedUsers([...searchedUsers, username]);
+        const total_count = result.total_count;
 
-        dispatch(changeContent(items));
+        setPagination((pagination) => ({ ...pagination, total_count }));
+
+        // TODO: to fix the fetch followers response
+
+        // const items = result.items;
+
+        // console.log(items, 'ITEMS BEFORE FOLLOWERS');
+        // const followersData = await Promise.all(
+        //   items.map(async (user: IUserProfile) => {
+        //     return { ...user };
+        //   }),
+        // );
+
+        // setUserProfile([
+        //   ...followersData,
+        //   ...userProfileState.userProfiles.items,
+        // ]);
+
+        // setUserProfile((prevUserProfiles) => {
+        //   const updatedProfiles = followersData.map(
+        //     (userWithFollowers: IUserProfile) => ({
+        //       ...userWithFollowers,
+        //       followers: userWithFollowers.followers,
+        //     }),
+        //   );
+
+        //   return [...prevUserProfiles, ...updatedProfiles];
+        // });
+        // dispatch(changeUserProfile(items));
+        // setSearchedUsers([...searchedUsers, username]);
+        // reposState.userRepos.items = [];
       }
     } else if (selectedOption === 'repos') {
-      searchRepos();
+      await fetchReposData(username, pagination.per_page, pagination.page);
+
+      console.log(await reposState, 'REPO RESULT SEARCH');
+
+      if (reposState && reposState.userRepos.items.length > 0) {
+        setUserRepos((prevUserRepos) => [
+          ...prevUserRepos,
+          ...reposState.userRepos.items,
+        ]);
+
+        setPagination((pagination) => ({ ...pagination }));
+
+        // dispatch(changeUserRepositories(reposState.userRepos.items)); //persisting repos data in redux
+        setIsloading(false);
+      } else if (reposState.userRepos.items.length === 0) {
+        setPagination((pagination) => ({
+          ...pagination,
+          total_count: userRepositories.length,
+        }));
+      }
+
+      setUserProfile([]);
     }
-
-    setIsloading(true);
-  };
-
-  const searchRepos = async () => {
-    const repos = await fetchUserRepos(username);
-
-    setUserProfile([]);
-    setUserRepos(repos);
   };
 
   const debouncedProfileSearch = useDebounce((val: string) => {
+    search();
     setUsername(val);
   }, 1000);
 
   const handleChange = (v: SelectedOptionType) => {
-    v === 'user' ? setUserRepos([]) : setUserProfile([]);
+    // v === 'user' ? setUserRepos([]) : setUserProfile([]);
+    // if (username.length <= 3) {
+    //   setUsername('');
+    // }
 
-    if (username.length <= 3) {
-      setUsername('');
+    if (v === 'user') {
+      reposState.userRepos.items = clearUserCache;
+      setUserRepos(clearUserCache);
     }
 
+    setPagination(paginationInitialValues);
     setIsloading(false);
   };
+
+  useEffect(() => {
+    if (searchQuery.length < 3) {
+      setSearchQuery('');
+    }
+  });
 
   const handleScroll = () => {
     setPagination((pagination) => ({
@@ -129,13 +256,14 @@ const App = () => {
   };
 
   const conditionForBottomScroll =
-    pagination.total_count !== userProfiles.length && userProfiles.length !== 0;
-
-  // TODO: update using useEffect
+    (pagination.total_count !== userProfileState.userProfiles.items.length &&
+      userProfiles.length !== 0) ||
+    (pagination.total_count !== reposState.userRepos.items.length &&
+      reposState.userRepos.items.length !== 0);
 
   useEffect(() => {
-    search();
-  }, [username, page]);
+    debouncedProfileSearch(username);
+  }, [username, pagination.page]);
 
   useEffect(() => {}, [pagination]);
 
@@ -161,8 +289,8 @@ const App = () => {
           <HomePageLayout
             username={username}
             setUsername={setUsername}
-            userProfile={userProfiles}
-            userRepositories={userRepositories}
+            userProfile={userProfileState.userProfiles.items}
+            userRepositories={reposState.userRepos.items}
             setExpandedUserRepos={setUserRepos}
             handleChange={handleChange}
             handleInputChange={debouncedProfileSearch}
@@ -172,6 +300,7 @@ const App = () => {
             setIsLoading={setIsloading}
             handleScroll={handleScroll}
             conditionForBottomScroll={conditionForBottomScroll}
+            setPage={setPage}
             page={page}
           />
         </ThemeContext.Provider>

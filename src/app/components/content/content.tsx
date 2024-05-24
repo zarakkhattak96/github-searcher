@@ -8,62 +8,16 @@ const { Title } = Typography;
 
 export const ContentComponent: React.FC<IContentComponentProps> = ({
   userProfile,
-  // userRepositories,
-  // username,
+  userRepositories,
 }) => {
   const { styles } = useStyle();
 
   useEffect(() => {}, [userProfile]);
 
   return (
-    <Flex className={styles.cards} id='userProf-list'>
-      {userProfile.length > 0 && (
-        <Row gutter={[36, 18]}>
-          {userProfile?.map((profile, index) => (
-            <Col key={index}>
-              {profile.login !== undefined && (
-                <Card
-                  hoverable
-                  cover={
-                    <Avatar
-                      size={100}
-                      alt='user dp'
-                      src={profile.avatar_url}
-                      className={styles.profileAvatar}
-                    />
-                  }
-                  className={styles.profileCard}
-                >
-                  <Meta
-                    description={
-                      <Anchor
-                        items={[
-                          {
-                            key: 'profile_url',
-                            href: profile.html_url,
-                            title: 'Github Account',
-                          },
-                        ]}
-                      />
-                    }
-                  />
-
-                  <div>
-                    <Title level={5}> {profile.login}</Title>
-                    <Title level={5}>
-                      Followers: {profile?.followers ?? 0}
-                    </Title>
-                  </div>
-                </Card>
-              )}
-            </Col>
-          ))}
-        </Row>
-      )}
-    </Flex>
-  );
-
-  /* {userProfile.length > 0 && (
+    <>
+      <Flex className={styles.cards} id='userProf-list'>
+        {userProfile.length > 0 && (
           <Row gutter={[36, 18]}>
             {userProfile?.map((profile, index) => (
               <Col key={index}>
@@ -105,14 +59,10 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
               </Col>
             ))}
           </Row>
-        )}  */
-};
-{
-  /* </List> */
-}
+        )}
+      </Flex>
 
-{
-  /* <Flex className={styles.cards} id='repoCards'>
+      <Flex className={styles.cards} id='repoCards'>
         {userRepositories.length > 0 && (
           <Row gutter={[36, 18]}>
             {userRepositories?.map((repo, index) => (
@@ -147,8 +97,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
             ))}
           </Row>
         )}
-      </Flex> */
-}
-// </Flex>
-// )
-// }
+      </Flex>
+    </>
+  );
+};

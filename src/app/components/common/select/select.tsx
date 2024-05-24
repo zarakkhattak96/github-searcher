@@ -1,4 +1,4 @@
-import { Col, Row, Select } from 'antd';
+import { Col, Select } from 'antd';
 import { useStyle } from '../../../../styles/style';
 import React from 'react';
 import {
@@ -19,19 +19,17 @@ export const SelectCommonComponent: React.FC<ISelectComponentProps> = ({
   const { styles } = useStyle();
 
   return (
-    <Row align={'top'} justify={'end'}>
-      <Col push={3} className={styles.dropdownSelect} span={2}>
-        <Select
-          placeholder='User'
-          options={selectOptions}
-          size='large'
-          onChange={(e: SelectedOptionType) => {
-            handleChange(e);
-            setSelectedOption(e);
-          }}
-          value={selectedOption}
-        />
-      </Col>
-    </Row>
+    <Col push={24} className={styles.dropdownSelect} offset={1}>
+      <Select
+        placeholder='User'
+        options={selectOptions}
+        size='large'
+        onChange={(e: SelectedOptionType) => {
+          handleChange(e);
+          setSelectedOption(e);
+        }}
+        value={selectedOption}
+      />
+    </Col>
   );
 };
