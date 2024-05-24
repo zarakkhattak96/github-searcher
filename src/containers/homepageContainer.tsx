@@ -5,11 +5,9 @@ import {
   IUserProfile,
   SelectedOptionType,
 } from '../utils/interfaces';
-import {
-  FetchUseProfileArgs,
-  fetchUserProfiles,
-  fetchUserRepos,
-} from '../services/github';
+import { FetchUseProfileArgs } from '../services/types';
+import { fetchUserProfiles } from '../redux/thunk/fetchUserThunk';
+import { fetchUserRepos } from '../redux/thunk/fetchReposThunk';
 import { HomePageLayout } from '../app/components/homepage/homepageLayout';
 import { ThemeContext } from '../context/themeContext';
 import { ThemeProvider } from 'antd-style';
@@ -17,9 +15,7 @@ import { useStyle } from '../styles/style';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDebounce } from '../hooks/debounce';
-import { AppDispatch, RootState } from '../app/store/store';
-import { cacheClearSlice } from '../app/slice';
-import { clear } from 'console';
+import { AppDispatch, RootState } from '../redux/store/store';
 
 const App = () => {
   const paginationInitialValues = {

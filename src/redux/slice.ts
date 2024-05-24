@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchUserProfiles, fetchUserRepos } from '../services/github';
+import { fetchUserProfiles } from './thunk/fetchUserThunk';
+import { fetchUserRepos } from '../redux/thunk/fetchReposThunk';
 import { IRepository, IUserProfile } from '../utils/interfaces';
 
 const searchInputInitialState = {
@@ -307,8 +308,8 @@ export const cacheClearSlice = createSlice({
   reducers: {
     clearUserData: (state) => {
       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 1');
-      
-      console.log(state.userProfiles.items, "items in slice")
+
+      console.log(state.userProfiles.items, 'items in slice');
       state.userProfiles.items = [];
       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 2');
 
