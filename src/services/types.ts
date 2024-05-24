@@ -20,14 +20,14 @@ export interface IUserResponse {
 
 export interface IReposResponse {
   items: IRepository[];
-  total_count: number;
-  requests: {
-    [key: string]: {
-      status: string;
-      items: IRepository[];
-      total_count: number;
-    };
-  };
+  total_count: number | undefined;
+  // requests: {
+  //   [key: string]: {
+  //     status: string;
+  //     items: IRepository[];
+  //     total_count: number;
+  //   };
+  // };
 }
 
 export interface FetchReposArgs {

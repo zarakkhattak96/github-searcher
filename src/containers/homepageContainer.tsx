@@ -252,8 +252,8 @@ const App = () => {
   };
 
   const conditionForBottomScroll =
-    (pagination.total_count !== userProfileState.userProfiles.items.length &&
-      userProfiles.length !== 0) ||
+    (pagination.total_count !== userProfileState.userProfiles.items?.length &&
+      userProfiles?.length !== 0) ||
     (pagination.total_count !== reposState.userRepos.items.length &&
       reposState.userRepos.items.length !== 0);
 

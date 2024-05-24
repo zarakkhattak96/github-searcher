@@ -17,7 +17,7 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
   return (
     <>
       <Flex className={styles.cards} id='userProf-list'>
-        {userProfile.length > 0 && (
+        {userProfile?.length > 0 && (
           <Row gutter={[36, 18]}>
             {userProfile?.map((profile, index) => (
               <Col key={index}>
