@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {
-  cacheClearSlice,
+  // cacheClearSlice,
   searchInputSlice,
   userProfileSlice,
   userRepoSlice,
@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   searchInput: searchInputSlice.reducer,
   profile: userProfileSlice.reducer,
   repos: userRepoSlice.reducer,
-  clearUserData: cacheClearSlice.reducer,
+  // clearUserData: cacheClearSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

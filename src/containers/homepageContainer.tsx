@@ -46,9 +46,9 @@ const App = () => {
 
   const userProfileState = useSelector((state: RootState) => state.profile);
   const reposState = useSelector((state: RootState) => state.repos);
-  const clearUserCache = useSelector(
-    (state: RootState) => state.clearUserData.userProfiles.items,
-  );
+  // const clearUserCache = useSelector(
+  //   (state: RootState) => state.clearUserData.userProfiles.items,
+  // );
 
   // console.log(clearUserCache, 'CLEAR USER CACHE Container');
 
@@ -223,15 +223,15 @@ const App = () => {
   }, 1000);
 
   const handleChange = (v: SelectedOptionType) => {
-    // v === 'user' ? setUserRepos([]) : setUserProfile([]);
-    // if (username.length <= 3) {
-    //   setUsername('');
-    // }
-
-    if (v === 'user') {
-      reposState.userRepos.items = clearUserCache;
-      setUserRepos(clearUserCache);
+    v === 'user' ? setUserRepos([]) : setUserProfile([]);
+    if (username.length <= 3) {
+      setUsername('');
     }
+
+    // if (v === 'user') {
+    // reposState.userRepos.items = clearUserCache;
+    // setUserRepos(clearUserCache);
+    // }
 
     setPagination(paginationInitialValues);
     setIsloading(false);

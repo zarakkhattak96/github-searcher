@@ -1,96 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { fetchUserProfiles } from './thunk/fetchUserThunk';
 import { fetchUserRepos } from '../redux/thunk/fetchReposThunk';
-import { IRepository, IUserProfile } from '../utils/interfaces';
-
-const searchInputInitialState = {
-  username: '',
-};
-
-export interface IClearCache {
-  userProfiles: {
-    items: IUserProfile[];
-    total_count: number;
-  };
-
-  userRepos: {
-    items: IRepository[];
-    total_count: number;
-  };
-}
-
-const clearCacheInitialState = {
-  userProfiles: {
-    items: [],
-    total_count: 0,
-  },
-
-  userRepos: {
-    items: [],
-    total_count: 0,
-  },
-};
-
-interface UserProfileState {
-  userProfiles: {
-    items: IUserProfile[];
-    total_count: number;
-  };
-  currentUsername: string;
-  loading: boolean;
-  error: string | null;
-  requests: {
-    // request is an object for storing cache
-    [key: string]: {
-      [key1: number]: {
-        status: string;
-        items: IUserProfile[];
-      };
-    };
-  };
-}
-
-interface ReposInitialState {
-  userRepos: {
-    items: IRepository[];
-    total_count: number;
-  };
-
-  currentUsername: string;
-
-  loading: boolean;
-  error: string | null;
-  requests: {
-    [key: string]: {
-      [key1: number]: {
-        status: string;
-        items: IRepository[];
-      };
-    };
-  };
-}
-
-const reposInitialState: ReposInitialState = {
-  userRepos: {
-    items: [],
-    total_count: 0,
-  },
-  currentUsername: '',
-  loading: false,
-  error: null,
-  requests: {},
-};
-
-const profileInitialState: UserProfileState = {
-  userProfiles: {
-    items: [],
-    total_count: 0,
-  },
-  currentUsername: '', //to check current username from the request; query === username from cache
-  loading: false,
-  error: null,
-  requests: {},
-};
+import {
+  profileInitialState,
+  reposInitialState,
+  searchInputInitialState,
+} from './initialStates';
 
 export const userProfileSlice = createSlice({
   name: 'profileSlice',
@@ -155,15 +70,10 @@ export const userProfileSlice = createSlice({
       .addCase(fetchUserProfiles.rejected, (state, action) => {
         if (action.meta?.arg) {
           // will run when the thunk is aborted
-          // console.log(
-          //   action.meta.arg.query,
-          //   action.meta.arg.page,
-          //   'QUERYYY_______',
-          // );
+
           const { query, page } = action.meta?.arg;
           if (state.currentUsername === query) {
             if (state.requests[query]) {
-              // console.log(state.userProfiles.items, "PROFSSSSS")
               state.userProfiles.items = [
                 ...state.userProfiles.items,
                 ...state.requests?.[query]?.[page].items, // data per page is appended
@@ -171,7 +81,6 @@ export const userProfileSlice = createSlice({
             }
           } else {
             state.currentUsername = query; // data is present in cache but not the same as the previous request
-            // console.log(query, "QUERYYY")
             state.userProfiles.items = [
               ...state.requests?.[query]?.[page].items,
             ];
@@ -302,27 +211,27 @@ export const searchInputSlice = createSlice({
   },
 });
 
-export const cacheClearSlice = createSlice({
-  name: 'clearCache',
-  initialState: clearCacheInitialState,
-  reducers: {
-    clearUserData: (state) => {
-      // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 1');
+// export const cacheClearSlice = createSlice({
+//   name: 'clearCache',
+//   initialState: clearCacheInitialState,
+//   reducers: {
+//     clearUserData: (state) => {
+//       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 1');
 
-      console.log(state.userProfiles.items, 'items in slice');
-      state.userProfiles.items = [];
-      // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 2');
+//       console.log(state.userProfiles.items, 'items in slice');
+//       state.userProfiles.items = [];
+//       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 2');
 
-      state.userRepos.items = [];
-      // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 3');
-    },
-  },
-});
+//       state.userRepos.items = [];
+//       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 3');
+//     },
+//   },
+// });
 
 export const { changeSearchInput } = searchInputSlice.actions;
 export const { changeUserProfile } = userProfileSlice.actions;
 export const { changeUserRepositories } = userRepoSlice.actions;
-export const { clearUserData } = cacheClearSlice.actions;
+// export const { clearUserData } = cacheClearSlice.actions;
 
 const reducers = {
   searchInput: searchInputSlice.reducer,
