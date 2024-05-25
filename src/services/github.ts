@@ -1,12 +1,12 @@
-import axios from 'axios';
-import { FetchUseProfileArgs } from './types';
+import axios from "axios";
+import type { FetchUseProfileArgs } from "./types";
 
 export const fetchUser = async ({
   query,
   page,
   perPage,
 }: FetchUseProfileArgs) => {
-  const url = 'https://api.github.com/search/users';
+  const url = "https://api.github.com/search/users";
 
   try {
     const response = await axios.get(url, {
@@ -26,7 +26,7 @@ export const fetchUser = async ({
       total_count: response.data.total_count,
     };
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error("Error fetching users:", error);
     return {
       items: [],
       total_count: 0,

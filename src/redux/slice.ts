@@ -13,9 +13,10 @@ export const userProfileSlice = createSlice({
 	reducers: {
 		changeUserProfile: (state, action) => {
 			state.userProfiles.items = action.payload;
+		},
 
-			console.log(state, "USER STATE SLICE");
-			console.log(action, "USER action SLICE");
+		clearUserData: (state) => {
+			state.userProfiles.items = [];
 		},
 	},
 	extraReducers: (builder) => {
@@ -105,10 +106,10 @@ export const userRepoSlice = createSlice({
 	reducers: {
 		changeUserRepositories: (state, action) => {
 			state.userRepos.items = action.payload;
-			console.log(action.payload, "PAYLOAD SLICE");
+		},
 
-			console.log(state, "REPO STATE SLICE");
-			console.log(action, "REPO action SLICE");
+		clearReposData: (state) => {
+			state.userRepos.items = [];
 		},
 	},
 
@@ -219,27 +220,9 @@ export const searchInputSlice = createSlice({
 	},
 });
 
-// export const cacheClearSlice = createSlice({
-//   name: 'clearCache',
-//   initialState: clearCacheInitialState,
-//   reducers: {
-//     clearUserData: (state) => {
-//       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 1');
-
-//       console.log(state.userProfiles.items, 'items in slice');
-//       state.userProfiles.items = [];
-//       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 2');
-
-//       state.userRepos.items = [];
-//       // console.log(state.userProfiles.items, 'CLEAR USER PROFILE 3');
-//     },
-//   },
-// });
-
 export const { changeSearchInput } = searchInputSlice.actions;
-export const { changeUserProfile } = userProfileSlice.actions;
-export const { changeUserRepositories } = userRepoSlice.actions;
-// export const { clearUserData } = cacheClearSlice.actions;
+export const { changeUserProfile, clearUserData } = userProfileSlice.actions;
+export const { changeUserRepositories, clearReposData } = userRepoSlice.actions;
 
 const reducers = {
 	searchInput: searchInputSlice.reducer,

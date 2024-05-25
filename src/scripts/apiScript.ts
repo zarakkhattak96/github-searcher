@@ -56,10 +56,10 @@
 const main = async () => {
   // const perPage = 10;
   // const page = 1;
-  const username = 'userData';
+  const username = "userData";
   try {
     const fetch = localStorage.getItem(username);
-    console.log(fetch, 'FETCH FROM CACHE');
+    console.log(fetch, "FETCH FROM CACHE");
   } catch (error) {
     console.error(error);
   }

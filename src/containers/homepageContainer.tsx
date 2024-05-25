@@ -1,21 +1,23 @@
-import { Flex, message } from 'antd';
-import { useEffect, useState } from 'react';
-import {
+import { Flex, message } from "antd";
+import { useEffect, useState } from "react";
+import type {
   IRepository,
   IUserProfile,
   SelectedOptionType,
-} from '../utils/interfaces';
-import { FetchUseProfileArgs } from '../services/types';
-import { fetchUserProfiles } from '../redux/thunk/fetchUserThunk';
-import { fetchUserRepos } from '../redux/thunk/fetchReposThunk';
-import { HomePageLayout } from '../app/components/homepage/homepageLayout';
-import { ThemeContext } from '../context/themeContext';
-import { ThemeProvider } from 'antd-style';
-import { useStyle } from '../styles/style';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDebounce } from '../hooks/debounce';
-import { AppDispatch, RootState } from '../redux/store/store';
+} from "../utils/interfaces";
+import type { FetchUseProfileArgs } from "../services/types";
+import { fetchUserProfiles } from "../redux/thunk/fetchUserThunk";
+import { fetchUserRepos } from "../redux/thunk/fetchReposThunk";
+import { HomePageLayout } from "../app/components/homepage/homepageLayout";
+import { ThemeContext } from "../context/themeContext";
+import { ThemeProvider } from "antd-style";
+import { useStyle } from "../styles/style";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDebounce } from "../hooks/debounce";
+import type { AppDispatch, RootState } from "../redux/store/store";
+import { checkCache, clearCache } from "../services/ttlCache";
+import { clearReposData, clearUserData } from "../redux/slice";
 
 const App = () => {
   const paginationInitialValues = {
@@ -25,32 +27,27 @@ const App = () => {
   };
 
   const [pagination, setPagination] = useState(paginationInitialValues);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [page, setPage] = useState(1);
   const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
   const [selectedOption, setSelectedOption] =
-    useState<SelectedOptionType>('user');
+    useState<SelectedOptionType>("user");
   const [isLoading, setIsloading] = useState<boolean>(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<"light" | "dark">("light");
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
 
-  const userName = queryParams.get('q') || '';
+  const userName = queryParams.get("q") || "";
   const { styles } = useStyle();
 
   const dispatch = useDispatch();
 
   const userProfileState = useSelector((state: RootState) => state.profile);
   const reposState = useSelector((state: RootState) => state.repos);
-  // const clearUserCache = useSelector(
-  //   (state: RootState) => state.clearUserData.userProfiles.items,
-  // );
-
-  // console.log(clearUserCache, 'CLEAR USER CACHE Container');
 
   const fetchProfileData = async ({
     query,
@@ -58,7 +55,7 @@ const App = () => {
     page,
   }: FetchUseProfileArgs) => {
     try {
-      const resultAction = dispatch<AppDispatch | any>(
+      const resultAction = dispatch(
         fetchUserProfiles({
           query: query,
           perPage,
@@ -66,8 +63,12 @@ const App = () => {
         }),
       );
 
-      if (fetchUserProfiles.fulfilled.match(resultAction)) {
+      console.log(await resultAction, "ERROR NAME SHOULD BE CONDITIONERROR");
+
+      if (await resultAction) {
         const user = resultAction;
+
+        console.log(await resultAction, "USER WHEN FULFILLED");
 
         setIsloading(false);
 
@@ -75,7 +76,7 @@ const App = () => {
       } else if (fetchUserProfiles.rejected.match(resultAction)) {
         setIsloading(true);
 
-        message.error('Cannot fetch User Profile');
+        message.error("Cannot fetch User Profile");
         return;
       } else {
         setIsloading(true);
@@ -83,7 +84,7 @@ const App = () => {
 
       return await resultAction;
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       setIsloading(false);
     }
   };
@@ -107,13 +108,13 @@ const App = () => {
       } else if (fetchUserRepos.rejected.match(resultAction)) {
         setIsloading(true);
 
-        message.error('Cannot fetch repos');
+        message.error("Cannot fetch repos");
         return;
       } else {
         setIsloading(true);
       }
 
-      console.log(await resultAction, 'ACTION');
+      console.log(await resultAction, "ACTION");
       setIsloading(true);
 
       // const result = await fetchUserRepos(query, perPage, page);
@@ -124,7 +125,7 @@ const App = () => {
 
       // return result;
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
 
       setIsloading(false);
     }
@@ -139,7 +140,7 @@ const App = () => {
 
     setIsloading(true);
 
-    if (selectedOption === 'user') {
+    if (selectedOption === "user") {
       await fetchProfileData({
         query: username,
         perPage: pagination.per_page,
@@ -148,14 +149,14 @@ const App = () => {
 
       const result = userProfileState.userProfiles;
 
-      console.log(result, 'RESULT11');
+      console.log(result, "RESULT11");
 
       if (result) {
         const items = result.items;
         setUserProfile(items);
         // const items = await result.payload.items;
 
-        console.log(items, 'PAYYYYYYYYY11111');
+        console.log(items, "PAYYYYYYYYY11111");
 
         const total_count = result.total_count;
 
@@ -191,10 +192,10 @@ const App = () => {
         // setSearchedUsers([...searchedUsers, username]);
         // reposState.userRepos.items = [];
       }
-    } else if (selectedOption === 'repos') {
+    } else if (selectedOption === "repos") {
       await fetchReposData(username, pagination.per_page, pagination.page);
 
-      console.log(await reposState, 'REPO RESULT SEARCH');
+      console.log(await reposState, "REPO RESULT SEARCH");
 
       if (reposState && reposState.userRepos.items.length > 0) {
         setUserRepos((prevUserRepos) => [
@@ -223,15 +224,16 @@ const App = () => {
   }, 1000);
 
   const handleChange = (v: SelectedOptionType) => {
-    v === 'user' ? setUserRepos([]) : setUserProfile([]);
-    if (username.length <= 3) {
-      setUsername('');
+    if (v === "user") {
+      dispatch(clearReposData());
+      console.log(v);
+    } else if (v === "repos") {
+      dispatch(clearUserData());
     }
 
-    // if (v === 'user') {
-    // reposState.userRepos.items = clearUserCache;
-    // setUserRepos(clearUserCache);
-    // }
+    if (username.length >= 3) {
+      setUsername("");
+    }
 
     setPagination(paginationInitialValues);
     setIsloading(false);
@@ -239,7 +241,7 @@ const App = () => {
 
   useEffect(() => {
     if (searchQuery.length < 3) {
-      setSearchQuery('');
+      setSearchQuery("");
     }
   });
 
@@ -261,7 +263,7 @@ const App = () => {
     debouncedProfileSearch(username);
   }, [username, pagination.page]);
 
-  useEffect(() => {}, [pagination]);
+  useEffect(() => { }, [pagination]);
 
   useEffect(() => {
     const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
@@ -273,12 +275,12 @@ const App = () => {
   }, [userName]);
 
   return (
-    <Flex id='homeContainer' className={styles.flexHeight}>
+    <Flex id="homeContainer" className={styles.flexHeight}>
       <ThemeProvider appearance={theme}>
         <ThemeContext.Provider
           value={{
             changeTheme: () => {
-              setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
+              setTheme((curr) => (curr === "dark" ? "light" : "dark"));
             },
           }}
         >
