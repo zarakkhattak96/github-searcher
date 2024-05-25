@@ -18,16 +18,12 @@ export const fetchUserRepos = createAsyncThunk<IReposResponse, FetchReposArgs>(
 		condition: ({ query, page }: FetchUseProfileArgs, { getState }) => {
 			const { repos } = getState();
 
-			console.log(repos, "REPOS IN SERV");
-
 			const statusKey = repos.requests?.[query]?.[page];
 
 			if (
 				statusKey &&
 				(statusKey.status === "fulfilled" || statusKey.status === "loading")
 			) {
-				console.log("ALREADY FETCHED");
-				// Already fetched or in progress, don't need to re-fetch
 				return false;
 			}
 			return true;

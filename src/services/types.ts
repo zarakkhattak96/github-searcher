@@ -1,37 +1,23 @@
-import { IRepository, IUserProfile } from '../utils/interfaces';
+import type { IRepository, IUserProfile } from "../utils/interfaces";
 
 export interface FetchUseProfileArgs {
-  query: string;
-  perPage?: number;
-  page?: number;
+	query: string;
+	perPage?: number;
+	page?: number;
 }
 
 export interface IUserResponse {
-  items: IUserProfile[];
-  total_count: number;
-  requests: {
-    [key: string]: {
-      status: string;
-      items: IUserProfile[];
-      total_count: number;
-    };
-  };
+	items: IUserProfile[];
+	total_count: number;
 }
 
 export interface IReposResponse {
-  items: IRepository[];
-  total_count: number | undefined;
-  // requests: {
-  //   [key: string]: {
-  //     status: string;
-  //     items: IRepository[];
-  //     total_count: number;
-  //   };
-  // };
+	items: IRepository[];
+	total_count: number | undefined;
 }
 
 export interface FetchReposArgs {
-  query: string;
-  perPage?: number;
-  page?: number;
+	query: string;
+	perPage?: number;
+	page?: number;
 }

@@ -121,7 +121,6 @@ export const userRepoSlice = createSlice({
 				if (action.meta?.arg) {
 					const { query, page } = action.meta.arg;
 
-					console.log(query, page, "PENDING SLICE");
 					if (state.requests?.[query]) {
 						state.requests[query] = {
 							...state.requests?.[query],
@@ -144,8 +143,6 @@ export const userRepoSlice = createSlice({
 				state.loading = false;
 				if (action.meta?.arg) {
 					const { query, page } = action.meta.arg;
-					console.log(query, page, "QUERY+PAGE");
-					console.log(state, "STATE");
 					if (state.currentUsername === query) {
 						state.userRepos.items = [
 							...state.userRepos.items,
@@ -170,17 +167,10 @@ export const userRepoSlice = createSlice({
 				if (action.meta?.arg) {
 					// will run when the thunk is aborted
 
-					// console.log(action.meta.arg, 'ARGS IN REJECTED');
 					const { query, page } = action.meta.arg;
-
-					console.log(query, page, "QUERY REJECTED");
-
-					console.log(state.currentUsername, "CURRENT NAME");
 
 					if (state.currentUsername === query) {
 						if (state.requests[query]) {
-							console.log(state.userRepos.items, "REQS IN REJECTED");
-
 							state.userRepos.items = [
 								...state.userRepos.items,
 								...state.requests?.[query]?.[page].items, // data per page is appended
@@ -189,10 +179,6 @@ export const userRepoSlice = createSlice({
 					} else {
 						state.currentUsername = query; // data is present in cache but not the same as the previous request
 
-						console.log(state.currentUsername, "current user name");
-
-						// console.log([new Proxy(state.requests, {})], 'QUERY IN REQS ');
-
 						state.userRepos.items = [...state.requests?.[query]?.[page].items];
 					}
 				} else {
@@ -200,7 +186,6 @@ export const userRepoSlice = createSlice({
 					state.error = action.error.message || "Failed to fetch user profiles"; // when thunk fails
 					state.userRepos.items = [];
 
-					console.log(action.payload.arg, "PAYLOAD ARGS REEJECTED");
 					if (action.payload?.arg) {
 						const { query } = action.payload.arg;
 						delete state.requests[query]; // since object doesnt exist, delete it

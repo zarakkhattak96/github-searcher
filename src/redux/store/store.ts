@@ -1,32 +1,26 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import {
-  // cacheClearSlice,
-  searchInputSlice,
-  userProfileSlice,
-  userRepoSlice,
-} from '../slice';
-import { persistReducer, persistStore } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import { searchInputSlice, userProfileSlice, userRepoSlice } from "../slice";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
 //Config to persist the data to the localStorage under the key "root"
 const persistConfig = {
-  key: 'userData',
-  storage,
+	key: "userData",
+	storage,
 };
 
 const rootReducer = combineReducers({
-  searchInput: searchInputSlice.reducer,
-  profile: userProfileSlice.reducer,
-  repos: userRepoSlice.reducer,
-  // clearUserData: cacheClearSlice.reducer,
+	searchInput: searchInputSlice.reducer,
+	profile: userProfileSlice.reducer,
+	repos: userRepoSlice.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-  reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }),
+	reducer: persistedReducer,
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({ serializableCheck: false }),
 });
 
 //persistedStore to be passed to the PersistGate

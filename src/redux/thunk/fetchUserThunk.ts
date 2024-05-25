@@ -1,21 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchUser } from "../../services/github";
-import type { IUserProfile } from "../../utils/interfaces";
-import type { FetchUseProfileArgs } from "../../services/types";
+import type { FetchUseProfileArgs, IUserResponse } from "../../services/types";
 
 export const fetchUserProfiles = createAsyncThunk<
-	IUserProfile,
+	IUserResponse,
 	FetchUseProfileArgs
 >(
 	"profile/fetchUserProfiles",
 
 	async ({ query, page, perPage }) => {
-		const userProfiles = fetchUser({ query, page, perPage });
+		const userProfiles = await fetchUser({ query, page, perPage });
 		return userProfiles;
 	},
 	{
-		condition: ({ query, page }: FetchUseProfileArgs, { getState }) => {
-			const { profile } = getState();
+		condition: ({ query, page }: FetchUseProfileArgs, thunkAPI) => {
+			const { profile } = thunkAPI.getState();
 
 			const statusKey = profile.requests?.[query]?.[page];
 
