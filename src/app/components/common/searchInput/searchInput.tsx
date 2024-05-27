@@ -7,6 +7,7 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 	username,
 	setUsername,
 	handleInputChange,
+	handleTextChange,
 }) => {
 	const { styles } = useStyle();
 
@@ -20,6 +21,7 @@ export const SearchInputComponent: React.FC<ISearchInputProps> = ({
 				const v = e.target.value;
 				setUsername(e.target.value);
 				handleInputChange(v);
+				handleTextChange(v);
 			}}
 			className={styles.searchField}
 		/>

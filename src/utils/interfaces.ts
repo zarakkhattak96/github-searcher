@@ -134,6 +134,7 @@ export interface ISearchInputProps {
 	handleInputChange: (v: string) => void;
 	username: string;
 	setUsername: React.Dispatch<SetStateAction<string>>;
+	handleTextChange: (query: string) => void;
 }
 
 export interface IContentComponentProps {
@@ -170,6 +171,7 @@ export interface IHomePageComponentProps {
 	setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	handleScroll: (page: number) => void;
 	conditionForBottomScroll: boolean;
+	handleTextChange: (query: string) => void;
 }
 
 export interface IIsLoading {

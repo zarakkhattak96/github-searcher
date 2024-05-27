@@ -23,6 +23,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
 	handleScroll,
 	setPage,
 	page,
+	handleTextChange,
 }) => {
 	const { styles } = useStyle();
 
@@ -56,6 +57,7 @@ export const HomePageLayout: React.FC<IHomePageComponentProps> = ({
 							handleInputChange={handleInputChange}
 							username={username}
 							setUsername={setUsername}
+							handleTextChange={handleTextChange}
 						/>
 
 						<SelectCommonComponent

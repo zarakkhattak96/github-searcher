@@ -28,7 +28,6 @@ const App = () => {
 	const [username, setUsername] = useState("");
 	const [page, setPage] = useState(1);
 	const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
-	const [searchQuery, setSearchQuery] = useState("");
 
 	const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
 	const [selectedOption, setSelectedOption] =
@@ -92,8 +91,6 @@ const App = () => {
 			);
 
 			if (fetchUserRepos.fulfilled.match(resultAction)) {
-				// const reposAction = resultAction;
-
 				setIsloading(false);
 
 				return resultAction;
@@ -144,44 +141,6 @@ const App = () => {
 					total_count: userProfiles.length,
 				}));
 			}
-
-			// const result = userProfileState.userProfiles;
-
-			// if (result) {
-			// 	const items = result.items;
-			// 	setUserProfile(items);
-
-			// 	const total_count = result.total_count;
-
-			// 	setPagination((pagination) => ({
-			// 		...pagination,
-			// 	}));
-
-			// const followersData = await Promise.all(
-			//   items.map(async (user: IUserProfile) => {
-			//     return { ...user };
-			//   }),
-			// );
-
-			// setUserProfile([
-			//   ...followersData,
-			//   ...userProfileState.userProfiles.items,
-			// ]);
-
-			// setUserProfile((prevUserProfiles) => {
-			//   const updatedProfiles = followersData.map(
-			//     (userWithFollowers: IUserProfile) => ({
-			//       ...userWithFollowers,
-			//       followers: userWithFollowers.followers,
-			//     }),
-			//   );
-
-			//   return [...prevUserProfiles, ...updatedProfiles];
-			// });
-			// dispatch(changeUserProfile(items));
-			// setSearchedUsers([...searchedUsers, username]);
-			// reposState.userRepos.items = [];
-			// }
 		} else if (selectedOption === "repos") {
 			await fetchReposData(username, pagination.per_page, pagination.page);
 
@@ -225,11 +184,13 @@ const App = () => {
 		setIsloading(false);
 	};
 
-	useEffect(() => {
-		if (searchQuery.length < 3) {
-			setSearchQuery("");
+	const handleTextChange = (query: string) => {
+		if (query.length < 3) {
+			dispatch(clearUserData());
+			dispatch(clearReposData());
+			setIsloading(false);
 		}
-	});
+	};
 
 	const handleScroll = () => {
 		setPagination((pagination) => ({
@@ -288,6 +249,7 @@ const App = () => {
 						conditionForBottomScroll={conditionForBottomScroll}
 						setPage={setPage}
 						page={page}
+						handleTextChange={handleTextChange}
 					/>
 				</ThemeContext.Provider>
 			</ThemeProvider>

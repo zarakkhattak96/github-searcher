@@ -13,9 +13,6 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
 }) => {
 	const { styles } = useStyle();
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	useEffect(() => {}, [userProfile]);
-
 	return (
 		<>
 			<Flex className={styles.cards} id="userProf-list">
@@ -52,9 +49,19 @@ export const ContentComponent: React.FC<IContentComponentProps> = ({
 
 										<div>
 											<Title level={5}> {profile.login}</Title>
-											<Title level={5}>
-												Followers: {profile?.followers ?? 0}
-											</Title>
+											<Meta
+												description={
+													<Anchor
+														items={[
+															{
+																key: "Profile",
+																href: profile.html_url,
+																title: "Profile",
+															},
+														]}
+													/>
+												}
+											/>
 										</div>
 									</Card>
 								)}
