@@ -1,312 +1,260 @@
-import { Flex, message } from 'antd';
-import { useEffect, useState } from 'react';
-import {
-  IRepository,
-  IUserProfile,
-  SelectedOptionType,
-} from '../utils/interfaces';
-import {
-  FetchUseProfileArgs,
-  fetchUserProfiles,
-  fetchUserRepos,
-} from '../services/github';
-import { HomePageLayout } from '../app/components/homepage/homepageLayout';
-import { ThemeContext } from '../context/themeContext';
-import { ThemeProvider } from 'antd-style';
-import { useStyle } from '../styles/style';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useDebounce } from '../hooks/debounce';
-import { AppDispatch, RootState } from '../app/store/store';
-import { cacheClearSlice } from '../app/slice';
-import { clear } from 'console';
+import { Flex, message } from "antd";
+import { useEffect, useState } from "react";
+import type {
+	IRepository,
+	IUserProfile,
+	SelectedOptionType,
+} from "../utils/interfaces";
+import { fetchUserProfiles } from "../redux/thunk/fetchUserThunk";
+import { fetchUserRepos } from "../redux/thunk/fetchReposThunk";
+import { HomePageLayout } from "../app/components/homepage/homepageLayout";
+import { ThemeContext } from "../context/themeContext";
+import { ThemeProvider } from "antd-style";
+import { useStyle } from "../styles/style";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useDebounce } from "../hooks/debounce";
+import type { AppDispatch, RootState } from "../redux/store/store";
+import { clearReposData, clearUserData } from "../redux/slice";
 
 const App = () => {
-  const paginationInitialValues = {
-    page: 1,
-    per_page: 20,
-    total_count: 0,
-  };
+	const paginationInitialValues = {
+		page: 1,
+		per_page: 20,
+		total_count: 0,
+	};
 
-  const [pagination, setPagination] = useState(paginationInitialValues);
-  const [username, setUsername] = useState('');
-  const [page, setPage] = useState(1);
-  const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+	const [pagination, setPagination] = useState(paginationInitialValues);
+	const [username, setUsername] = useState("");
+	const [page, setPage] = useState(1);
+	const [userProfiles, setUserProfile] = useState<IUserProfile[]>([]);
 
-  const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
-  const [selectedOption, setSelectedOption] =
-    useState<SelectedOptionType>('user');
-  const [isLoading, setIsloading] = useState<boolean>(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
-  const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
+	const [userRepositories, setUserRepos] = useState<IRepository[]>([]);
+	const [selectedOption, setSelectedOption] =
+		useState<SelectedOptionType>("user");
+	const [isLoading, setIsloading] = useState<boolean>(false);
+	const [theme, setTheme] = useState<"light" | "dark">("light");
+	const navigate = useNavigate();
+	const location = useLocation();
+	const queryParams = new URLSearchParams(location.search);
 
-  const userName = queryParams.get('q') || '';
-  const { styles } = useStyle();
+	const userName = queryParams.get("q") || "";
+	const { styles } = useStyle();
 
-  const dispatch = useDispatch();
+	const dispatch = useDispatch();
 
-  const userProfileState = useSelector((state: RootState) => state.profile);
-  const reposState = useSelector((state: RootState) => state.repos);
-  const clearUserCache = useSelector(
-    (state: RootState) => state.clearUserData.userProfiles.items,
-  );
+	const userProfileState = useSelector((state: RootState) => state.profile);
+	const reposState = useSelector((state: RootState) => state.repos);
 
-  // console.log(clearUserCache, 'CLEAR USER CACHE Container');
+	const fetchProfileData = async (
+		query: string,
+		perPage: number,
+		page: number,
+	) => {
+		try {
+			const resultAction = dispatch<AppDispatch | any>(
+				fetchUserProfiles({
+					query,
+					perPage,
+					page,
+				}),
+			);
 
-  const fetchProfileData = async ({
-    query,
-    perPage,
-    page,
-  }: FetchUseProfileArgs) => {
-    try {
-      const resultAction = dispatch<AppDispatch | any>(
-        fetchUserProfiles({
-          query: query,
-          perPage,
-          page,
-        }),
-      );
+			if (fetchUserProfiles.fulfilled.match(resultAction)) {
+				setIsloading(false);
 
-      if (fetchUserProfiles.fulfilled.match(resultAction)) {
-        const user = resultAction;
+				return resultAction;
+			}
+			if (fetchUserProfiles.rejected.match(resultAction)) {
+				setIsloading(true);
 
-        setIsloading(false);
+				message.error("Cannot fetch User Profile");
+				return;
+			}
+			setIsloading(true);
 
-        return user;
-      } else if (fetchUserProfiles.rejected.match(resultAction)) {
-        setIsloading(true);
+			return await resultAction;
+		} catch (error) {
+			console.error("Error fetching data:", error);
+			setIsloading(false);
+		}
+	};
 
-        message.error('Cannot fetch User Profile');
-        return;
-      } else {
-        setIsloading(true);
-      }
+	const fetchReposData = async (
+		query: string,
+		perPage?: number,
+		page?: number,
+	) => {
+		try {
+			const resultAction = dispatch<AppDispatch | any>(
+				fetchUserRepos({ query, perPage, page }),
+			);
 
-      return await resultAction;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      setIsloading(false);
-    }
-  };
+			if (fetchUserRepos.fulfilled.match(resultAction)) {
+				setIsloading(false);
 
-  const fetchReposData = async (
-    query: string,
-    perPage?: number,
-    page?: number,
-  ) => {
-    try {
-      const resultAction = dispatch<AppDispatch | any>(
-        fetchUserRepos({ query, perPage, page }),
-      );
+				return resultAction;
+			}
+			if (fetchUserRepos.rejected.match(resultAction)) {
+				setIsloading(true);
 
-      if (fetchUserRepos.fulfilled.match(resultAction)) {
-        const repos = resultAction;
+				message.error("Cannot fetch repos");
+				return;
+			}
+			setIsloading(true);
 
-        setIsloading(false);
+			setIsloading(true);
 
-        return repos;
-      } else if (fetchUserRepos.rejected.match(resultAction)) {
-        setIsloading(true);
+			setIsloading(false);
 
-        message.error('Cannot fetch repos');
-        return;
-      } else {
-        setIsloading(true);
-      }
+			return await resultAction;
+		} catch (error) {
+			console.error("Error fetching data:", error);
 
-      console.log(await resultAction, 'ACTION');
-      setIsloading(true);
+			setIsloading(false);
+		}
+	};
 
-      // const result = await fetchUserRepos(query, perPage, page);
+	const search = async () => {
+		if (username.length === 0 || username.length < 3) {
+			setIsloading(false);
 
-      setIsloading(false);
+			return;
+		}
 
-      return await resultAction;
+		setIsloading(true);
 
-      // return result;
-    } catch (error) {
-      console.error('Error fetching data:', error);
+		if (selectedOption === "user") {
+			await fetchProfileData(username, pagination.per_page, pagination.page);
 
-      setIsloading(false);
-    }
-  };
+			if (userProfileState && userProfileState.userProfiles.items.length > 0) {
+				setUserProfile((prevUserProfile) => [
+					...prevUserProfile,
+					...userProfileState.userProfiles.items,
+				]);
 
-  const search = async () => {
-    if (username.length === 0 || username.length < 3) {
-      setIsloading(false);
+				setPagination((pagination) => ({ ...pagination }));
+				setIsloading(false);
+			} else if (userProfileState.userProfiles.items.length === 0) {
+				setPagination((pagination) => ({
+					...pagination,
+					total_count: userProfiles.length,
+				}));
+			}
+		} else if (selectedOption === "repos") {
+			await fetchReposData(username, pagination.per_page, pagination.page);
 
-      return;
-    }
+			if (reposState && reposState.userRepos.items.length > 0) {
+				setUserRepos((prevUserRepos) => [
+					...prevUserRepos,
+					...reposState.userRepos.items,
+				]);
 
-    setIsloading(true);
+				setPagination((pagination) => ({ ...pagination }));
 
-    if (selectedOption === 'user') {
-      await fetchProfileData({
-        query: username,
-        perPage: pagination.per_page,
-        page: pagination.page,
-      });
+				setIsloading(false);
+			} else if (reposState.userRepos.items.length === 0) {
+				setPagination((pagination) => ({
+					...pagination,
+					total_count: userRepositories.length,
+				}));
+			}
 
-      const result = userProfileState.userProfiles;
+			setUserProfile([]);
+		}
+	};
 
-      console.log(result, 'RESULT11');
+	const debouncedProfileSearch = useDebounce((val: string) => {
+		search();
+		setUsername(val);
+	}, 1000);
 
-      if (result) {
-        const items = result.items;
-        setUserProfile(items);
-        // const items = await result.payload.items;
+	const handleChange = (v: SelectedOptionType) => {
+		if (v === "user") {
+			dispatch(clearReposData());
+		} else if (v === "repos") {
+			dispatch(clearUserData());
+		}
 
-        console.log(items, 'PAYYYYYYYYY11111');
+		if (username.length >= 3) {
+			setUsername("");
+		}
 
-        const total_count = result.total_count;
+		setPagination(paginationInitialValues);
+		setIsloading(false);
+	};
 
-        setPagination((pagination) => ({ ...pagination, total_count }));
+	const handleTextChange = (query: string) => {
+		if (query.length < 3) {
+			dispatch(clearUserData());
+			dispatch(clearReposData());
+			setIsloading(false);
+		}
+	};
 
-        // TODO: to fix the fetch followers response
+	const handleScroll = () => {
+		setPagination((pagination) => ({
+			...pagination,
+			page: pagination.page + 1,
+		}));
+		setPage((page) => page + 1);
+	};
 
-        // const items = result.items;
+	const conditionForBottomScroll =
+		(pagination.total_count !== userProfileState.userProfiles.items.length &&
+			userProfileState.userProfiles.items.length !== 0) ||
+		(pagination.total_count !== reposState.userRepos.items.length &&
+			reposState.userRepos.items.length !== 0);
 
-        // console.log(items, 'ITEMS BEFORE FOLLOWERS');
-        // const followersData = await Promise.all(
-        //   items.map(async (user: IUserProfile) => {
-        //     return { ...user };
-        //   }),
-        // );
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {
+		debouncedProfileSearch(username);
+	}, [username, pagination.page]);
 
-        // setUserProfile([
-        //   ...followersData,
-        //   ...userProfileState.userProfiles.items,
-        // ]);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+	useEffect(() => {}, [pagination]);
 
-        // setUserProfile((prevUserProfiles) => {
-        //   const updatedProfiles = followersData.map(
-        //     (userWithFollowers: IUserProfile) => ({
-        //       ...userWithFollowers,
-        //       followers: userWithFollowers.followers,
-        //     }),
-        //   );
+	useEffect(() => {
+		const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
+		navigate(newUrl);
+	}, [userName, navigate, location.pathname]);
 
-        //   return [...prevUserProfiles, ...updatedProfiles];
-        // });
-        // dispatch(changeUserProfile(items));
-        // setSearchedUsers([...searchedUsers, username]);
-        // reposState.userRepos.items = [];
-      }
-    } else if (selectedOption === 'repos') {
-      await fetchReposData(username, pagination.per_page, pagination.page);
+	useEffect(() => {
+		userName && setUsername(decodeURI(userName));
+	}, [userName]);
 
-      console.log(await reposState, 'REPO RESULT SEARCH');
-
-      if (reposState && reposState.userRepos.items.length > 0) {
-        setUserRepos((prevUserRepos) => [
-          ...prevUserRepos,
-          ...reposState.userRepos.items,
-        ]);
-
-        setPagination((pagination) => ({ ...pagination }));
-
-        // dispatch(changeUserRepositories(reposState.userRepos.items)); //persisting repos data in redux
-        setIsloading(false);
-      } else if (reposState.userRepos.items.length === 0) {
-        setPagination((pagination) => ({
-          ...pagination,
-          total_count: userRepositories.length,
-        }));
-      }
-
-      setUserProfile([]);
-    }
-  };
-
-  const debouncedProfileSearch = useDebounce((val: string) => {
-    search();
-    setUsername(val);
-  }, 1000);
-
-  const handleChange = (v: SelectedOptionType) => {
-    // v === 'user' ? setUserRepos([]) : setUserProfile([]);
-    // if (username.length <= 3) {
-    //   setUsername('');
-    // }
-
-    if (v === 'user') {
-      reposState.userRepos.items = clearUserCache;
-      setUserRepos(clearUserCache);
-    }
-
-    setPagination(paginationInitialValues);
-    setIsloading(false);
-  };
-
-  useEffect(() => {
-    if (searchQuery.length < 3) {
-      setSearchQuery('');
-    }
-  });
-
-  const handleScroll = () => {
-    setPagination((pagination) => ({
-      ...pagination,
-      page: pagination.page + 1,
-    }));
-    setPage((page) => page + 1);
-  };
-
-  const conditionForBottomScroll =
-    (pagination.total_count !== userProfileState.userProfiles.items.length &&
-      userProfiles.length !== 0) ||
-    (pagination.total_count !== reposState.userRepos.items.length &&
-      reposState.userRepos.items.length !== 0);
-
-  useEffect(() => {
-    debouncedProfileSearch(username);
-  }, [username, pagination.page]);
-
-  useEffect(() => {}, [pagination]);
-
-  useEffect(() => {
-    const newUrl = `${location.pathname}?q=${encodeURIComponent(userName)}`;
-    navigate(newUrl);
-  }, [userName, navigate, location.pathname]);
-
-  useEffect(() => {
-    userName && setUsername(decodeURI(userName));
-  }, [userName]);
-
-  return (
-    <Flex id='homeContainer' className={styles.flexHeight}>
-      <ThemeProvider appearance={theme}>
-        <ThemeContext.Provider
-          value={{
-            changeTheme: () => {
-              setTheme((curr) => (curr === 'dark' ? 'light' : 'dark'));
-            },
-          }}
-        >
-          <HomePageLayout
-            username={username}
-            setUsername={setUsername}
-            userProfile={userProfileState.userProfiles.items}
-            userRepositories={reposState.userRepos.items}
-            setExpandedUserRepos={setUserRepos}
-            handleChange={handleChange}
-            handleInputChange={debouncedProfileSearch}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
-            isLoading={isLoading}
-            setIsLoading={setIsloading}
-            handleScroll={handleScroll}
-            conditionForBottomScroll={conditionForBottomScroll}
-            setPage={setPage}
-            page={page}
-          />
-        </ThemeContext.Provider>
-      </ThemeProvider>
-    </Flex>
-  );
+	return (
+		<Flex id="homeContainer" className={styles.flexHeight}>
+			<ThemeProvider appearance={theme}>
+				<ThemeContext.Provider
+					value={{
+						changeTheme: () => {
+							setTheme((curr) => (curr === "dark" ? "light" : "dark"));
+						},
+					}}
+				>
+					<HomePageLayout
+						username={username}
+						setUsername={setUsername}
+						userProfile={userProfileState.userProfiles.items}
+						userRepositories={reposState.userRepos.items}
+						setExpandedUserRepos={setUserRepos}
+						handleChange={handleChange}
+						handleInputChange={debouncedProfileSearch}
+						selectedOption={selectedOption}
+						setSelectedOption={setSelectedOption}
+						isLoading={isLoading}
+						setIsLoading={setIsloading}
+						handleScroll={handleScroll}
+						conditionForBottomScroll={conditionForBottomScroll}
+						setPage={setPage}
+						page={page}
+						handleTextChange={handleTextChange}
+					/>
+				</ThemeContext.Provider>
+			</ThemeProvider>
+		</Flex>
+	);
 };
 
 export default App;

@@ -1,27 +1,29 @@
-import { Input } from 'antd';
-import { useStyle } from '../../../../styles/style';
-import React from 'react';
-import { ISearchInputProps } from '../../../../utils/interfaces';
+import { Input } from "antd";
+import { useStyle } from "../../../../styles/style";
+import type React from "react";
+import type { ISearchInputProps } from "../../../../utils/interfaces";
 
 export const SearchInputComponent: React.FC<ISearchInputProps> = ({
-  username,
-  setUsername,
-  handleInputChange,
+	username,
+	setUsername,
+	handleInputChange,
+	handleTextChange,
 }) => {
-  const { styles } = useStyle();
+	const { styles } = useStyle();
 
-  return (
-    <Input
-      placeholder='Start typing here ..'
-      maxLength={50}
-      size='large'
-      value={username}
-      onChange={(e) => {
-        const v = e.target.value;
-        setUsername(e.target.value);
-        handleInputChange(v);
-      }}
-      className={styles.searchField}
-    />
-  );
+	return (
+		<Input
+			placeholder="Start typing here .."
+			maxLength={50}
+			size="large"
+			value={username}
+			onChange={(e) => {
+				const v = e.target.value;
+				setUsername(e.target.value);
+				handleInputChange(v);
+				handleTextChange(v);
+			}}
+			className={styles.searchField}
+		/>
+	);
 };
